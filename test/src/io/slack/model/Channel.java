@@ -1,6 +1,8 @@
 package io.slack.model;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,12 +14,16 @@ import java.util.Objects;
 public class Channel implements Serializable, Comparable<Channel> {
 
 	private String name;
+	private User admin;
+	private Date createdAt;
 	private List<User> users = new ArrayList<>();
 
 	public Channel() {}
 
-	public Channel(String name) {
+	public Channel(String name, User admin) {
 		this.name = name;
+		this.admin=admin;
+		this.createdAt=new Date(Instant.now().toEpochMilli());
 	}
 
 	public String getName() {
@@ -26,6 +32,22 @@ public class Channel implements Serializable, Comparable<Channel> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public User getAdmin() {
+		return admin;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setAdmin(User admin) {
+		this.admin = admin;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public List<User> getUsers() {

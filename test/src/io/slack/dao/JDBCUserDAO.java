@@ -20,17 +20,36 @@ public class JDBCUserDAO implements DAO<User> {
 	private final Connection connection = DatabaseConnection.getConnection();
 
 	@Override
-	public User insert(User object) {
-		return null;
+	public User insert(User object) throws SQLException {
+		String query = "insert into user values ( ?, ?,  ?, ? );";
+		try(PreparedStatement statement = connection.prepareStatement(query)){
+			statement.setString(1, object.getEmail());
+			statement.setString(2, object.getPassword());
+			statement.setString(3, object.getPseudo());
+			statement.setDate(4, object.getCreatedAt());
+
+			try(ResultSet resultSet = statement.executeQuery()){
+				return object;
+			}
+		}
 	}
 
 	@Override
-	public User update(User object) {
-		return null;
+	public User update(User object) throws SQLException {
+		delete( object.getEmail() );
+		return insert( object);
+
 	}
 
 	@Override
-	public void delete(String key) {
+	public void delete(String key) throws SQLException {
+		String query = "delete from user where email = ? ;";
+		try(PreparedStatement statement =connection.prepareStatement(query)){
+			statement.setString(1, key);
+			try(ResultSet resultSet = statement.executeQuery()){
+
+			}
+		}
 	}
 
 	@Override
