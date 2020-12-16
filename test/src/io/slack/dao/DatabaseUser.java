@@ -9,6 +9,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * TODO à merger dans JDBCUserDAO
+ */
+
 public class DatabaseUser {
     private Statement stmt=null;
     private Connection con=null;
@@ -114,7 +118,7 @@ public class DatabaseUser {
             rs2.next();
 
             if(rs2.getString(3).equals(mdp)){
-                res= new User( rs.getString(3), rs.getString(2) );
+                //res= new User( rs.getString(3), rs.getString(2) );
             }
             rs.close();
             rs2.close();

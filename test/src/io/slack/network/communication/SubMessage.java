@@ -1,4 +1,4 @@
-package io.slack.network;
+package io.slack.network.communication;
 
 
 public class SubMessage extends Message {

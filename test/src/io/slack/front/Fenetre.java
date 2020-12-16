@@ -1,6 +1,6 @@
 package io.slack.front;
 
-import io.slack.image.Imagerie;
+import io.slack.utils.FileUtils;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -25,7 +25,7 @@ public class Fenetre extends JFrame implements KeyListener, ActionListener {
         frame.setPreferredSize (new Dimension(2000, 1300) ) ;
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setIconImage(Imagerie.getImage("Icons/logo.png"));
+        frame.setIconImage(FileUtils.getImage("Icons/logo.png"));
         frame.setTitle("Slack");
         frame.setFocusable(true);
         frame.setResizable(true);

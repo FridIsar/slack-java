@@ -1,7 +1,7 @@
 package io.slack.front;
 
 import io.slack.controller.Systeme;
-import io.slack.image.Imagerie;
+import io.slack.utils.FileUtils;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -46,10 +46,10 @@ public class PageAccueil extends PageCentrale{
     }
 
     public void remplirAccueil(){
-        MessageImage m1 = new MessageImage(Systeme.getUser(),"image 1 : petit test de la page d'accueil ", Imagerie.getImage( "Icons/logo.png" ) );
-        MessageImage m2 = new MessageImage(Systeme.getUser(),"image 2 : petit test de la page d'accueil ", Imagerie.getImage( "Icons/logo.png" ) );
-        MessageImage m3 = new MessageImage(Systeme.getUser(),"image 3 : petit test de la page d'accueil ", Imagerie.getImage( "Icons/logo.png" ) );
-        MessageImage m4 = new MessageImage(Systeme.getUser(),"image 4 : petit test de la page d'accueil ", Imagerie.getImage( "Icons/logo.png" ) );
+        MessageImage m1 = new MessageImage(Systeme.getUser(),"image 1 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        MessageImage m2 = new MessageImage(Systeme.getUser(),"image 2 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        MessageImage m3 = new MessageImage(Systeme.getUser(),"image 3 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        MessageImage m4 = new MessageImage(Systeme.getUser(),"image 4 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
 
         contenu.add(m1);
         contenu.add(m2);

@@ -8,7 +8,7 @@ import io.slack.front.PageUser;
 import io.slack.front.PanneauLateralGauche;
 import io.slack.front.ToolBar;
 import io.slack.model.User;
-import io.slack.utils.Outils;
+import io.slack.utils.EmailUtils;
 
 import java.util.ArrayList;
 
@@ -74,7 +74,7 @@ public class Systeme {
         boolean[] res = {true, true};
         String[] message = new String[3];
         //email
-        if(! Outils.isEmail(email) ){
+        if(! EmailUtils.isEmail(email) ){
             res[0]=false;
             for(int i=0; i<message.length; i++){
                 if(message[i]==null) message[i]="veuillez retaper un email au bon format [ exemple aaa@lip6.fr ]";
@@ -88,7 +88,7 @@ public class Systeme {
         }
 
         //password
-        if(! Outils.isPassword(mdp)){
+        if(! EmailUtils.isPassword(mdp)){
 
             res[1]=false;
             for(int i=0; i<message.length; i++){
@@ -127,7 +127,7 @@ public class Systeme {
 
     public static void test(){
         /*for(int i=0; i<20; i++){
-            io.slack.front.PanneauLateralGauche.getPanneau().addAbutton( io.slack.image.Imagerie.getImage( "Icons/logo.png" ) );
+            io.slack.front.PanneauLateralGauche.getPanneau().addAbutton( io.slack.utils.Imagerie.getImage( "Icons/logo.png" ) );
         }*/
 
         User nidhal = new User("nidhal@gmail.com","root","nidhal");

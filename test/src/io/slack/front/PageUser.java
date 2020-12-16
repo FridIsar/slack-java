@@ -148,7 +148,7 @@ public class PageUser extends PageCentrale implements ActionListener {
             int option = JOptionPane.showConfirmDialog(this, message, "modifiez vos infos", JOptionPane.OK_CANCEL_OPTION);
 
             if(option == JOptionPane.OK_OPTION){
-                contenu.modifierInfos(email.getText(), pseudo.getText());
+               // contenu.modifierInfos(email.getText(), pseudo.getText());
             }
         }
 
@@ -159,7 +159,7 @@ public class PageUser extends PageCentrale implements ActionListener {
 
             int option = JOptionPane.showConfirmDialog(this, message, "modifiez votre mot de passe", JOptionPane.OK_CANCEL_OPTION );
             if(option==JOptionPane.OK_OPTION){
-                contenu.modifierPassword(oldPwd.getText(), newPwd.getText());
+                //contenu.modifierPassword(oldPwd.getText(), newPwd.getText());
             }
         }
 

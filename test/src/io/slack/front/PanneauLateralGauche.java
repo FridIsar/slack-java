@@ -1,7 +1,7 @@
 package io.slack.front;
 
 import io.slack.controller.Systeme;
-import io.slack.image.Imagerie;
+import io.slack.utils.FileUtils;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -65,7 +65,7 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
 
             JButton bouton;
             if (image == null) {
-                image = Imagerie.getImage( "Icons/logo.png" );
+                image = FileUtils.getImage( "Icons/logo.png" );
             }
             bouton = new JButton(new ImageIcon(image.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
             bouton.addActionListener(this);

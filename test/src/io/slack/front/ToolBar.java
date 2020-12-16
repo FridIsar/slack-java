@@ -1,7 +1,7 @@
 package io.slack.front;
 
 import io.slack.controller.Systeme;
-import io.slack.image.Imagerie;
+import io.slack.utils.FileUtils;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,10 +18,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ToolBar extends JPanel implements ActionListener {
-    private Image imgLogo =Imagerie.getImage("Icons/logo.png");
-    private Image imgConnect = Imagerie.getImage("Icons/connect.png");
-    private Image imgProfil = Imagerie.getImage("Icons/profil.jpg");
-    private Image imgSearch = Imagerie.getImage("Icons/search.jpg");
+    private Image imgLogo = FileUtils.getImage("Icons/logo.png");
+    private Image imgConnect = FileUtils.getImage("Icons/connect.png");
+    private Image imgProfil = FileUtils.getImage("Icons/profil.jpg");
+    private Image imgSearch = FileUtils.getImage("Icons/search.jpg");
 
     private JButton logo = new JButton(new ImageIcon(imgLogo.getScaledInstance(100,100, Image.SCALE_SMOOTH)));;
     private JTextField recherche = new JTextField("Rechercher");

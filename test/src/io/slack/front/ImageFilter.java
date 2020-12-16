@@ -3,7 +3,7 @@ package io.slack.front;
 /**
  * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
  */
-import io.slack.utils.Outils;
+import io.slack.utils.FileUtils;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
@@ -15,7 +15,7 @@ public class ImageFilter extends FileFilter {
 			return true;
 		}
 
-		extension = Outils.getExtension(f);
+		extension = FileUtils.getExtension(f);
 		if (extension != null) {
 			if ( extension.equals("jpeg") ||
 				extension.equals("jpg")  ||

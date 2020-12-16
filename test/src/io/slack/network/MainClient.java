@@ -1,5 +1,8 @@
 package io.slack.network;
 
+import io.slack.network.communication.Message;
+import io.slack.network.communication.SubMessage;
+
 import java.io.IOException;
 
 public class MainClient {

@@ -1,5 +1,8 @@
 package io.slack.network;
 
+import io.slack.network.communication.Message;
+import io.slack.network.communication.SubMessage;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -42,7 +45,7 @@ public class Client {
                     try {
                         Message messageReceived = (Message) ois.readObject();
 
-                        switch (messageReceived.code) {
+                        switch (messageReceived.getCode()) {
                             case 1:
                                 messageReceived = (SubMessage) messageReceived;
                                 break;

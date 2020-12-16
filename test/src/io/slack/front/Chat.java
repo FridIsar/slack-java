@@ -1,7 +1,6 @@
 package io.slack.front;
 
 import io.slack.controller.Systeme;
-import io.slack.image.Imagerie;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -111,10 +110,10 @@ public class Chat extends PageCentrale implements ActionListener {
         Object source = e.getSource();
 
         if( source == send){
-            if( Systeme.getUser().isTestFichier() ){
+            /*if( Systeme.getUser().isTestFichier() ){
                 addContenu( new MessageImage(Systeme.getUser(), texteMessage.getText(), Imagerie.getImage(Systeme.getUser().getFichierJoint()) ) );
                 Systeme.getUser().resetFichierJoint();
-            }else
+            }else*/
                 addContenu( new Message(Systeme.getUser(),texteMessage.getText()) );
             try {
                 dessiner();
@@ -133,7 +132,7 @@ public class Chat extends PageCentrale implements ActionListener {
             jFileChooser.setDialogTitle("Choisir un fichier");
             int result = jFileChooser.showSaveDialog(this);
             if(result == JFileChooser.APPROVE_OPTION){
-                Systeme.getUser().setFichierJoint(jFileChooser.getSelectedFile());
+               // Systeme.getUser().setFichierJoint(jFileChooser.getSelectedFile());
             }
         }
     }

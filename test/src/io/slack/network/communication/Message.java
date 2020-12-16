@@ -1,12 +1,21 @@
-package io.slack.network;
+package io.slack.network.communication;
 
 import java.io.Serializable;
 
 public class Message implements Serializable {
-    protected int code;
+
+    protected final int code;
 
     public Message(int code) {
         this.code = code;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public boolean hasAttachment() {
+        return false;
     }
 
     @Override
