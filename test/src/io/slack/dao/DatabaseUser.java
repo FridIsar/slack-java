@@ -1,4 +1,13 @@
-import java.sql.*;
+package io.slack.dao;
+
+import io.slack.model.User;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseUser {
     private Statement stmt=null;

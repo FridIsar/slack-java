@@ -1,12 +1,22 @@
-import javax.swing.*;
+package io.slack.front;
+
+import io.slack.controller.Systeme;
+import io.slack.image.Imagerie;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 
 public class Chat extends PageCentrale implements ActionListener {

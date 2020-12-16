@@ -1,3 +1,15 @@
+package io.slack.controller;
+
+import io.slack.dao.DatabaseUser;
+import io.slack.front.Chat;
+import io.slack.front.Fenetre;
+import io.slack.front.Message;
+import io.slack.front.PageUser;
+import io.slack.front.PanneauLateralGauche;
+import io.slack.front.ToolBar;
+import io.slack.model.User;
+import io.slack.utils.Outils;
+
 import java.util.ArrayList;
 
 public class Systeme {
@@ -115,7 +127,7 @@ public class Systeme {
 
     public static void test(){
         /*for(int i=0; i<20; i++){
-            PanneauLateralGauche.getPanneau().addAbutton( Imagerie.getImage( "Icons/logo.png" ) );
+            io.slack.front.PanneauLateralGauche.getPanneau().addAbutton( io.slack.image.Imagerie.getImage( "Icons/logo.png" ) );
         }*/
 
         User nidhal = new User("nidhal@gmail.com","root","nidhal");

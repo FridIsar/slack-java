@@ -1,4 +1,6 @@
-import javax.swing.*;
+package io.slack.front;
+
+import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
 
 public abstract class PageCentrale extends JPanel {

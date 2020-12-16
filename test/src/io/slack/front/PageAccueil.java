@@ -1,13 +1,16 @@
+package io.slack.front;
 
+import io.slack.controller.Systeme;
+import io.slack.image.Imagerie;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
-import java.awt.*;
-import javax.swing.*;
-import javax.imageio.ImageIO;
-import javax.swing.text.*;
-import java.io.*;
 
 
 public class PageAccueil extends PageCentrale{

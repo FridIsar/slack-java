@@ -1,11 +1,10 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+package io.slack.network;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class Client {
     final Socket socket;
@@ -53,13 +52,13 @@ public class Client {
                         }
 
                         // Treatment to make:
-                        // 1 -> idetnify the code of the Message
+                        // 1 -> idetnify the code of the io.slack.network.io.slack.front.Message
                         // 2 -> make the adequate treatement like update
                         //      the databse then notify every client in the vector
                         // end of
                         System.out.println(messageReceived.toString());
                         Thread.sleep(2000);
-                        oos.writeObject(new SubMessage(1, "Message bien reçu par le client !"));
+                        oos.writeObject(new SubMessage(1, "io.slack.network.io.slack.front.Message bien reçu par le client !"));
                     } catch (IOException | ClassNotFoundException | InterruptedException e) {
                         e.printStackTrace();
                     }

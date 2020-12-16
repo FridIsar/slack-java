@@ -1,3 +1,5 @@
+package io.slack.network;
+
 import java.io.IOException;
 
 public class MainClient {

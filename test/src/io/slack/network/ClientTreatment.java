@@ -1,4 +1,8 @@
-import java.io.*;
+package io.slack.network;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 
@@ -30,12 +34,12 @@ public class ClientTreatment implements Callable {
                 }
 
                 // Treatment to make:
-                // 1 -> idetnify the code of the Message
+                // 1 -> idetnify the code of the io.slack.network.io.slack.front.Message
                 // 2 -> make the adequate treatement like update
                 //      the databse then notify every client in the vector
                 // end of
                 System.out.println(messageReceived.toString());
-                this.oos.writeObject(new SubMessage(1, "Message bien reçu par le serveur !"));
+                this.oos.writeObject(new SubMessage(1, "io.slack.network.io.slack.front.Message bien reçu par le serveur !"));
 
             } catch (IOException e) {
                 e.printStackTrace();

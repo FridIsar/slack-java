@@ -1,6 +1,5 @@
-import org.omg.CORBA.DataOutputStream;
+package io.slack.network;
 
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 public class Message implements Serializable {
@@ -12,7 +11,7 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "Message{" +
+        return "io.slack.network.io.slack.front.Message{" +
                 "code=" + code +
                 '}';
     }

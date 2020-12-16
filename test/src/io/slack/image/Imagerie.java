@@ -1,7 +1,9 @@
-import java.awt.*;
-import javax.swing.*;
+package io.slack.image;
+
 import javax.imageio.ImageIO;
-import java.io.*;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 
 //class permettant la gestion des images
 

@@ -1,8 +1,18 @@
-import javax.swing.*;
+package io.slack.front;
+
+import io.slack.image.Imagerie;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Fenetre extends JFrame implements KeyListener, ActionListener {
     private static JFrame frame = new JFrame();
@@ -25,8 +35,8 @@ public class Fenetre extends JFrame implements KeyListener, ActionListener {
         frame.setContentPane(new JPanel());
 
         setContenu( PageAccueil.getPage() );
-        //frame.add(ToolBar.getToolBar(), BorderLayout.NORTH );
-        //frame.add(PanneauLateralGauche.getPanneau(), BorderLayout.WEST);
+        //frame.add(io.slack.front.ToolBar.getToolBar(), BorderLayout.NORTH );
+        //frame.add(io.slack.front.PanneauLateralGauche.getPanneau(), BorderLayout.WEST);
         //frame.add(centre, BorderLayout.CENTER);
         frame.setVisible(true);
         frame.pack();

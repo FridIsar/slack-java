@@ -1,7 +1,18 @@
-import java.awt.*;
+package io.slack.front;
+
+import io.slack.controller.Systeme;
+import io.slack.model.User;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 
 
 public class PageUser extends PageCentrale implements ActionListener {

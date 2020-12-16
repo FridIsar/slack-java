@@ -1,5 +1,10 @@
-import javax.swing.*;
-import java.awt.*;
+package io.slack.front;
+
+import io.slack.model.User;
+
+import javax.swing.ImageIcon;
+import javax.swing.JTextPane;
+import java.awt.Image;
 
 public class MessageImage extends Message {
 

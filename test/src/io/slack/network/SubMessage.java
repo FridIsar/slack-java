@@ -1,6 +1,5 @@
-package networkAndThreads;
+package io.slack.network;
 
-import com.sun.xml.internal.ws.api.message.Message;
 
 public class SubMessage extends Message {
     private String specificSubMessage;
