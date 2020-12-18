@@ -21,7 +21,7 @@ public class JDBCUserDAO implements DAO<User> {
 
 	@Override
 	public User insert(User object) throws SQLException {
-		String query = "insert into user values ( ?, ?,  ?, ? );";
+		String query = "insert into users values ( ?, ?,  ?, ? );";
 		try(PreparedStatement statement = connection.prepareStatement(query)){
 			statement.setString(1, object.getEmail());
 			statement.setString(2, object.getPassword());
@@ -43,7 +43,7 @@ public class JDBCUserDAO implements DAO<User> {
 
 	@Override
 	public void delete(String key) throws SQLException {
-		String query = "delete from user where email = ? ;";
+		String query = "delete from users where email = ? ;";
 		try(PreparedStatement statement =connection.prepareStatement(query)){
 			statement.setString(1, key);
 			try(ResultSet resultSet = statement.executeQuery()){
@@ -54,7 +54,7 @@ public class JDBCUserDAO implements DAO<User> {
 
 	@Override
 	public User find(String key) throws SQLException {
-		String query = "SELECT * FROM user WHERE email = ?";
+		String query = "SELECT * FROM users WHERE email = ?";
 		try(PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, key);
 			try(ResultSet resultSet = statement.executeQuery()) {
@@ -70,7 +70,7 @@ public class JDBCUserDAO implements DAO<User> {
 	public List<User> findAll() throws SQLException {
 		List<User> users = new ArrayList<>();
 		try(Statement statement = connection.createStatement()) {
-			try(ResultSet resultSet = statement.executeQuery("SELECT * FROM user")) {
+			try(ResultSet resultSet = statement.executeQuery("SELECT * FROM users")) {
 				while (resultSet.next()) {
 					User user = new User(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
 					users.add(user);
