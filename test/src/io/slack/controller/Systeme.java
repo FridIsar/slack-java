@@ -26,8 +26,7 @@ public class Systeme {
     public static boolean login(String email, String password) {
         //appel au réseau
 
-        //TODO question :'est mieux d'avoir des méthodes de création de message dans le réseau, et les appeler ici
-
+        //TODO question : methode du réseau
         Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
         // le credential à adapter
 
