@@ -10,10 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *  * TODO à faire
- * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
- */
 
 public class JDBCUserDAO implements DAO<User> {
 

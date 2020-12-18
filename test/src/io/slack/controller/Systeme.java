@@ -16,25 +16,30 @@ import io.slack.network.communication.MessageAttachment;
 public class Systeme {
 
     /*TODO à supprimer, trouver un autre moyen pour savoir si un utilisateur est connecté sur l'interface */
-    public static boolean isConnect(){return true; }
+    private static boolean connect=false;
+    public static boolean isConnect(){return connect; }
 
     /*TODO à supprimer, trouver autre moyen pour récupérer le user courant */
     public static User getUserCourant(){ return new User("root@slack.com", "root", "createur"); }
 
+    //TODO à faire
     public static boolean login(String email, String password) {
         //appel au réseau
 
-        //question : est ce qu'on peut appeler le package réseau et créer les messages ici
-        //où est ce que c'est mieux d'avoir des méthodes de création de message
+        //TODO question :'est mieux d'avoir des méthodes de création de message dans le réseau, et les appeler ici
 
         Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
         // le credential à adapter
+
+
+
+        connect=true;
         return true;
     }
 
 
 
-
+    //TODO à faire
     public static boolean createAcc(String pseudo, String email, String password ) {
         //appel au réseau
 
@@ -42,6 +47,7 @@ public class Systeme {
         //credential à adapter
 
 
+        connect=true;
         return true;
 
     }
@@ -53,6 +59,8 @@ public class Systeme {
 
     //TODO ajouter appel au réseau pour retirer le user de la liste des connectés
     public static void disconnect() {
+        connect=false;
+
         ToolBar.getToolBar().addMyButton();
         PanneauLateralGauche.getPanneau().addMyButton();
 

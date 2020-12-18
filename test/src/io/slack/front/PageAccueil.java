@@ -29,7 +29,7 @@ public class PageAccueil extends PageCentrale{
         setPreferredSize(new Dimension(1000, 850) ) ;
         setLayout(null);
 
-        //remplirAccueil();
+        remplirAccueil();
 
         try {
             dessiner();
