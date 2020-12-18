@@ -1,5 +1,6 @@
 package io.slack.model;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.Instant;
@@ -16,7 +17,9 @@ public class Channel implements Serializable, Comparable<Channel> {
 	private String name;
 	private User admin;
 	private Date createdAt;
+	private Image icon;
 	private List<User> users = new ArrayList<>();
+	private List<Message> messages = new ArrayList<>();
 
 	public Channel() {}
 
@@ -60,6 +63,18 @@ public class Channel implements Serializable, Comparable<Channel> {
 
 	public void removeUser(User user) {
 		this.users.remove(user);
+	}
+
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+	public void addMessage(Message message){this.messages.add((message)); }
+
+	public void removeMessage(Message message){this.messages.remove((message)); }
+
+	public Image getIcon() {
+		return icon;
 	}
 
 	@Override

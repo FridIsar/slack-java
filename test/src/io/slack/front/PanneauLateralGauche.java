@@ -1,6 +1,7 @@
 package io.slack.front;
 
 import io.slack.controller.ControllerClient;
+import io.slack.model.Channel;
 import io.slack.utils.FileUtils;
 
 import javax.swing.ImageIcon;
@@ -59,9 +60,9 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
         createChat.addActionListener(this);
     }
 
-    public void addAChat(Chat chat){
+    public void addAChat(Channel chat){
         if(chatCompteur < 50) {
-            Image image = chat.getImage();
+            Image image = chat.getIcon();
 
             JButton bouton;
             if (image == null) {
@@ -91,12 +92,13 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
 
             int option = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
             if(option == JOptionPane.OK_OPTION){
-                Chat chat = new Chat(titre.getText());
+                Channel chat = new Channel(titre.getText(), ControllerClient.getUserCourant());
 
                 this.addAChat( chat );
             }
         }
 
+        /*TODO récupérer la liste des chats dans lequel est un user (après création de la table sql 'membre'
         for(JButton button : listeBouton){
             if( source == button ){
                 Chat c = ControllerClient.getChat( listeBouton.indexOf(button));
@@ -104,5 +106,6 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
                 Fenetre.getFenetre().setContenu( c );
             }
         }
+         */
     }
 }

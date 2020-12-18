@@ -1,6 +1,10 @@
 package io.slack.front;
 
 import io.slack.controller.ControllerClient;
+import io.slack.front.UI.UIMessage;
+import io.slack.model.Message;
+import io.slack.model.MessageImage;
+import io.slack.model.User;
 import io.slack.utils.FileUtils;
 
 import javax.swing.JScrollPane;
@@ -25,7 +29,7 @@ public class PageAccueil extends PageCentrale{
         setPreferredSize(new Dimension(1000, 850) ) ;
         setLayout(null);
 
-        remplirAccueil();
+        //remplirAccueil();
 
         try {
             dessiner();
@@ -46,10 +50,10 @@ public class PageAccueil extends PageCentrale{
     }
 
     public void remplirAccueil(){
-        MessageImage m1 = new MessageImage(ControllerClient.getUser(),"image 1 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        MessageImage m2 = new MessageImage(ControllerClient.getUser(),"image 2 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        MessageImage m3 = new MessageImage(ControllerClient.getUser(),"image 3 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        MessageImage m4 = new MessageImage(ControllerClient.getUser(),"image 4 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        MessageImage m1 = new MessageImage(new User("root@slack.com", "root", "createur"),"image 1 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        MessageImage m2 = new MessageImage(new User("root@slack.com", "root", "createur"),"image 2 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        MessageImage m3 = new MessageImage(new User("root@slack.com", "root", "createur"),"image 3 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        MessageImage m4 = new MessageImage(new User("root@slack.com", "root", "createur"),"image 4 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
 
         contenu.add(m1);
         contenu.add(m2);
@@ -63,7 +67,7 @@ public class PageAccueil extends PageCentrale{
         textPane.getDocument().remove(0, doc.getLength() );
         for(int i =contenu.size()-1; i>=0; i--){
             Message mess = contenu.get(i);
-            textPane.insertComponent( mess.dessiner() );
+            textPane.insertComponent( new UIMessage(mess).dessiner() );
 
 
             SimpleAttributeSet style = new SimpleAttributeSet();

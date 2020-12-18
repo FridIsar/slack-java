@@ -114,7 +114,7 @@ public class ToolBar extends JPanel implements ActionListener {
                 int optionSignin = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), messageSignin, "signin", JOptionPane.OK_CANCEL_OPTION );
 
                 if( optionSignin == JOptionPane.OK_OPTION )
-                    ControllerClient.signin(pseudo.getText(), email.getText(), pwd.getText());
+                    ControllerClient.createAcc(pseudo.getText(), email.getText(), pwd.getText());
             }
         }
 
@@ -123,7 +123,7 @@ public class ToolBar extends JPanel implements ActionListener {
         }
 
         if(source == profil){
-            PageUser.getPage().setContenu( ControllerClient.getUser() );
+            PageUser.getPage().setContenu( ControllerClient.getUserCourant() );
             Fenetre.getFenetre().setContenu( PageUser.getPage() );
         }
 

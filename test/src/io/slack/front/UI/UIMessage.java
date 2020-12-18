@@ -1,5 +1,6 @@
-package io.slack.front;
+package io.slack.front.UI;
 
+import io.slack.model.Message;
 import io.slack.model.User;
 
 import javax.swing.JPanel;
@@ -12,31 +13,14 @@ import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Message extends JPanel {
-    private String message = null;
-    private Date dateEnvoie;
-    private User auteur = null;
+public class UIMessage extends JPanel {
+    protected Message message;
 
-    public Message(User auteur, String message) {
+    public UIMessage(Message message) {
         setPreferredSize (new Dimension(1000, 100) ) ;
         setLayout(null);
 
-        this.auteur=auteur;
-        this.message = message;
-
-        dateEnvoie = new Date();
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public Date getDateEnvoie() {
-        return dateEnvoie;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+        this.message=message;
     }
 
     public JTextPane dessiner(){
@@ -54,10 +38,10 @@ public class Message extends JPanel {
         StyledDocument doc = textPane.getStyledDocument();
 
         try {
-            if(auteur != null) {
+            if(message.getAuteur() != null) {
                 SimpleDateFormat simpleformat = new SimpleDateFormat("dd MMM yyyy, hh");
                 StyleConstants.setFontSize(style, 12);
-                doc.insertString(doc.getLength(), "\t" + auteur.getPseudo() + ", " + simpleformat.format(dateEnvoie) + "h\n", style);
+                doc.insertString(doc.getLength(), "\t" + message.getAuteur().getPseudo() + ", " + simpleformat.format(message.getDateEnvoie()) + "h\n", style);
             }
             StyleConstants.setFontSize(style, 20);
             doc.insertString(doc.getLength(), message+"\n", style );

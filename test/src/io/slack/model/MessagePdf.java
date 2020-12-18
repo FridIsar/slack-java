@@ -1,6 +1,5 @@
-package io.slack.front;
+package io.slack.model;
 
-import io.slack.model.User;
 
 import java.io.File;
 
