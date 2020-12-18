@@ -7,17 +7,24 @@ import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
 import io.slack.model.Channel;
 import io.slack.model.Credentials;
+import io.slack.model.MessageImage;
 import io.slack.model.User;
 import io.slack.network.HandlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
+import io.slack.utils.EmailUtils;
+import io.slack.utils.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ControllerClient {
-    private static User user=null;
+    private static User userCourant =null;
     private static boolean connect = false;
     private static ArrayList<Channel> channels = new ArrayList<>();
+
+    private static File attachedFile=null;
+    private static boolean isFileAttached = false;
 
 
     public static boolean isConnect(){return connect; }
@@ -25,8 +32,7 @@ public class ControllerClient {
 
     ////////////// management of users ///////////////////
 
-    /*TODO à supprimer, trouver autre moyen pour récupérer le user courant */
-    public static User getUserCourant(){ return new User("root@slack.com", "root", "createur"); }
+    public static User getUserCourant(){ return userCourant; }
 
     //TODO to do
     public static boolean login(String email, String password) {
@@ -58,11 +64,12 @@ public class ControllerClient {
     }
 
    public static void profil() {
-        UIUser.afficheProfil( user );
+        UIUser.afficheProfil(userCourant);
     }
 
     //TODO call the network to retire the user from the connected users list
     public static void disconnect() {
+        userCourant =null;
         connect=false;
 
         ToolBar.getToolBar().addMyButton();
@@ -78,12 +85,23 @@ public class ControllerClient {
     }
 
 
-    public static void updateUser(User contenu) {
-        //TODO call the network
+    public static void updateUser(User user, String email, String pseudo) {
+        user.setEmail(email);
+        user.setPseudo(pseudo);
+        //TODO call the network to check if email is not used & if not, update the user instance (add a method in UserService)
     }
 
-    public static void updatePassword(String oldPassword, String newPassword) {
-        //TODO call the network & update the user instance
+    public static void updatePassword(User user, String oldPassword, String newPassword) {
+        if(user.getPassword().equals(oldPassword)){
+            if(EmailUtils.isPassword(newPassword)) {
+                user.setPassword(newPassword);
+                //TODO call the network to update the user instance
+            }else{
+                Fenetre.getFenetre().affichePopup(new String[] {"veuillez taper un mot de passe au bon format  [ minimum 8 caractère : 1 maj | 1 min | 1 chiffre | 1 caractère spécial ]"} );
+            }
+        }else{
+            Fenetre.getFenetre().affichePopup( new String[]{"le mot de passe ne correspond pas"} );
+        }
     }
 
     /////// management of channels  ////////////////
@@ -105,13 +123,36 @@ public class ControllerClient {
         return channel;
     }
 
+    public static Channel getChannel(int i) {
+        return channels.get(i);
+    }
+
+    ////////// management of the messages ////////////////
 
 
+    public static void setAttachedFile(File file) {
+        if(file!=null) {
+            attachedFile = file;
+            isFileAttached = true;
+        }
+    }
 
+    private static void resetAttachedFile() {
+        attachedFile = null;
+        isFileAttached = false;
+    }
 
+    public static void sendMessage(Channel channel, String textMessage ){
+        if( isFileAttached ){
+            //TODO call the network to add a message in a channel
+            channel.addMessage( new MessageImage(userCourant, textMessage , FileUtils.getImage(attachedFile ) ));
+            resetAttachedFile();
+        }else
+            channel.addMessage(new io.slack.model.Message(userCourant, textMessage) );
 
+    }
 
-    ///////////// main and test ////////////////
+///////////// main and test ////////////////
 
     /*public static void test(){
         /*for(int i=0; i<20; i++){

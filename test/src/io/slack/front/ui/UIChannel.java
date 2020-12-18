@@ -5,6 +5,8 @@ import io.slack.front.ImageFilter;
 import io.slack.front.CentralePage;
 import io.slack.model.Channel;
 import io.slack.model.Message;
+import io.slack.model.MessageImage;
+import io.slack.utils.FileUtils;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -79,7 +81,10 @@ public class UIChannel extends CentralePage implements ActionListener {
         //add UIMessage to the pane
         for(int i=0; i<channel.getMessages().size(); i++){
             Message mess = channel.getMessages().get(i);
-            textPane.insertComponent( new UIMessage( mess ).dessiner() );
+            if(mess instanceof MessageImage)
+                textPane.insertComponent( new UIMessageImage( (MessageImage)mess ).dessiner() );
+            else
+                textPane.insertComponent( new UIMessage( mess ).dessiner() );
 
             SimpleAttributeSet style = new SimpleAttributeSet();
             StyleConstants.setFontFamily(style, "Calibri");
@@ -101,17 +106,12 @@ public class UIChannel extends CentralePage implements ActionListener {
 
     }
 
-    //TODO only call the controller
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
         if( source == send){
-            /*if( ControllerClient.getUser().isTestFichier() ){
-                addContenu( new MessageImage(ControllerClient.getUser(), texteMessage.getText(), Imagerie.getImage(ControllerClient.getUser().getFichierJoint()) ) );
-                ControllerClient.getUser().resetFichierJoint();
-            }else*/
-                channel.addMessage(new Message(ControllerClient.getUserCourant(),texteMessage.getText()) );
+            ControllerClient.sendMessage(channel,texteMessage.getText());
             try {
                 dessiner();
             } catch (BadLocationException badLocationException) {
@@ -129,7 +129,7 @@ public class UIChannel extends CentralePage implements ActionListener {
             jFileChooser.setDialogTitle("Choisir un fichier");
             int result = jFileChooser.showSaveDialog(this);
             if(result == JFileChooser.APPROVE_OPTION){
-               // ControllerClient.getUser().setFichierJoint(jFileChooser.getSelectedFile());
+               ControllerClient.setAttachedFile(jFileChooser.getSelectedFile());
             }
         }
     }

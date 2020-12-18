@@ -72,6 +72,10 @@ public class UIUser extends CentralePage implements ActionListener {
 
     public User getContenu() { return this.contenu;}
 
+    public void setContenu(User contenu) {
+        this.contenu = contenu;
+    }
+
     public static void afficheProfil(User u){
         page.contenu = u;
         Fenetre.getFenetre().setContenu(UIUser.getPage());
@@ -121,7 +125,6 @@ public class UIUser extends CentralePage implements ActionListener {
     }
 
 
-    //TODO only call the controller
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -142,10 +145,7 @@ public class UIUser extends CentralePage implements ActionListener {
             int option = JOptionPane.showConfirmDialog(this, message, "modifiez vos infos", JOptionPane.OK_CANCEL_OPTION);
 
             if(option == JOptionPane.OK_OPTION){
-               contenu.setEmail(email.getText());
-               contenu.setPseudo(pseudo.getText());
-
-               ControllerClient.updateUser(contenu);
+               ControllerClient.updateUser(contenu, email.getText(), pseudo.getText());
             }
         }
 
@@ -156,7 +156,7 @@ public class UIUser extends CentralePage implements ActionListener {
 
             int option = JOptionPane.showConfirmDialog(this, message, "modifiez votre mot de passe", JOptionPane.OK_CANCEL_OPTION );
             if(option==JOptionPane.OK_OPTION){
-                ControllerClient.updatePassword(oldPwd.getText(), newPwd.getText());
+                ControllerClient.updatePassword(contenu, oldPwd.getText(), newPwd.getText());
             }
         }
 

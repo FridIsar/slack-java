@@ -1,6 +1,7 @@
 package io.slack.front;
 
 import io.slack.controller.ControllerClient;
+import io.slack.front.ui.UIChannel;
 import io.slack.model.Channel;
 import io.slack.utils.FileUtils;
 
@@ -83,7 +84,6 @@ public class LeftSidePanel extends JPanel implements ActionListener {
     }
 
 
-    //TODO only call the controller
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -99,14 +99,12 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             }
         }
 
-        /*TODO récupérer la liste des chats dans lequel est un user (après création de la table sql 'membre'
         for(JButton button : listeBouton){
             if( source == button ){
-                Chat c = ControllerClient.getChat( listeBouton.indexOf(button));
+                Channel channel = ControllerClient.getChannel( listeBouton.indexOf(button));
                 //System.out.println("chat : "+c.getTitre());
-                Fenetre.getFenetre().setContenu( c );
+                Fenetre.getFenetre().setContenu( new UIChannel(channel));
             }
         }
-         */
     }
 }

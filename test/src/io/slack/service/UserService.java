@@ -15,18 +15,37 @@ public class UserService {
 
 	private final DAO<User> userDAO = DAOFactory.getUser();
 
+	// User creation
 	public Message create(String email, String password, String pseudo) {
 		try {
 			User user = userDAO.find(email);
-			if (user != null) {
+			if (user != null) {			// User already exists
 				return new Message(403);
 			}
-			if (!EmailUtils.isEmail(email) || !EmailUtils.isPassword(password)) {
+			if (!EmailUtils.isEmail(email) || !EmailUtils.isPassword(password)) {	// Invalid email or password
 				return new Message(403);
 			}
 			user = new User(email, password, pseudo);
 			userDAO.insert(user);
 			return new MessageAttachment<>(200, user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Message(500);
+		}
+	}
+
+	// User deletion
+	public Message delete(String email) {
+		try {
+			User user = userDAO.find(email);
+			if (user == null) {				// User does not exist
+				return new Message(404);
+			}
+			if (!EmailUtils.isEmail(email)) {	// Invalid email
+				return new Message(403);
+			}
+			userDAO.delete(email);
+			return new MessageAttachment<>(200, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Message(500);

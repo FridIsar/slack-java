@@ -25,4 +25,7 @@ public class Message {
         this.message = message;
     }
 
+    public User getAuteur() {
+        return auteur;
+    }
 }
