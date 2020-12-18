@@ -1,6 +1,5 @@
-package io.slack.front.UI;
+package io.slack.front.ui;
 
-import io.slack.front.UI.UIMessage;
 import io.slack.model.MessageImage;
 
 import javax.swing.ImageIcon;

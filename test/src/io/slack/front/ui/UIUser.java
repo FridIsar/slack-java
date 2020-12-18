@@ -1,6 +1,8 @@
-package io.slack.front;
+package io.slack.front.ui;
 
-import io.slack.controller.Systeme;
+import io.slack.controller.ControllerClient;
+import io.slack.front.Fenetre;
+import io.slack.front.CentralePage;
 import io.slack.model.User;
 
 import javax.swing.JButton;
@@ -15,8 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class PageUser extends PageCentrale implements ActionListener {
-    private static PageUser page = new PageUser();
+public class UIUser extends CentralePage implements ActionListener {
+    private static UIUser page = new UIUser();
 
     private JButton modifInfos = new JButton("modifier infos");
     private JButton modifPassword = new JButton("modifier password");
@@ -29,7 +31,7 @@ public class PageUser extends PageCentrale implements ActionListener {
 
 
 
-    private PageUser() {
+    private UIUser() {
         setPreferredSize(new Dimension(900,900));
         setLayout(null);
 
@@ -64,25 +66,16 @@ public class PageUser extends PageCentrale implements ActionListener {
     ///////////////////////////////////////////
 
 
-    public static PageUser getPage() {
+    public static UIUser getPage() {
         return page;
     }
-    public JButton getModifInfos() {
-        return this.modifInfos;
-    }
-    public JButton getModifPassword() {
-        return this.modifPassword;
-    }
-    public JButton getDeleteAccount() {return this.deleteAccount; }
-    public JButton getDisconnect() { return this.disconnect; }
 
-    public void setContenu(User value) { this.contenu = value;  }
     public User getContenu() { return this.contenu;}
 
     public static void afficheProfil(User u){
         page.contenu = u;
-        Fenetre.getFenetre().setContenu(PageUser.getPage());
-        Fenetre.setPageActuelle("profil");
+        Fenetre.getFenetre().setContenu(UIUser.getPage());
+        //Fenetre.setPageActuelle("profil");
     }
 
 
@@ -128,16 +121,17 @@ public class PageUser extends PageCentrale implements ActionListener {
     }
 
 
+    //TODO only call the controller
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
         if( source == disconnect){
-            Systeme.disconnect();
+            ControllerClient.disconnect();
         }
 
         if( source == deleteAccount){
-            Systeme.deleteAccount();
+            ControllerClient.deleteAccount();
         }
 
         if( source == modifInfos ){
@@ -148,7 +142,10 @@ public class PageUser extends PageCentrale implements ActionListener {
             int option = JOptionPane.showConfirmDialog(this, message, "modifiez vos infos", JOptionPane.OK_CANCEL_OPTION);
 
             if(option == JOptionPane.OK_OPTION){
-               // contenu.modifierInfos(email.getText(), pseudo.getText());
+               contenu.setEmail(email.getText());
+               contenu.setPseudo(pseudo.getText());
+
+               ControllerClient.updateUser(contenu);
             }
         }
 
@@ -159,7 +156,7 @@ public class PageUser extends PageCentrale implements ActionListener {
 
             int option = JOptionPane.showConfirmDialog(this, message, "modifiez votre mot de passe", JOptionPane.OK_CANCEL_OPTION );
             if(option==JOptionPane.OK_OPTION){
-                //contenu.modifierPassword(oldPwd.getText(), newPwd.getText());
+                ControllerClient.updatePassword(oldPwd.getText(), newPwd.getText());
             }
         }
 

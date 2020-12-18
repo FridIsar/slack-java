@@ -1,6 +1,7 @@
 package io.slack.front;
 
-import io.slack.controller.Systeme;
+import io.slack.controller.ControllerClient;
+import io.slack.front.ui.UIUser;
 import io.slack.utils.FileUtils;
 
 import javax.swing.ImageIcon;
@@ -54,7 +55,7 @@ public class ToolBar extends JPanel implements ActionListener {
         barre.addSeparator(new Dimension(50,5));
         barre.add( search );
         barre.addSeparator(new Dimension(250,5));
-        if( Systeme.isConnect() )
+        if( ControllerClient.isConnect() )
             barre.add( profil );
         else
             barre.add( connect );
@@ -103,7 +104,7 @@ public class ToolBar extends JPanel implements ActionListener {
                 int optionLogin = JOptionPane.showConfirmDialog(Fenetre.getFenetre(), messageLogin, "login", JOptionPane.OK_CANCEL_OPTION);
 
                 if( optionLogin == JOptionPane.OK_OPTION)
-                    Systeme.login(email.getText(), pwd.getText());
+                    ControllerClient.login(email.getText(), pwd.getText());
             }
             if(option == JOptionPane.NO_OPTION){
                 JTextField pseudo = new JTextField();
@@ -114,7 +115,7 @@ public class ToolBar extends JPanel implements ActionListener {
                 int optionSignin = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), messageSignin, "signin", JOptionPane.OK_CANCEL_OPTION );
 
                 if( optionSignin == JOptionPane.OK_OPTION )
-                    Systeme.createAcc(pseudo.getText(), email.getText(), pwd.getText());
+                    ControllerClient.createAcc(pseudo.getText(), email.getText(), pwd.getText());
             }
         }
 
@@ -123,8 +124,8 @@ public class ToolBar extends JPanel implements ActionListener {
         }
 
         if(source == profil){
-            PageUser.getPage().setContenu( Systeme.getUserCourant() );
-            Fenetre.getFenetre().setContenu( PageUser.getPage() );
+            UIUser.getPage().setContenu( ControllerClient.getUserCourant() );
+            Fenetre.getFenetre().setContenu( UIUser.getPage() );
         }
 
 

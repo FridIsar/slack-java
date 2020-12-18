@@ -1,7 +1,6 @@
 package io.slack.front;
 
-import io.slack.controller.Systeme;
-import io.slack.front.UI.UIMessage;
+import io.slack.front.ui.UIMessage;
 import io.slack.model.Message;
 import io.slack.model.MessageImage;
 import io.slack.model.User;
@@ -17,15 +16,15 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 
-public class PageAccueil extends PageCentrale{
+public class HomePage extends CentralePage {
     private ArrayList<Message> contenu = new ArrayList<Message> ();
 
     JTextPane textPane = new JTextPane();
     JScrollPane jScrollPane= new JScrollPane(textPane);
 
-    private static PageAccueil page=new PageAccueil();
+    private static HomePage page=new HomePage();
 
-    private PageAccueil() {
+    private HomePage() {
         setPreferredSize(new Dimension(1000, 850) ) ;
         setLayout(null);
 
@@ -45,7 +44,7 @@ public class PageAccueil extends PageCentrale{
         bar.setValue( bar.getMaximum() );*/
     }
 
-    public static PageAccueil getPage() {
+    public static HomePage getPage() {
         return page;
     }
 

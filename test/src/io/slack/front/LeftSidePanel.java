@@ -1,6 +1,6 @@
 package io.slack.front;
 
-import io.slack.controller.Systeme;
+import io.slack.controller.ControllerClient;
 import io.slack.model.Channel;
 import io.slack.utils.FileUtils;
 
@@ -19,19 +19,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class PanneauLateralGauche extends JPanel implements ActionListener {
+public class LeftSidePanel extends JPanel implements ActionListener {
     private JButton createChat = new JButton("create chat");
 
     private JScrollPane jScrollPane;
     private static JToolBar barre = new JToolBar(JToolBar.VERTICAL);
-    private static PanneauLateralGauche panneau = new PanneauLateralGauche();
+    private static LeftSidePanel panneau = new LeftSidePanel();
 
     private static ArrayList<JButton> listeBouton = new ArrayList<JButton>();
 
     private int chatCompteur = 0;
 
 
-    private PanneauLateralGauche(){
+    private LeftSidePanel(){
         setPreferredSize (new Dimension(150, 900) ) ;
         setLayout(null);
         barre.setFloatable(false);
@@ -48,11 +48,11 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
 
     }
 
-    public static PanneauLateralGauche getPanneau() {return panneau; }
+    public static LeftSidePanel getPanneau() {return panneau; }
 
     public void addMyButton(){
         barre.removeAll();
-        if( Systeme.isConnect() ){
+        if( ControllerClient.isConnect() ){
             barre.add(createChat);
         }
     }
@@ -73,7 +73,7 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
 
             barre.add(bouton);
             listeBouton.add(bouton);
-            Systeme.addChat(chat);
+            ControllerClient.addChat(chat);
 
             chatCompteur++;
 
@@ -83,6 +83,7 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
     }
 
 
+    //TODO only call the controller
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -92,16 +93,16 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
 
             int option = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
             if(option == JOptionPane.OK_OPTION){
-                Channel chat = new Channel(titre.getText(), Systeme.getUserCourant());
+                /*Channel chat = new Channel(titre.getText(), ControllerClient.getUserCourant());
 
-                this.addAChat( chat );
+                this.addAChat( chat );*/
             }
         }
 
         /*TODO récupérer la liste des chats dans lequel est un user (après création de la table sql 'membre'
         for(JButton button : listeBouton){
             if( source == button ){
-                Channel c = Systeme.getChat( listeBouton.indexOf(button));
+                Chat c = ControllerClient.getChat( listeBouton.indexOf(button));
                 //System.out.println("chat : "+c.getTitre());
                 Fenetre.getFenetre().setContenu( c );
             }

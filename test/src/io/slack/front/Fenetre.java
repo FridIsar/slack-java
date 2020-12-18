@@ -17,7 +17,7 @@ import java.awt.event.KeyListener;
 public class Fenetre extends JFrame implements KeyListener, ActionListener {
     private static JFrame frame = new JFrame();
     private static Fenetre fenetre = new Fenetre();
-    private static PageCentrale centre;
+    private static CentralePage centre;
     private static Container panneauGauche;
     private static String pageActuelle = "accueil";
 
@@ -34,7 +34,7 @@ public class Fenetre extends JFrame implements KeyListener, ActionListener {
 
         frame.setContentPane(new JPanel());
 
-        setContenu( PageAccueil.getPage() );
+        setContenu( HomePage.getPage() );
         //frame.add(io.slack.front.ToolBar.getToolBar(), BorderLayout.NORTH );
         //frame.add(io.slack.front.PanneauLateralGauche.getPanneau(), BorderLayout.WEST);
         //frame.add(centre, BorderLayout.CENTER);
@@ -64,7 +64,7 @@ public class Fenetre extends JFrame implements KeyListener, ActionListener {
         return pageActuelle;
     }
 
-   public void setContenu(PageCentrale contenu){
+   public void setContenu(CentralePage contenu){
         if(centre != null)
             frame.remove(centre);
         centre=contenu;
@@ -74,13 +74,13 @@ public class Fenetre extends JFrame implements KeyListener, ActionListener {
            e.printStackTrace();
        }
        frame.add(ToolBar.getToolBar(), BorderLayout.NORTH );
-       frame.add(PanneauLateralGauche.getPanneau(), BorderLayout.WEST);
+       frame.add(LeftSidePanel.getPanneau(), BorderLayout.WEST);
        frame.add(centre, BorderLayout.CENTER);
        frame.setVisible(true);
     }
 
     public void backToHome() {
-        setContenu(PageAccueil.getPage());
+        setContenu(HomePage.getPage());
     }
 
 

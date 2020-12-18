@@ -1,8 +1,8 @@
-package io.slack.front.UI;
+package io.slack.front.ui;
 
-import io.slack.controller.Systeme;
+import io.slack.controller.ControllerClient;
 import io.slack.front.ImageFilter;
-import io.slack.front.PageCentrale;
+import io.slack.front.CentralePage;
 import io.slack.model.Channel;
 import io.slack.model.Message;
 
@@ -21,11 +21,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class UIChannel extends PageCentrale implements ActionListener {
+public class UIChannel extends CentralePage implements ActionListener {
     private Channel channel;
-    //
 
-    private Image image;
     //bouton
     private JButton send = new JButton("send");
     private JTextField texteMessage = new JTextField();
@@ -43,9 +41,7 @@ public class UIChannel extends PageCentrale implements ActionListener {
 
         this.channel=channel;
 
-        channel.addMessage(new Message(Systeme.getUserCourant()," Bienvenue, voici le début de la conversation '"+channel.getName()+"'"));
-
-
+        //channel.addMessage(new Message(ControllerClient.getUserCourant()," Bienvenue, voici le début de la conversation '"+channel.getName()+"'"));
         initMyButton();
         addMyButton();
 
@@ -70,17 +66,17 @@ public class UIChannel extends PageCentrale implements ActionListener {
     }
 
 
-    /*public void addContenu(Message m){
-        channel.getMessages().add(m);
-    }*/
+    public Image getIcon() { return channel.getIcon();  }
 
-    public Image getImage() { return image;  }
+    public void setIcon(Image image) {  channel.setIcon(image); }
 
-    public void setImage(Image image) {  this.image = image; }
+
 
     public void dessiner() throws BadLocationException {
+        //clear the pane
         StyledDocument doc = textPane.getStyledDocument();
         textPane.getDocument().remove(0, doc.getLength() );
+        //add UIMessage to the pane
         for(int i=0; i<channel.getMessages().size(); i++){
             Message mess = channel.getMessages().get(i);
             textPane.insertComponent( new UIMessage( mess ).dessiner() );
@@ -105,16 +101,17 @@ public class UIChannel extends PageCentrale implements ActionListener {
 
     }
 
+    //TODO only call the controller
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
         if( source == send){
-            /*if( Systeme.getUser().isTestFichier() ){
-                addContenu( new MessageImage(Systeme.getUser(), texteMessage.getText(), Imagerie.getImage(Systeme.getUser().getFichierJoint()) ) );
-                Systeme.getUser().resetFichierJoint();
+            /*if( ControllerClient.getUser().isTestFichier() ){
+                addContenu( new MessageImage(ControllerClient.getUser(), texteMessage.getText(), Imagerie.getImage(ControllerClient.getUser().getFichierJoint()) ) );
+                ControllerClient.getUser().resetFichierJoint();
             }else*/
-                channel.addMessage(new Message(Systeme.getUserCourant(),texteMessage.getText()) );
+                channel.addMessage(new Message(ControllerClient.getUserCourant(),texteMessage.getText()) );
             try {
                 dessiner();
             } catch (BadLocationException badLocationException) {
@@ -132,7 +129,7 @@ public class UIChannel extends PageCentrale implements ActionListener {
             jFileChooser.setDialogTitle("Choisir un fichier");
             int result = jFileChooser.showSaveDialog(this);
             if(result == JFileChooser.APPROVE_OPTION){
-               // Systeme.getUser().setFichierJoint(jFileChooser.getSelectedFile());
+               // ControllerClient.getUser().setFichierJoint(jFileChooser.getSelectedFile());
             }
         }
     }

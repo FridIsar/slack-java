@@ -19,7 +19,7 @@ public class SignInMessage implements ClientMessageHandler<Credentials>{
 
     @Override
     public Message asyncHandle(Credentials dataMessage, ConcurrentHashMap<Integer, String> cc, AsynchronousSocketChannel sock) {
-        // some treatment
+        // some treatment using services
         System.out.println("Handling Signin ...");
         cc.put(sock.hashCode(), "@EMAIL");
         return new Message(200);

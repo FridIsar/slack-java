@@ -1,7 +1,6 @@
-package io.slack.front.UI;
+package io.slack.front.ui;
 
 import io.slack.model.Message;
-import io.slack.model.User;
 
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
@@ -11,7 +10,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class UIMessage extends JPanel {
     protected Message message;

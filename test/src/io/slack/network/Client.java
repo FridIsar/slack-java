@@ -9,6 +9,13 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+
+/**
+ * TODO :
+ * Logique                  Concrete action code
+ * user open the app        Syste
+ *
+ */
 public class Client {
     final Socket socket;
     final InetAddress ip;
@@ -37,7 +44,7 @@ public class Client {
         }
     }
 
-    // Question :
+    // TODO :
     //  split synchronous messages at the first time
     //      -> when the user want's to connect
     //  split asynchronous messages at the second time
@@ -50,6 +57,8 @@ public class Client {
                     try {
                         Message messageReceived = (Message) ois.readObject();
                         System.out.println(messageReceived.getCode());
+
+
 
                         } catch (IOException | ClassNotFoundException e) {
                         System.out.println("SERVER CLOSED !");

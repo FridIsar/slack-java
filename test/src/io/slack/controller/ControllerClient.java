@@ -2,8 +2,8 @@ package io.slack.controller;
 
 
 import io.slack.front.Fenetre;
-import io.slack.front.PageUser;
-import io.slack.front.PanneauLateralGauche;
+import io.slack.front.ui.UIUser;
+import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
 import io.slack.model.Channel;
 import io.slack.model.Credentials;
@@ -12,21 +12,27 @@ import io.slack.network.HandlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 
+import java.util.ArrayList;
 
-public class Systeme {
+public class ControllerClient {
+    private static User user=null;
+    private static boolean connect = false;
+    private static ArrayList<Channel> channels = new ArrayList<>();
 
-    /*TODO à supprimer, trouver un autre moyen pour savoir si un utilisateur est connecté sur l'interface */
-    private static boolean connect=false;
+
     public static boolean isConnect(){return connect; }
+
+
+    ////////////// management of users ///////////////////
 
     /*TODO à supprimer, trouver autre moyen pour récupérer le user courant */
     public static User getUserCourant(){ return new User("root@slack.com", "root", "createur"); }
 
-    //TODO à faire
+    //TODO to do
     public static boolean login(String email, String password) {
         //appel au réseau
 
-        //TODO question : methode du réseau
+        //TODO call the network
         Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
         // le credential à adapter
 
@@ -38,7 +44,7 @@ public class Systeme {
 
 
 
-    //TODO à faire
+    //TODO to do
     public static boolean createAcc(String pseudo, String email, String password ) {
         //appel au réseau
 
@@ -51,30 +57,61 @@ public class Systeme {
 
     }
 
-    //TODO user
    public static void profil() {
-        PageUser.afficheProfil( new User("root@slack.com", "root", "createur") );
+        UIUser.afficheProfil( user );
     }
 
-    //TODO ajouter appel au réseau pour retirer le user de la liste des connectés
+    //TODO call the network to retire the user from the connected users list
     public static void disconnect() {
         connect=false;
 
         ToolBar.getToolBar().addMyButton();
-        PanneauLateralGauche.getPanneau().addMyButton();
+        LeftSidePanel.getPanneau().addMyButton();
 
         Fenetre.getFenetre().backToHome();
     }
 
-    //TODO appelle au réseau pour accéder à DAOFactory.getUser().delete( user.getEmail() )
+    //TODO call the network pour access DAOFactory.getUser().delete( user.getEmail() )
     public static void deleteAccount() {
         //DatabaseUser.getDatabase().deleteUser(user.getId());
 	    disconnect();
     }
 
+
+    public static void updateUser(User contenu) {
+        //TODO call the network
+    }
+
+    public static void updatePassword(String oldPassword, String newPassword) {
+        //TODO call the network & update the user instance
+    }
+
+    /////// management of channels  ////////////////
+
+
     //TODO à faire
     public static void addChat(Channel chat) {
+        //TODO call the network to register user in the channel
+
+        channels.add(chat);
+
     }
+
+    public static Channel createChannel(){
+        Channel channel=null;
+
+        //TODO call the network
+
+        return channel;
+    }
+
+
+
+
+
+
+
+    ///////////// main and test ////////////////
 
     /*public static void test(){
         /*for(int i=0; i<20; i++){
@@ -91,7 +128,7 @@ public class Systeme {
 
 
         for(int i=0; i<50; i++){
-            example.addContenu( new Message(Systeme.getUser(), "test"+i ) );
+            example.addContenu( new Message(ControllerClient.getUser(), "test"+i ) );
         }
     }
 

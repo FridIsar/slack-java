@@ -77,6 +77,10 @@ public class Channel implements Serializable, Comparable<Channel> {
 		return icon;
 	}
 
+	public void setIcon(Image icon) {
+		this.icon = icon;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
