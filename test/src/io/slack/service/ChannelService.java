@@ -37,6 +37,21 @@ public class ChannelService {
 		}
 	}
 
+	// Channel deletion
+	public Message delete(String name) {
+		try {
+			Channel channel = channelDAO.find(name);
+			if (channel == null) {		// Channel does not exist
+				return new Message(404);
+			}
+			channelDAO.delete(name);
+			return new MessageAttachment<>(200, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Message(500);
+		}
+	}
+
 	// User is entering a channel
 	public Message addUser(String channelName, User user)	{
 		try {
