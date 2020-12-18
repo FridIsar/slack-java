@@ -123,7 +123,7 @@ public class ToolBar extends JPanel implements ActionListener {
         }
 
         if(source == profil){
-            PageUser.getPage().setContenu( Systeme.getUser() );
+            PageUser.getPage().setContenu( Systeme.getUserCourant() );
             Fenetre.getFenetre().setContenu( PageUser.getPage() );
         }
 

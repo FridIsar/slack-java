@@ -43,7 +43,7 @@ public class UIChannel extends PageCentrale implements ActionListener {
 
         this.channel=channel;
 
-        channel.addMessage(new Message(Systeme.getUser()," Bienvenue, voici le début de la conversation '"+channel.getName()+"'"));
+        channel.addMessage(new Message(Systeme.getUserCourant()," Bienvenue, voici le début de la conversation '"+channel.getName()+"'"));
 
 
         initMyButton();
@@ -114,7 +114,7 @@ public class UIChannel extends PageCentrale implements ActionListener {
                 addContenu( new MessageImage(Systeme.getUser(), texteMessage.getText(), Imagerie.getImage(Systeme.getUser().getFichierJoint()) ) );
                 Systeme.getUser().resetFichierJoint();
             }else*/
-                channel.addMessage(new Message(Systeme.getUser(),texteMessage.getText()) );
+                channel.addMessage(new Message(Systeme.getUserCourant(),texteMessage.getText()) );
             try {
                 dessiner();
             } catch (BadLocationException badLocationException) {
