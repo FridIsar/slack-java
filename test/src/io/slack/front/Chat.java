@@ -1,6 +1,6 @@
 package io.slack.front;
 
-import io.slack.controller.Systeme;
+import io.slack.controller.ControllerClient;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -41,7 +41,7 @@ public class Chat extends PageCentrale implements ActionListener {
 
         this.titre=titre;
 
-        addContenu(new Message(Systeme.getUser()," Bienvenue, voici le début de la conversation '"+titre+"'"));
+        addContenu(new Message(ControllerClient.getUser()," Bienvenue, voici le début de la conversation '"+titre+"'"));
 
 
         initMyButton();
@@ -110,11 +110,11 @@ public class Chat extends PageCentrale implements ActionListener {
         Object source = e.getSource();
 
         if( source == send){
-            /*if( Systeme.getUser().isTestFichier() ){
-                addContenu( new MessageImage(Systeme.getUser(), texteMessage.getText(), Imagerie.getImage(Systeme.getUser().getFichierJoint()) ) );
-                Systeme.getUser().resetFichierJoint();
+            /*if( ControllerClient.getUser().isTestFichier() ){
+                addContenu( new MessageImage(ControllerClient.getUser(), texteMessage.getText(), Imagerie.getImage(ControllerClient.getUser().getFichierJoint()) ) );
+                ControllerClient.getUser().resetFichierJoint();
             }else*/
-                addContenu( new Message(Systeme.getUser(),texteMessage.getText()) );
+                addContenu( new Message(ControllerClient.getUser(),texteMessage.getText()) );
             try {
                 dessiner();
             } catch (BadLocationException badLocationException) {
@@ -132,7 +132,7 @@ public class Chat extends PageCentrale implements ActionListener {
             jFileChooser.setDialogTitle("Choisir un fichier");
             int result = jFileChooser.showSaveDialog(this);
             if(result == JFileChooser.APPROVE_OPTION){
-               // Systeme.getUser().setFichierJoint(jFileChooser.getSelectedFile());
+               // ControllerClient.getUser().setFichierJoint(jFileChooser.getSelectedFile());
             }
         }
     }

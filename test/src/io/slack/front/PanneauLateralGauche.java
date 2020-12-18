@@ -1,6 +1,6 @@
 package io.slack.front;
 
-import io.slack.controller.Systeme;
+import io.slack.controller.ControllerClient;
 import io.slack.utils.FileUtils;
 
 import javax.swing.ImageIcon;
@@ -51,7 +51,7 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
 
     public void addMyButton(){
         barre.removeAll();
-        if( Systeme.isConnect() ){
+        if( ControllerClient.isConnect() ){
             barre.add(createChat);
         }
     }
@@ -72,7 +72,7 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
 
             barre.add(bouton);
             listeBouton.add(bouton);
-            Systeme.addChat(chat);
+            ControllerClient.addChat(chat);
 
             chatCompteur++;
 
@@ -99,7 +99,7 @@ public class PanneauLateralGauche extends JPanel implements ActionListener {
 
         for(JButton button : listeBouton){
             if( source == button ){
-                Chat c = Systeme.getChat( listeBouton.indexOf(button));
+                Chat c = ControllerClient.getChat( listeBouton.indexOf(button));
                 //System.out.println("chat : "+c.getTitre());
                 Fenetre.getFenetre().setContenu( c );
             }

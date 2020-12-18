@@ -20,7 +20,7 @@ public class AsyncServer {
 
 
     public static void main(String[] args) throws IOException {
-         ConcurrentHashMap<Integer, String> concurrentUserAuthenticated;
+        ConcurrentHashMap<Integer, String> concurrentUserAuthenticated;
         concurrentUserAuthenticated = new ConcurrentHashMap<>();
         InetSocketAddress sockAddr = new InetSocketAddress("localhost", 50_500);
 

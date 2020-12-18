@@ -1,6 +1,6 @@
 package io.slack.front;
 
-import io.slack.controller.Systeme;
+import io.slack.controller.ControllerClient;
 import io.slack.model.User;
 
 import javax.swing.JButton;
@@ -133,11 +133,11 @@ public class PageUser extends PageCentrale implements ActionListener {
         Object source = e.getSource();
 
         if( source == disconnect){
-            Systeme.disconnect();
+            ControllerClient.disconnect();
         }
 
         if( source == deleteAccount){
-            Systeme.deleteAccount();
+            ControllerClient.deleteAccount();
         }
 
         if( source == modifInfos ){

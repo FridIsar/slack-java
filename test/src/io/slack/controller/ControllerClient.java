@@ -12,7 +12,7 @@ import io.slack.utils.EmailUtils;
 
 import java.util.ArrayList;
 
-public class Systeme {
+public class ControllerClient {
     private static User user=null;
     private static boolean connect = false;
 
@@ -32,6 +32,9 @@ public class Systeme {
         return connect;
     }
 
+    // TODO :
+    //      => creation of a methode on Client side to generarte (set) a specifique TYpe of Message
+    //      methode to call with following parametters  : ClientMessageType.SIGNIN.getValue() ET Object Credentials
     public static boolean login(String email, String password) {
 
 	    if(DatabaseUser.getDatabase().existEmail(email)) {
@@ -121,7 +124,7 @@ public class Systeme {
     }
 
     public static void deleteAccount() {
-        DatabaseUser.getDatabase().deleteUser(user.getId());
+        //DatabaseUser.getDatabase().deleteUser(user.getId());
 	    disconnect();
     }
 
@@ -140,7 +143,7 @@ public class Systeme {
 
 
         for(int i=0; i<50; i++){
-            example.addContenu( new Message(Systeme.getUser(), "test"+i ) );
+            example.addContenu( new Message(ControllerClient.getUser(), "test"+i ) );
         }
     }
 
