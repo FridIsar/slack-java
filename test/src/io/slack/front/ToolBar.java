@@ -21,7 +21,7 @@ import java.awt.event.ActionListener;
 public class ToolBar extends JPanel implements ActionListener {
     private Image imgLogo = FileUtils.getImage("Icons/logo.png");
     private Image imgConnect = FileUtils.getImage("Icons/connect.png");
-    private Image imgProfil = FileUtils.getImage("Icons/profil.jpg");
+    private Image imgProfil = FileUtils.getImage("Icons/profil.png");
     private Image imgSearch = FileUtils.getImage("Icons/search.jpg");
 
     private JButton logo = new JButton(new ImageIcon(imgLogo.getScaledInstance(100,100, Image.SCALE_SMOOTH)));;
@@ -39,9 +39,10 @@ public class ToolBar extends JPanel implements ActionListener {
         setPreferredSize (new Dimension(2000, 130) ) ;
         barre.setFloatable(false);
         //barre.setRollover(true);
+
+        addMyButton();
         initMyButton();
         add(barre);
-        addMyButton();
     }
 
     public void addMyButton(){
@@ -68,7 +69,7 @@ public class ToolBar extends JPanel implements ActionListener {
     public static JToolBar getBarre() { return barre; }
 
     public void initMyButton(){
-        recherche.setPreferredSize(new Dimension(300, 0));
+        recherche.setSize(new Dimension(300, 10));
         recherche.setHorizontalAlignment(10);
         recherche.setFont(new Font("Rechercher", 0, 50));
         listeAmis.setPreferredSize(new Dimension(300,0));
@@ -124,8 +125,7 @@ public class ToolBar extends JPanel implements ActionListener {
         }
 
         if(source == profil){
-            UIUser.getPage().setContenu( ControllerClient.getUserCourant() );
-            Fenetre.getFenetre().setContenu( UIUser.getPage() );
+            Fenetre.getFenetre().setContenu( new UIUser( ControllerClient.getUserCourant() ) );
         }
 
 

@@ -74,8 +74,9 @@ public class Fenetre extends JFrame implements KeyListener, ActionListener {
            e.printStackTrace();
        }
        frame.add(ToolBar.getToolBar(), BorderLayout.NORTH );
-       frame.add(LeftSidePanel.getPanneau(), BorderLayout.WEST);
+       frame.add(LeftSidePanel.getPanel(), BorderLayout.WEST);
        frame.add(centre, BorderLayout.CENTER);
+       frame.add(RightSidePanel.getPanel(), BorderLayout.EAST);
        frame.setVisible(true);
     }
 

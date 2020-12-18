@@ -2,6 +2,7 @@ package io.slack.controller;
 
 
 import io.slack.front.Fenetre;
+import io.slack.front.RightSidePanel;
 import io.slack.front.ui.UIUser;
 import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
@@ -17,6 +18,7 @@ import io.slack.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ControllerClient {
     private static User userCourant =null;
@@ -64,7 +66,7 @@ public class ControllerClient {
     }
 
    public static void profil() {
-        UIUser.afficheProfil(userCourant);
+        Fenetre.getFenetre().setContenu( new UIUser(userCourant) );
     }
 
     //TODO call the network to retire the user from the connected users list
@@ -73,7 +75,7 @@ public class ControllerClient {
         connect=false;
 
         ToolBar.getToolBar().addMyButton();
-        LeftSidePanel.getPanneau().addMyButton();
+        LeftSidePanel.getPanel().addMyButton();
 
         Fenetre.getFenetre().backToHome();
     }
@@ -107,16 +109,16 @@ public class ControllerClient {
     /////// management of channels  ////////////////
 
 
-    //TODO à faire
+    //TODO to do
     public static void addChat(Channel chat) {
         //TODO call the network to register user in the channel
 
         channels.add(chat);
-
     }
 
-    public static Channel createChannel(){
-        Channel channel=null;
+    public static Channel createChannel(String nom){
+        Channel channel=new Channel(nom, userCourant);
+        channel.addMessage( new io.slack.model.Message(new User("root@slack.com", "root", "createur"), "Welcome to the '"+channel.getName()+"' channel") );
 
         //TODO call the network
 
@@ -154,22 +156,37 @@ public class ControllerClient {
 
 ///////////// main and test ////////////////
 
-    /*public static void test(){
-        /*for(int i=0; i<20; i++){
-            io.slack.front.PanneauLateralGauche.getPanneau().addAbutton( io.slack.utils.Imagerie.getImage( "Icons/logo.png" ) );
-        }
+    //variable for the tests
 
+    private static ArrayList<User> usersTest = new ArrayList<User>();
+
+    public static User getUserTest(int i){
+        return usersTest.get(i);
+    }
+
+    public static void test(){
         User nidhal = new User("nidhal@gmail.com","root","nidhal");
         connect=true;
-        user = nidhal;
+        userCourant = nidhal;
 
-        Chat example = new Chat( "test ");
-        PanneauLateralGauche.getPanneau().addAChat(example);
+        //left pannel
+        for(int i=0; i<20; i++){
+            Channel channel = createChannel("channel"+i);
+            LeftSidePanel.getPanel().addAChat(channel);
+        }
 
+        Channel example = new Channel( "test ", userCourant);
+        LeftSidePanel.getPanel().addAChat(example);
 
+        //right pannel
+        for(int i=0; i<20; i++){
+            User user = new User("root_"+i+"@slack.com","root","root_"+i);
+            usersTest.add(user);
+            RightSidePanel.getPanel().addAUser(user);
+        }
 
         for(int i=0; i<50; i++){
-            example.addContenu( new Message(ControllerClient.getUser(), "test"+i ) );
+            example.addMessage( new io.slack.model.Message(userCourant, "test "+i ) );
         }
     }
 
@@ -178,6 +195,6 @@ public class ControllerClient {
         test();
         Fenetre.getFrame().setVisible(true);
 
-    }*/
+    }
 
 }

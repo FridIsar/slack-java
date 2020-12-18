@@ -4,83 +4,79 @@ import io.slack.controller.ControllerClient;
 import io.slack.front.ui.UIChannel;
 import io.slack.model.Channel;
 import io.slack.utils.FileUtils;
+import io.slack.utils.GraphicsUtils;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.ScrollPaneConstants;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class LeftSidePanel extends JPanel implements ActionListener {
     private JButton createChat = new JButton("create chat");
 
     private JScrollPane jScrollPane;
-    private static JToolBar barre = new JToolBar(JToolBar.VERTICAL);
-    private static LeftSidePanel panneau = new LeftSidePanel();
+    private static JToolBar bar = new JToolBar(JToolBar.VERTICAL);
+    private static LeftSidePanel panel = new LeftSidePanel();
 
     private static ArrayList<JButton> listeBouton = new ArrayList<JButton>();
 
-    private int chatCompteur = 0;
+    //private int chatCompteur = 0;
+
+    private static final int DIMENSION_X = 300;
+    private static final int DIMENSION_Y = 900;
+
+    private static int DIMENSION_Y_BAR = 100;
 
 
     private LeftSidePanel(){
-        setPreferredSize (new Dimension(150, 900) ) ;
+        setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y) ) ;
+        bar.setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y) ) ;
         setLayout(null);
-        barre.setFloatable(false);
-        barre.setLayout(new GridLayout(50,1));
-        //barre.setPreferredSize(new Dimension(150, 900));
+        bar.setFloatable(false);
+        //bar.setLayout(new GridLayout(50,1));
 
         initMyButton();
         addMyButton();
 
-        jScrollPane = new JScrollPane(barre, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane = new JScrollPane(bar, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jScrollPane.setBounds(0,0,150,900);
+        jScrollPane.setBounds(0,0,DIMENSION_X, DIMENSION_Y);
         add(jScrollPane);
-
     }
 
-    public static LeftSidePanel getPanneau() {return panneau; }
+    public static LeftSidePanel getPanel() {return panel; }
 
     public void addMyButton(){
-        barre.removeAll();
+        bar.removeAll();
         if( ControllerClient.isConnect() ){
-            barre.add(createChat);
+            bar.add(createChat);
         }
     }
     public void initMyButton(){
         createChat.addActionListener(this);
+        createChat.setFont( new Font(Font.DIALOG,Font.BOLD,25));
     }
 
     public void addAChat(Channel chat){
-        if(chatCompteur < 50) {
-            Image image = chat.getIcon();
+        Image image = chat.getIcon();
 
-            JButton bouton;
-            if (image == null) {
-                image = FileUtils.getImage( "Icons/logo.png" );
-            }
-            bouton = new JButton(new ImageIcon(image.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
-            bouton.addActionListener(this);
-
-            barre.add(bouton);
-            listeBouton.add(bouton);
-            ControllerClient.addChat(chat);
-
-            chatCompteur++;
-
-        }else{
-            Fenetre.getFenetre().affichePopup(new String[]{ "limite de chat atteinte" });
+        JButton button;
+        if (image == null) {
+            image = FileUtils.getImage( "Icons/logo.png" );
         }
+        button = new JButton(new ImageIcon(image.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
+        button.setText(chat.getName());
+        GraphicsUtils.buttonWithText(button);
+        button.addActionListener(this);
+
+
+        bar.setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y_BAR+=82 ));
+        bar.add(button);
+        listeBouton.add(button);
+        ControllerClient.addChat(chat);
     }
 
 
@@ -90,19 +86,27 @@ public class LeftSidePanel extends JPanel implements ActionListener {
 
         if( source == createChat ){
             JTextField titre = new JTextField();
+            titre.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    if(titre.getText().length()>=15 ) //limit textfield to 11 characters
+                        e.consume();
+                }
+            });
 
             int option = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
             if(option == JOptionPane.OK_OPTION){
-                /*Channel chat = new Channel(titre.getText(), ControllerClient.getUserCourant());
-
-                this.addAChat( chat );*/
+                Channel channel = ControllerClient.createChannel(titre.getText());
+                //Channel chat = new Channel(titre.getText(), ControllerClient.getUserCourant());
+                ControllerClient.addChat(channel);
+                this.addAChat(channel);
             }
         }
 
         for(JButton button : listeBouton){
             if( source == button ){
                 Channel channel = ControllerClient.getChannel( listeBouton.indexOf(button));
-                //System.out.println("chat : "+c.getTitre());
+                //System.out.println("chat : "+channel.getName());
                 Fenetre.getFenetre().setContenu( new UIChannel(channel));
             }
         }

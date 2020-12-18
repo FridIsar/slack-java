@@ -3,7 +3,7 @@ package io.slack.front;
 import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
 
-//TODO poser question interface ou class abstract
+//TODO ask question about interface or abstract class
 public abstract class CentralePage extends JPanel {
 
     public abstract void addMyButton();

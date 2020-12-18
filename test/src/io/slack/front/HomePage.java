@@ -1,6 +1,7 @@
 package io.slack.front;
 
 import io.slack.front.ui.UIMessage;
+import io.slack.front.ui.UIMessageImage;
 import io.slack.model.Message;
 import io.slack.model.MessageImage;
 import io.slack.model.User;
@@ -19,8 +20,8 @@ import java.util.ArrayList;
 public class HomePage extends CentralePage {
     private ArrayList<Message> contenu = new ArrayList<Message> ();
 
-    JTextPane textPane = new JTextPane();
-    JScrollPane jScrollPane= new JScrollPane(textPane);
+    private JTextPane textPane = new JTextPane();
+    private JScrollPane jScrollPane= new JScrollPane(textPane);
 
     private static HomePage page=new HomePage();
 
@@ -64,9 +65,12 @@ public class HomePage extends CentralePage {
         //System.out.println("dessiner");
         StyledDocument doc = textPane.getStyledDocument();
         textPane.getDocument().remove(0, doc.getLength() );
-        for(int i =contenu.size()-1; i>=0; i--){
+        for(int i =0; i<contenu.size(); i++){
             Message mess = contenu.get(i);
-            textPane.insertComponent( new UIMessage(mess).dessiner() );
+            if(mess instanceof MessageImage)
+                textPane.insertComponent( new UIMessageImage( (MessageImage)mess ).dessiner() );
+            else
+                textPane.insertComponent( new UIMessage( mess ).dessiner() );
 
 
             SimpleAttributeSet style = new SimpleAttributeSet();

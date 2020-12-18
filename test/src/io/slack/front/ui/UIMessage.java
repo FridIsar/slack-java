@@ -42,7 +42,7 @@ public class UIMessage extends JPanel {
                 doc.insertString(doc.getLength(), "\t" + message.getAuteur().getPseudo() + ", " + simpleformat.format(message.getDateEnvoie()) + "h\n", style);
             }
             StyleConstants.setFontSize(style, 20);
-            doc.insertString(doc.getLength(), message+"\n", style );
+            doc.insertString(doc.getLength(), message.getMessage()+"\n", style );
 
         } catch (BadLocationException e) {
             e.printStackTrace();

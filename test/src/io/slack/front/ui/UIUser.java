@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 
 
 public class UIUser extends CentralePage implements ActionListener {
-    private static UIUser page = new UIUser();
+    //private static UIUser page = new UIUser();
 
     private JButton modifInfos = new JButton("modifier infos");
     private JButton modifPassword = new JButton("modifier password");
@@ -27,14 +27,15 @@ public class UIUser extends CentralePage implements ActionListener {
     private JButton changePP = new JButton("devenir vendeur");
     
 
-    private User contenu;
+    private User user;
 
 
 
-    private UIUser() {
+    public UIUser(User user) {
         setPreferredSize(new Dimension(900,900));
         setLayout(null);
 
+        this.user=user;
         initMyButton();
 
         addMyButton();
@@ -59,21 +60,19 @@ public class UIUser extends CentralePage implements ActionListener {
         changePP.addActionListener(this);
     }
 
-    public void dessiner() {
-
-    }
+    public void dessiner() {}
 
     ///////////////////////////////////////////
 
-
+/*
     public static UIUser getPage() {
         return page;
     }
 
-    public User getContenu() { return this.contenu;}
+    public User getContenu() { return this.user;}
 
     public void setContenu(User contenu) {
-        this.contenu = contenu;
+        this.user = contenu;
     }
 
     public static void afficheProfil(User u){
@@ -81,6 +80,8 @@ public class UIUser extends CentralePage implements ActionListener {
         Fenetre.getFenetre().setContenu(UIUser.getPage());
         //Fenetre.setPageActuelle("profil");
     }
+
+ */
 
 
     ////////////////////////////////////////////////////////////
@@ -95,32 +96,39 @@ public class UIUser extends CentralePage implements ActionListener {
         int tc=50;
 
 
-        for(int x=0; x<19; x++){
+        /*for(int x=0; x<19; x++){
             for(int y=0; y<18; y++){
                 g.drawRect(x*tc,y*tc,tc,tc) ;
             }
-        }
+        }*/
 
         //nom
-        JLabel labelNom = new JLabel("Bonjour "+contenu.getPseudo()+", bienvenue");
-        labelNom.setBounds(4*tc, 0, tc*10, tc);
-        labelNom.setFont(font);
-        add(labelNom);
+        if(user.equals(ControllerClient.getUserCourant())) {
+            JLabel labelNom = new JLabel("Bonjour " + user.getPseudo() + ", bienvenue");
+            labelNom.setBounds(4 * tc, 0, tc * 10, tc);
+            labelNom.setFont(font);
+            add(labelNom);
 
-        font = new Font("Arial",0,20);
+            font = new Font("Arial", 0, 20);
 
-        //modifier infos
-        modifInfos.setBounds(14*tc, 7*tc, tc*4, tc );
-        modifInfos.setFont(font);
-        //modifier password
-        modifPassword.setBounds(13*tc, 16*tc, tc*5, tc );
-        modifPassword.setFont(font);
-        //supprimer compte
-        deleteAccount.setBounds(0, 16*tc, tc*4, tc );
-        deleteAccount.setFont(font);
-        //disconnect
-        disconnect.setBounds(14*tc, 0*tc, tc*4, tc );
-        disconnect.setFont(font);
+            //modifier infos
+            modifInfos.setBounds(14 * tc, 7 * tc, tc * 4, tc);
+            modifInfos.setFont(font);
+            //modifier password
+            modifPassword.setBounds(13 * tc, 16 * tc, tc * 5, tc);
+            modifPassword.setFont(font);
+            //supprimer compte
+            deleteAccount.setBounds(0, 16 * tc, tc * 4, tc);
+            deleteAccount.setFont(font);
+            //disconnect
+            disconnect.setBounds(14 * tc, 0 * tc, tc * 4, tc);
+            disconnect.setFont(font);
+        }else{
+            JLabel labelNom = new JLabel("Voici le compte de " + user.getPseudo());
+            labelNom.setBounds(4 * tc, 0, tc * 10, tc);
+            labelNom.setFont(font);
+            add(labelNom);
+        }
 
     }
 
@@ -138,14 +146,14 @@ public class UIUser extends CentralePage implements ActionListener {
         }
 
         if( source == modifInfos ){
-            JTextField email = new JTextField( contenu.getEmail());
-            JTextField pseudo = new JTextField( contenu.getPseudo());
+            JTextField email = new JTextField( user.getEmail());
+            JTextField pseudo = new JTextField( user.getPseudo());
             Object[] message= {"email :", email, "pseudo :",pseudo};
 
             int option = JOptionPane.showConfirmDialog(this, message, "modifiez vos infos", JOptionPane.OK_CANCEL_OPTION);
 
             if(option == JOptionPane.OK_OPTION){
-               ControllerClient.updateUser(contenu, email.getText(), pseudo.getText());
+               ControllerClient.updateUser(user, email.getText(), pseudo.getText());
             }
         }
 
@@ -156,7 +164,7 @@ public class UIUser extends CentralePage implements ActionListener {
 
             int option = JOptionPane.showConfirmDialog(this, message, "modifiez votre mot de passe", JOptionPane.OK_CANCEL_OPTION );
             if(option==JOptionPane.OK_OPTION){
-                ControllerClient.updatePassword(contenu, oldPwd.getText(), newPwd.getText());
+                ControllerClient.updatePassword(user, oldPwd.getText(), newPwd.getText());
             }
         }
 

@@ -11,7 +11,7 @@ import java.io.UncheckedIOException;
 public class FileUtils {
 
     public static Image getImage(String nom) {
-        return getImage(new File("./Images/" + nom));
+        return getImage(new File("test/Images/" + nom));
     }
 
     public static Image getImage(File file) {
