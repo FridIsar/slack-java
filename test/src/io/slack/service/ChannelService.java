@@ -11,10 +11,6 @@ import io.slack.utils.EmailUtils;
 import java.util.ArrayList;
 
 /**
- * TODO change class of messages from String to ChatMessage
- */
-
-/**
  * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
  */
 
@@ -61,7 +57,7 @@ public class ChannelService {
 	}
 
 	// User has published a message into a channel
-	public Message publishMessage(String channelName, String message, User user)	{
+	public Message publishMessage(String channelName, io.slack.model.Message message, User user)	{
 		try {
 			Channel channel = channelDAO.find(channelName);
 			if (channel == null) { 				// Channel not found
@@ -70,7 +66,7 @@ public class ChannelService {
 			if (!channel.getUsers().contains(user)) {	// User not in channel
 				return new Message(403);
 			}
-			// channel.addMessage(message);
+			channel.addMessage(message);
 			channelDAO.update(channel);
 			return new MessageAttachment<Channel>(200, channel);
 		} catch (Exception e) {
@@ -89,9 +85,7 @@ public class ChannelService {
 			if (!channel.getUsers().contains(user)) { 	// User not in channel
 				return new Message(403);
 			}
-			ArrayList<String> messages = new ArrayList<String>();
-			// messages = channel.getMessages();
-			return new MessageAttachment<ArrayList>(200, messages);
+			return new MessageAttachment<>(200, (ArrayList) channel.getMessages());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Message(500);
