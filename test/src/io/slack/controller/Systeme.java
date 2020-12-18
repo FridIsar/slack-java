@@ -1,6 +1,5 @@
 package io.slack.controller;
 
-import io.slack.dao.DatabaseUser;
 import io.slack.front.Chat;
 import io.slack.front.Fenetre;
 import io.slack.front.Message;
@@ -16,8 +15,8 @@ public class Systeme {
     private static User user=null;
     private static boolean connect = false;
 
-
     private static ArrayList<Chat> listeChat = new ArrayList<Chat>();
+
 
     public static void addChat( Chat c ){
         listeChat.add(c);
@@ -33,7 +32,10 @@ public class Systeme {
     }
 
     public static boolean login(String email, String password) {
+        //appel au réseau
 
+
+        /*
 	    if(DatabaseUser.getDatabase().existEmail(email)) {
 	    	User u= DatabaseUser.getDatabase().connexion(email,password);
 	    	if(u!=null){
@@ -48,14 +50,18 @@ public class Systeme {
 	    }else{
 	    	Fenetre.getFenetre().affichePopup(new String[]{"email non existant"});
 	    	return false;
-	    }
+	    }*/
+        return true;
     }
 
 
 
 
-    public static boolean signin(String pseudo, String email, String password ) {
+    public static boolean createAcc(String pseudo, String email, String password ) {
+        //appel au réseau
 
+
+        /*
 	    boolean[] check= checkUserData(email, password);
 	    if(check[0] && check[1]) {
             user= new User(email, password, pseudo);
@@ -66,10 +72,12 @@ public class Systeme {
 
 	    }else
 	    	return  false;
-
+        */
+        return true;
 
     }
 
+    /*
     public static boolean[] checkUserData(String email, String mdp){
         boolean[] res = {true, true};
         String[] message = new String[3];
@@ -100,7 +108,7 @@ public class Systeme {
             Fenetre.getFenetre().affichePopup(message);
 
         return res;
-    }
+    }*/
 
 
 
@@ -112,6 +120,7 @@ public class Systeme {
     }
 
     public static void disconnect() {
+       //ajouter appel au réseau pour retirer le user de la liste des connectés
         user=null;
         connect=false;
         ToolBar.getToolBar().addMyButton();
@@ -121,7 +130,8 @@ public class Systeme {
     }
 
     public static void deleteAccount() {
-        DatabaseUser.getDatabase().deleteUser(user.getId());
+        //appelle au réseau pour accéder à DAOFactory.getUser().delete( user.getEmail() )
+        //DatabaseUser.getDatabase().deleteUser(user.getId());
 	    disconnect();
     }
 
@@ -144,11 +154,11 @@ public class Systeme {
         }
     }
 
+    /*
     public static void main(String[] args){
         test();
         Fenetre.getFrame().setVisible(true);
 
-    }
-
+    }*/
 
 }

@@ -1,4 +1,4 @@
-package io.slack.front;
+package io.slack.model;
 
 import io.slack.model.User;
 
@@ -19,13 +19,4 @@ public class MessageImage extends Message {
         return image;
     }
 
-    @Override
-    public JTextPane dessiner() {
-        JTextPane textPane = super.dessiner();
-
-        ImageIcon img = new ImageIcon(image.getScaledInstance(200,200, Image.SCALE_SMOOTH));
-        textPane.insertIcon( img );
-        return textPane;
-
-    }
 }

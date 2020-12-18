@@ -114,7 +114,7 @@ public class ToolBar extends JPanel implements ActionListener {
                 int optionSignin = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), messageSignin, "signin", JOptionPane.OK_CANCEL_OPTION );
 
                 if( optionSignin == JOptionPane.OK_OPTION )
-                    Systeme.signin(pseudo.getText(), email.getText(), pwd.getText());
+                    Systeme.createAcc(pseudo.getText(), email.getText(), pwd.getText());
             }
         }
 

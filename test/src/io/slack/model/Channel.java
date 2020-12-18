@@ -17,6 +17,7 @@ public class Channel implements Serializable, Comparable<Channel> {
 	private User admin;
 	private Date createdAt;
 	private List<User> users = new ArrayList<>();
+	private List<Message> messages = new ArrayList<>();
 
 	public Channel() {}
 
@@ -61,6 +62,14 @@ public class Channel implements Serializable, Comparable<Channel> {
 	public void removeUser(User user) {
 		this.users.remove(user);
 	}
+
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+	public void addMessage(Message message){this.messages.add((message)); }
+
+	public void removeMessage(Message message){this.messages.remove((message)); }
 
 	@Override
 	public boolean equals(Object o) {

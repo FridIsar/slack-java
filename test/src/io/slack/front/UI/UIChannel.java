@@ -1,6 +1,10 @@
-package io.slack.front;
+package io.slack.front.UI;
 
 import io.slack.controller.Systeme;
+import io.slack.front.ImageFilter;
+import io.slack.front.PageCentrale;
+import io.slack.model.Channel;
+import io.slack.model.Message;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -16,11 +20,9 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-public class Chat extends PageCentrale implements ActionListener {
-    private String titre;
-    private ArrayList<Message> contenu = new ArrayList<Message>();
+public class UIChannel extends PageCentrale implements ActionListener {
+    private Channel channel;
     //
 
     private Image image;
@@ -35,13 +37,13 @@ public class Chat extends PageCentrale implements ActionListener {
 
     private boolean imagePresente = false;
 
-    public Chat(String titre){
+    public UIChannel(Channel channel){
         setPreferredSize (new Dimension(1000, 850) ) ;
         setLayout(null);
 
-        this.titre=titre;
+        this.channel=channel;
 
-        addContenu(new Message(Systeme.getUser()," Bienvenue, voici le début de la conversation '"+titre+"'"));
+        channel.addMessage(new Message(Systeme.getUser()," Bienvenue, voici le début de la conversation '"+channel.getName()+"'"));
 
 
         initMyButton();
@@ -68,22 +70,20 @@ public class Chat extends PageCentrale implements ActionListener {
     }
 
 
-    public void addContenu(Message m){
-        contenu.add(m);
-    }
+    /*public void addContenu(Message m){
+        channel.getMessages().add(m);
+    }*/
 
     public Image getImage() { return image;  }
 
     public void setImage(Image image) {  this.image = image; }
 
-    public String getTitre() {return titre; }
-
     public void dessiner() throws BadLocationException {
         StyledDocument doc = textPane.getStyledDocument();
         textPane.getDocument().remove(0, doc.getLength() );
-        for(int i=0; i<contenu.size(); i++){
-            Message mess = contenu.get(i);
-            textPane.insertComponent( mess.dessiner() );
+        for(int i=0; i<channel.getMessages().size(); i++){
+            Message mess = channel.getMessages().get(i);
+            textPane.insertComponent( new UIMessage( mess ).dessiner() );
 
             SimpleAttributeSet style = new SimpleAttributeSet();
             StyleConstants.setFontFamily(style, "Calibri");
@@ -114,7 +114,7 @@ public class Chat extends PageCentrale implements ActionListener {
                 addContenu( new MessageImage(Systeme.getUser(), texteMessage.getText(), Imagerie.getImage(Systeme.getUser().getFichierJoint()) ) );
                 Systeme.getUser().resetFichierJoint();
             }else*/
-                addContenu( new Message(Systeme.getUser(),texteMessage.getText()) );
+                channel.addMessage(new Message(Systeme.getUser(),texteMessage.getText()) );
             try {
                 dessiner();
             } catch (BadLocationException badLocationException) {

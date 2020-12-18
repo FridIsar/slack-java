@@ -1,6 +1,9 @@
 package io.slack.front;
 
 import io.slack.controller.Systeme;
+import io.slack.front.UI.UIMessage;
+import io.slack.model.Message;
+import io.slack.model.MessageImage;
 import io.slack.utils.FileUtils;
 
 import javax.swing.JScrollPane;
@@ -63,7 +66,7 @@ public class PageAccueil extends PageCentrale{
         textPane.getDocument().remove(0, doc.getLength() );
         for(int i =contenu.size()-1; i>=0; i--){
             Message mess = contenu.get(i);
-            textPane.insertComponent( mess.dessiner() );
+            textPane.insertComponent( new UIMessage(mess).dessiner() );
 
 
             SimpleAttributeSet style = new SimpleAttributeSet();
