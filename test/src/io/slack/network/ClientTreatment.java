@@ -1,52 +1,64 @@
 package io.slack.network;
 
+import io.slack.network.HandlerMessages.ClientMessageMapping;
+import io.slack.network.HandlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
+import io.slack.network.communication.MessageAttachment;
 import io.slack.network.communication.SubMessage;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousSocketChannel;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ClientTreatment implements Callable {
-    final ObjectInputStream ois;
-    final ObjectOutputStream oos;
-    private Socket socket;
+    public Socket getSocket() {
+        return socket;
+    }
 
-    public ClientTreatment(Socket socket, ObjectInputStream ois, ObjectOutputStream oos) {
-        System.out.println("in client treatment");
+    private Socket socket;
+    private CopyOnWriteArrayList<ClientTreatment> activatedClient;
+
+    public ConcurrentHashMap<Integer, String> getConcurrentUserAuthenticated() {
+        return concurrentUserAuthenticated;
+    }
+
+    private ConcurrentHashMap<Integer, String> concurrentUserAuthenticated;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
+
+    public ClientTreatment(Socket socket,
+                           CopyOnWriteArrayList<ClientTreatment> activatedClient,
+                           ConcurrentHashMap<Integer, String>concurrentUserAuthenticated) throws IOException {
         this.socket = socket;
-        this.ois = ois;
-        this.oos = oos;
+        this.activatedClient = activatedClient;
+        this.concurrentUserAuthenticated = concurrentUserAuthenticated;
+        this.oos = new ObjectOutputStream(socket.getOutputStream());
+        this.ois = new ObjectInputStream(socket.getInputStream());
     }
 
     @Override
     public Integer call() throws Exception {
         while(true) {
             try {
+                // on lit le Message
                 Message messageReceived = (Message) this.ois.readObject();
-
-                switch (messageReceived.getCode()) {
-                    case 1:
-                        messageReceived = (SubMessage) messageReceived;
-                        break;
-                    default:
-                        System.out.println("/!\\ Invalid message !");
-                        break;
-                }
-
-                // Treatment to make:
-                // 1 -> idetnify the code of the io.slack.network.io.slack.front.Message
-                // 2 -> make the adequate treatement like update
-                //      the databse then notify every client in the vector
-                // end of
-                System.out.println(messageReceived.toString());
-                this.oos.writeObject(new SubMessage(1, "io.slack.network.io.slack.front.Message bien reçu par le serveur !"));
-
+                Message messageToSend = ClientMessageMapping.handlers.get(messageReceived.getCode()).handle(
+                        messageReceived.hasAttachment() ? ((MessageAttachment)messageReceived).getAttachment() : null,
+                        this);
+                this.oos.writeObject(messageToSend);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("CLIENT CLOSED !");
+                this.socket.close();
+                return 1;
             }
         }
     }
+
 }

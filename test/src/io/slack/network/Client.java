@@ -37,6 +37,11 @@ public class Client {
         }
     }
 
+    // Question :
+    //  split synchronous messages at the first time
+    //      -> when the user want's to connect
+    //  split asynchronous messages at the second time
+    //      -> when the user want's to chat (both receive and send messages)
     public void readMessage() {
         Thread threadReadMessage = new Thread(new Runnable() {
             @Override
@@ -44,26 +49,11 @@ public class Client {
                 while (true) {
                     try {
                         Message messageReceived = (Message) ois.readObject();
+                        System.out.println(messageReceived.getCode());
 
-                        switch (messageReceived.getCode()) {
-                            case 1:
-                                messageReceived = (SubMessage) messageReceived;
-                                break;
-                            default:
-                                System.out.println("/!\\ Invalid message !");
-                                break;
-                        }
-
-                        // Treatment to make:
-                        // 1 -> idetnify the code of the io.slack.network.io.slack.front.Message
-                        // 2 -> make the adequate treatement like update
-                        //      the databse then notify every client in the vector
-                        // end of
-                        System.out.println(messageReceived.toString());
-                        Thread.sleep(2000);
-                        oos.writeObject(new SubMessage(1, "io.slack.network.io.slack.front.Message bien reçu par le client !"));
-                    } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                        e.printStackTrace();
+                        } catch (IOException | ClassNotFoundException e) {
+                        System.out.println("SERVER CLOSED !");
+                        break;
                     }
                 }
             }
