@@ -22,6 +22,25 @@ public class ChannelService {
 
 	private final DAO<Channel> channelDAO = DAOFactory.getChannel();
 
+	// Channel creation
+	public Message create(String name, User admin) {
+		try {
+			Channel channel = channelDAO.find(name);
+			if (channel != null) {		// Channel already exists
+				return new Message(403);
+			}
+			/*if (!name.isValid()) {	// Invalid channel name
+				return new Message(403);
+			}*/
+			channel = new Channel(name, admin);
+			channelDAO.insert(channel);
+			return new MessageAttachment<Channel>(200, channel);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Message(500);
+		}
+	}
+
 	// User is entering a channel
 	public Message addUser(String channelName, User user)	{
 		try {
