@@ -9,6 +9,11 @@ import io.slack.network.communication.MessageAttachment;
 import io.slack.utils.EmailUtils;
 
 import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * TODO Add parameters to update OR add update for each Channel attribute
+ */
 
 /**
  * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
@@ -41,7 +46,7 @@ public class ChannelService {
 	public Message delete(String name) {
 		try {
 			Channel channel = channelDAO.find(name);
-			if (channel == null) {		// Channel does not exist
+			if (channel == null) {        // Channel does not exist
 				return new Message(404);
 			}
 			channelDAO.delete(name);
@@ -52,17 +57,13 @@ public class ChannelService {
 		}
 	}
 
-	// User is entering a channel
-	public Message addUser(String channelName, User user)	{
+	// Update channel (add all parameters or one update per attribute?)
+	public Message update(String name) {
 		try {
-			Channel channel = channelDAO.find(channelName);
-			if (channel == null) { 				// Channel not found
+			Channel channel = channelDAO.find(name);
+			if (channel == null) {		// Channel does not exist
 				return new Message(404);
 			}
-			if (channel.getUsers().contains(user)) { 	// User already in channel
-				return new Message(400);
-			}
-			channel.addUser(user);
 			channelDAO.update(channel);
 			return new MessageAttachment<Channel>(200, channel);
 		} catch (Exception e) {
@@ -71,55 +72,28 @@ public class ChannelService {
 		}
 	}
 
-	// User has published a message into a channel
-	public Message publishMessage(String channelName, io.slack.model.Message message, User user)	{
+	// Finds channel
+	public Message get(String name) {
 		try {
-			Channel channel = channelDAO.find(channelName);
-			if (channel == null) { 				// Channel not found
+			Channel channel = channelDAO.find(name);
+			if (channel == null) {        // Channel does not exist
 				return new Message(404);
 			}
-			if (!channel.getUsers().contains(user)) {	// User not in channel
-				return new Message(403);
-			}
-			channel.addMessage(message);
-			channelDAO.update(channel);
-			return new MessageAttachment<Channel>(200, channel);
+			return new MessageAttachment<>(200, channel);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Message(500);
 		}
 	}
 
-	// User wants to retrieve all messages from a channel
-	public Message getMessages(String channelName, User user)	{
+	// Gets all channels
+	public Message getAll() {
 		try {
-			Channel channel = channelDAO.find(channelName);
-			if (channel == null) { 				// Channel not found
+			List<Channel> channels = channelDAO.findAll();
+			if (channels.isEmpty()) {        // Channels do not exist
 				return new Message(404);
 			}
-			if (!channel.getUsers().contains(user)) { 	// User not in channel
-				return new Message(403);
-			}
-			return new MessageAttachment<>(200, (ArrayList) channel.getMessages());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Message(500);
-		}
-	}
-
-	// User quits a channel
-	public Message removeUser(String channelName, User user)	{
-		try {
-			Channel channel = channelDAO.find(channelName);
-			if (channel == null) { 				// Channel not found
-				return new Message(404);
-			}
-			if (!channel.getUsers().contains(user)) { 	// User not in channel
-				return new Message(403);
-			}
-			channel.removeUser(user);
-			channelDAO.update(channel);
-			return new MessageAttachment<Channel>(200, channel);
+			return new MessageAttachment<ArrayList>(200, (ArrayList) channels);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Message(500);
