@@ -18,31 +18,23 @@ import io.slack.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ControllerClient {
-    private static User userCourant =null;
+    ////////////// management of users ///////////////////
+
+    private static User currentUser =null;
     private static boolean connect = false;
-    private static ArrayList<Channel> channels = new ArrayList<>();
-
-    private static File attachedFile=null;
-    private static boolean isFileAttached = false;
-
 
     public static boolean isConnect(){return connect; }
 
-
-    ////////////// management of users ///////////////////
-
-    public static User getUserCourant(){ return userCourant; }
+    public static User getCurrentUser(){ return currentUser; }
 
     //TODO to do
     public static boolean login(String email, String password) {
-        //appel au réseau
 
         //TODO call the network
         Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
-        // le credential à adapter
+        // adapt the credential
 
 
 
@@ -54,10 +46,9 @@ public class ControllerClient {
 
     //TODO to do
     public static boolean createAcc(String pseudo, String email, String password ) {
-        //appel au réseau
 
         Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
-        //credential à adapter
+        // adapt the credential
 
 
         connect=true;
@@ -66,12 +57,12 @@ public class ControllerClient {
     }
 
    public static void profil() {
-        Fenetre.getFenetre().setContenu( new UIUser(userCourant) );
+        Fenetre.getFenetre().setContenu( new UIUser(currentUser) );
     }
 
     //TODO call the network to retire the user from the connected users list
     public static void disconnect() {
-        userCourant =null;
+        currentUser =null;
         connect=false;
 
         ToolBar.getToolBar().addMyButton();
@@ -80,7 +71,7 @@ public class ControllerClient {
         Fenetre.getFenetre().backToHome();
     }
 
-    //TODO call the network pour access DAOFactory.getUser().delete( user.getEmail() )
+    //TODO call the network to access DAOFactory.getUser().delete( user.getEmail() )
     public static void deleteAccount() {
         //DatabaseUser.getDatabase().deleteUser(user.getId());
 	    disconnect();
@@ -106,18 +97,35 @@ public class ControllerClient {
         }
     }
 
-    /////// management of channels  ////////////////
 
+
+//////////////// management of channels  ////////////////
+
+    private static Channel currentChannel = null;
+    private static ArrayList<Channel> channels = new ArrayList<>();
+
+    public static Channel getCurrentChannel() {
+        return currentChannel;
+    }
+    public static void setCurrentChannel(Channel currentChannel) {
+        ControllerClient.currentChannel = currentChannel;
+        ArrayList<User> userList = new ArrayList<>();
+        RightSidePanel.getPanel().removeAllUsers();
+        for(User user : userList){
+            RightSidePanel.getPanel().addAUser(user);
+        }
+    }
+    public static void resetCurrentChannel(){ControllerClient.currentChannel=null; }
 
     //TODO to do
-    public static void addChat(Channel chat) {
+    public static void addChannel(Channel chat) {
         //TODO call the network to register user in the channel
 
         channels.add(chat);
     }
 
     public static Channel createChannel(String nom){
-        Channel channel=new Channel(nom, userCourant);
+        Channel channel=new Channel(nom, currentUser);
         channel.addMessage( new io.slack.model.Message(new User("root@slack.com", "root", "createur"), "Welcome to the '"+channel.getName()+"' channel") );
 
         //TODO call the network
@@ -125,11 +133,23 @@ public class ControllerClient {
         return channel;
     }
 
+    //TODO call the network to get the list of users in a channem
+    public static ArrayList<User> getUserListInChannel(Channel channel){
+        return new ArrayList<>();
+    }
+
     public static Channel getChannel(int i) {
         return channels.get(i);
     }
 
-    ////////// management of the messages ////////////////
+
+
+
+
+///////////////// management of the messages ////////////////
+
+    private static File attachedFile=null;
+    private static boolean isFileAttached = false;
 
 
     public static void setAttachedFile(File file) {
@@ -147,12 +167,16 @@ public class ControllerClient {
     public static void sendMessage(Channel channel, String textMessage ){
         if( isFileAttached ){
             //TODO call the network to add a message in a channel
-            channel.addMessage( new MessageImage(userCourant, textMessage , FileUtils.getImage(attachedFile ) ));
+            channel.addMessage( new MessageImage(currentUser, textMessage , FileUtils.getImage(attachedFile ) ));
             resetAttachedFile();
         }else
-            channel.addMessage(new io.slack.model.Message(userCourant, textMessage) );
+            channel.addMessage(new io.slack.model.Message(currentUser, textMessage) );
 
     }
+
+
+
+
 
 ///////////// main and test ////////////////
 
@@ -167,7 +191,7 @@ public class ControllerClient {
     public static void test(){
         User nidhal = new User("nidhal@gmail.com","root","nidhal");
         connect=true;
-        userCourant = nidhal;
+        currentUser = nidhal;
 
         //left pannel
         for(int i=0; i<20; i++){
@@ -175,7 +199,7 @@ public class ControllerClient {
             LeftSidePanel.getPanel().addAChat(channel);
         }
 
-        Channel example = new Channel( "test ", userCourant);
+        Channel example = new Channel( "test ", currentUser);
         LeftSidePanel.getPanel().addAChat(example);
 
         //right pannel
@@ -186,7 +210,7 @@ public class ControllerClient {
         }
 
         for(int i=0; i<50; i++){
-            example.addMessage( new io.slack.model.Message(userCourant, "test "+i ) );
+            example.addMessage( new io.slack.model.Message(currentUser, "test "+i ) );
         }
     }
 
