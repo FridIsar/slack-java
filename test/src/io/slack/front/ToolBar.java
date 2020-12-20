@@ -38,6 +38,7 @@ public class ToolBar extends JPanel implements ActionListener {
     private ToolBar() {
         setPreferredSize (new Dimension(2000, 130) ) ;
         barre.setFloatable(false);
+        //barre.setLayout(null);
         //barre.setRollover(true);
 
         addMyButton();
@@ -74,6 +75,18 @@ public class ToolBar extends JPanel implements ActionListener {
         recherche.setFont(new Font("Rechercher", 0, 50));
         listeAmis.setPreferredSize(new Dimension(300,0));
 
+        /*
+        logo.setBorderPainted(false);
+        connect.setBorderPainted(false);
+        profil.setBorderPainted(false);
+        search.setBorderPainted(false);
+
+        logo.setFocusPainted(false);
+        connect.setFocusPainted(false);
+        profil.setFocusPainted(false);
+        search.setFocusPainted(false);
+        */
+
         logo.addActionListener(this);
         connect.addActionListener(this);
         profil.addActionListener(this);
@@ -93,7 +106,7 @@ public class ToolBar extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if(source == connect){
-            Object[] message = { "Avez vous un compte ?"};
+            Object[] message = { "Do you have a login account?"};
 
 
             int option = JOptionPane.showConfirmDialog(Fenetre.getFenetre(), message, "authentification", JOptionPane.YES_NO_CANCEL_OPTION);
@@ -125,7 +138,7 @@ public class ToolBar extends JPanel implements ActionListener {
         }
 
         if(source == profil){
-            Fenetre.getFenetre().setContenu( new UIUser( ControllerClient.getUserCourant() ) );
+            Fenetre.getFenetre().setContenu( new UIUser( ControllerClient.getCurrentUser() ) );
         }
 
 

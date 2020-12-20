@@ -74,8 +74,8 @@ public class RightSidePanel extends JPanel implements ActionListener {
         bar.add(button);
         listeBouton.add(button);
         //ControllerClient.addChat(chat);
-
     }
+    public void removeAllUsers(){listeBouton.clear();}
 
 
     @Override
@@ -88,7 +88,7 @@ public class RightSidePanel extends JPanel implements ActionListener {
 
         for(JButton button : listeBouton){
             if(source == button){
-                User user = ControllerClient.getUserTest(listeBouton.indexOf(button)); //TODO retrieve the list of users present in a channel in alphabetical order
+                User user = ControllerClient.getUserTest(listeBouton.indexOf(button));
                 Fenetre.getFenetre().setContenu( new UIUser(user) );
 
             }

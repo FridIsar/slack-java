@@ -8,18 +8,12 @@ import io.slack.model.Message;
 import io.slack.model.MessageImage;
 import io.slack.utils.FileUtils;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -56,6 +50,7 @@ public class UIChannel extends CentralePage implements ActionListener {
         add(jScrollPane);
         jScrollPane.setBounds(0,0,1000,800);
         textPane.setEditable(false);
+        //textPane.setBackground(new Color(108, 132, 203, 121));
     }
     public void addMyButton(){
         add(send);
@@ -80,12 +75,14 @@ public class UIChannel extends CentralePage implements ActionListener {
         textPane.getDocument().remove(0, doc.getLength() );
         //add UIMessage to the pane
         for(int i=0; i<channel.getMessages().size(); i++){
-            Message mess = channel.getMessages().get(i);
-            if(mess instanceof MessageImage)
-                textPane.insertComponent( new UIMessageImage( (MessageImage)mess ).dessiner() );
-            else
-                textPane.insertComponent( new UIMessage( mess ).dessiner() );
-
+            Message message = channel.getMessages().get(i);
+            JTextPane messageUI;
+            if(message instanceof MessageImage){
+                messageUI = new UIMessageImage((MessageImage) message).dessiner();
+            }else{
+                messageUI = new UIMessage(message).dessiner();
+            }
+            textPane.insertComponent(messageUI);
             SimpleAttributeSet style = new SimpleAttributeSet();
             StyleConstants.setFontFamily(style, "Calibri");
             StyleConstants.setFontSize(style, 20);

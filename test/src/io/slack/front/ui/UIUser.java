@@ -1,7 +1,6 @@
 package io.slack.front.ui;
 
 import io.slack.controller.ControllerClient;
-import io.slack.front.Fenetre;
 import io.slack.front.CentralePage;
 import io.slack.model.User;
 
@@ -20,11 +19,11 @@ import java.awt.event.ActionListener;
 public class UIUser extends CentralePage implements ActionListener {
     //private static UIUser page = new UIUser();
 
-    private JButton modifInfos = new JButton("modifier infos");
-    private JButton modifPassword = new JButton("modifier password");
+    private JButton changeInfos = new JButton("change infos");
+    private JButton changePassword = new JButton("change password");
     private JButton deleteAccount = new JButton("delete account");
-    private JButton disconnect = new JButton("se déconnecter");
-    private JButton changePP = new JButton("devenir vendeur");
+    private JButton disconnect = new JButton("disconnect");
+    private JButton changePP = new JButton("change profil pic");
     
 
     private User user;
@@ -43,8 +42,8 @@ public class UIUser extends CentralePage implements ActionListener {
     }
     public void addMyButton(){
         removeAll();
-        add(modifInfos);
-        add(modifPassword);
+        add(changeInfos);
+        add(changePassword);
         add(deleteAccount);
         add(disconnect);
         add(changePP);
@@ -53,8 +52,8 @@ public class UIUser extends CentralePage implements ActionListener {
 
     public void initMyButton(){
 
-        modifInfos.addActionListener(this);
-        modifPassword.addActionListener(this);
+        changeInfos.addActionListener(this);
+        changePassword.addActionListener(this);
         deleteAccount.addActionListener(this);
         disconnect.addActionListener(this);
         changePP.addActionListener(this);
@@ -103,8 +102,8 @@ public class UIUser extends CentralePage implements ActionListener {
         }*/
 
         //nom
-        if(user.equals(ControllerClient.getUserCourant())) {
-            JLabel labelNom = new JLabel("Bonjour " + user.getPseudo() + ", bienvenue");
+        if(user.equals(ControllerClient.getCurrentUser())) {
+            JLabel labelNom = new JLabel("Hello " + user.getPseudo() + ", welcome");
             labelNom.setBounds(4 * tc, 0, tc * 10, tc);
             labelNom.setFont(font);
             add(labelNom);
@@ -112,11 +111,11 @@ public class UIUser extends CentralePage implements ActionListener {
             font = new Font("Arial", 0, 20);
 
             //modifier infos
-            modifInfos.setBounds(14 * tc, 7 * tc, tc * 4, tc);
-            modifInfos.setFont(font);
+            changeInfos.setBounds(14 * tc, 7 * tc, tc * 4, tc);
+            changeInfos.setFont(font);
             //modifier password
-            modifPassword.setBounds(13 * tc, 16 * tc, tc * 5, tc);
-            modifPassword.setFont(font);
+            changePassword.setBounds(13 * tc, 16 * tc, tc * 5, tc);
+            changePassword.setFont(font);
             //supprimer compte
             deleteAccount.setBounds(0, 16 * tc, tc * 4, tc);
             deleteAccount.setFont(font);
@@ -124,7 +123,7 @@ public class UIUser extends CentralePage implements ActionListener {
             disconnect.setBounds(14 * tc, 0 * tc, tc * 4, tc);
             disconnect.setFont(font);
         }else{
-            JLabel labelNom = new JLabel("Voici le compte de " + user.getPseudo());
+            JLabel labelNom = new JLabel("Here is the account of " + user.getPseudo());
             labelNom.setBounds(4 * tc, 0, tc * 10, tc);
             labelNom.setFont(font);
             add(labelNom);
@@ -145,24 +144,24 @@ public class UIUser extends CentralePage implements ActionListener {
             ControllerClient.deleteAccount();
         }
 
-        if( source == modifInfos ){
+        if( source == changeInfos){
             JTextField email = new JTextField( user.getEmail());
             JTextField pseudo = new JTextField( user.getPseudo());
             Object[] message= {"email :", email, "pseudo :",pseudo};
 
-            int option = JOptionPane.showConfirmDialog(this, message, "modifiez vos infos", JOptionPane.OK_CANCEL_OPTION);
+            int option = JOptionPane.showConfirmDialog(this, message, "edit your information", JOptionPane.OK_CANCEL_OPTION);
 
             if(option == JOptionPane.OK_OPTION){
                ControllerClient.updateUser(user, email.getText(), pseudo.getText());
             }
         }
 
-        if( source == modifPassword){
+        if( source == changePassword){
             JTextField oldPwd = new JPasswordField();
             JTextField newPwd = new JPasswordField();
-            Object[] message = {"ancien mot de passe :", oldPwd, "nouveau mot de passe :", newPwd};
+            Object[] message = {"old password :", oldPwd, "new password :", newPwd};
 
-            int option = JOptionPane.showConfirmDialog(this, message, "modifiez votre mot de passe", JOptionPane.OK_CANCEL_OPTION );
+            int option = JOptionPane.showConfirmDialog(this, message, "edit your password", JOptionPane.OK_CANCEL_OPTION );
             if(option==JOptionPane.OK_OPTION){
                 ControllerClient.updatePassword(user, oldPwd.getText(), newPwd.getText());
             }

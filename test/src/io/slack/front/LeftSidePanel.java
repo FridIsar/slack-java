@@ -3,6 +3,7 @@ package io.slack.front;
 import io.slack.controller.ControllerClient;
 import io.slack.front.ui.UIChannel;
 import io.slack.model.Channel;
+import io.slack.model.User;
 import io.slack.utils.FileUtils;
 import io.slack.utils.GraphicsUtils;
 
@@ -76,7 +77,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         bar.setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y_BAR+=82 ));
         bar.add(button);
         listeBouton.add(button);
-        ControllerClient.addChat(chat);
+        ControllerClient.addChannel(chat);
     }
 
 
@@ -98,7 +99,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             if(option == JOptionPane.OK_OPTION){
                 Channel channel = ControllerClient.createChannel(titre.getText());
                 //Channel chat = new Channel(titre.getText(), ControllerClient.getUserCourant());
-                ControllerClient.addChat(channel);
+                ControllerClient.addChannel(channel);
                 this.addAChat(channel);
             }
         }
@@ -107,6 +108,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             if( source == button ){
                 Channel channel = ControllerClient.getChannel( listeBouton.indexOf(button));
                 //System.out.println("chat : "+channel.getName());
+                ControllerClient.setCurrentChannel(channel);
                 Fenetre.getFenetre().setContenu( new UIChannel(channel));
             }
         }
