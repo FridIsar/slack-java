@@ -1,41 +1,32 @@
 package io.slack.network;
 
 import io.slack.network.HandlerMessages.ClientMessageMapping;
-import io.slack.network.HandlerMessages.ClientMessageType;
+import io.slack.network.HandlerMessages.TypeMessagesHandler.Channels.Observer;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
-import io.slack.network.communication.SubMessage;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousSocketChannel;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ClientTreatment implements Callable {
+public class ClientHandler implements Callable, Observer {
     public Socket getSocket() {
         return socket;
     }
 
     private Socket socket;
-    private CopyOnWriteArrayList<ClientTreatment> activatedClient;
-
-    public ConcurrentHashMap<Integer, String> getConcurrentUserAuthenticated() {
-        return concurrentUserAuthenticated;
-    }
-
-    private ConcurrentHashMap<Integer, String> concurrentUserAuthenticated;
+    private CopyOnWriteArrayList<ClientHandler> activatedClient;
+    private ConcurrentHashMap<Socket, String> concurrentUserAuthenticated;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
 
-    public ClientTreatment(Socket socket,
-                           CopyOnWriteArrayList<ClientTreatment> activatedClient,
-                           ConcurrentHashMap<Integer, String>concurrentUserAuthenticated) throws IOException {
+    public ClientHandler(Socket socket,
+                         CopyOnWriteArrayList<ClientHandler> activatedClient,
+                         ConcurrentHashMap<Socket, String>concurrentUserAuthenticated) throws IOException {
         this.socket = socket;
         this.activatedClient = activatedClient;
         this.concurrentUserAuthenticated = concurrentUserAuthenticated;
@@ -49,10 +40,11 @@ public class ClientTreatment implements Callable {
             try {
                 // on lit le Message
                 Message messageReceived = (Message) this.ois.readObject();
-                Message messageToSend = ClientMessageMapping.handlers.get(messageReceived.getCode()).handle(
+                Message messageToSend = ClientMessageMapping.getMapping().get(messageReceived.getCode()).handle(
                         messageReceived.hasAttachment() ? ((MessageAttachment)messageReceived).getAttachment() : null,
                         this);
                 this.oos.writeObject(messageToSend);
+
             } catch (IOException e) {
                 System.out.println("CLIENT CLOSED !");
                 this.socket.close();
@@ -61,4 +53,20 @@ public class ClientTreatment implements Callable {
         }
     }
 
+    @Override
+    public void notify(Message messageNotify) {
+        try {
+            this.oos.writeObject(messageNotify);
+        } catch (IOException e) {
+            System.out.println("notify An error occurred");
+        }
+    }
+
+    public ConcurrentHashMap<Socket, String> getConcurrentUserAuthenticated() {
+        return concurrentUserAuthenticated;
+    }
+
+    public CopyOnWriteArrayList<ClientHandler> getActivatedClient() {
+        return activatedClient;
+    }
 }

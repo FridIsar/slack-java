@@ -8,20 +8,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.concurrent.locks.*;
 
-
-/**
- * TODO :
- * Logique                  Concrete action code
- * user open the app        Syste
- *
- */
 public class Client {
     final Socket socket;
     final InetAddress ip;
     final int serverPort = 50_500;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+    private Message response;
+
+    private final Lock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
 
     public Client() throws IOException {
         this.ip = InetAddress.getByName("localhost");
@@ -29,44 +27,77 @@ public class Client {
         this.runClient();
     }
 
+    /**
+     * Method to run the Client
+     * @throws IOException
+     */
     public void runClient() throws IOException {
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
 
-        this.readMessage();
+        Thread threadReadMessage = new Thread(() -> this.readContinuouslyMessages());
+        threadReadMessage.start();
     }
 
-    public void sendMessage(Message sendMessage) {
+    /**
+     * Method to send a Message to the server
+     * @param sendMessage
+     * @return
+     * @throws InterruptedException
+     */
+    public Message sendMessage(Message sendMessage) throws InterruptedException {
+        Message response = null;
+
+        System.out.println("sendMessage");
         try {
             oos.writeObject(sendMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Waiting until response variable is set
+        this.lock.lock();
+        this.condition.await();
+        System.out.println("sendMessage into lock");
+        if (this.response == null) {
+            System.out.println("sendMessage An error occurred : response null");
+        } else {
+            response = new Message(this.response);
+        }
+        this.response = null;
+        this.lock.unlock();
+        return response;
     }
 
-    // TODO :
-    //  split synchronous messages at the first time
-    //      -> when the user want's to connect
-    //  split asynchronous messages at the second time
-    //      -> when the user want's to chat (both receive and send messages)
-    public void readMessage() {
-        Thread threadReadMessage = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Message messageReceived = (Message) ois.readObject();
-                        System.out.println(messageReceived.getCode());
+    /**
+     * Method to read continuously entrering Message (s) coming from the server
+     */
+    public void readContinuouslyMessages() {
+        while (true) {
+            try {
+                Message messageReceived = (Message) ois.readObject();
+                System.out.println(messageReceived.getCode());
 
+                if (messageReceived.getCode() >= 200 && messageReceived.getCode() <= 500) {
+                    // Notify with signalAll that response has been set
 
+                    this.lock.lock();
+                    System.out.println("readContinuouslyMessages into lock");
+                    this.response = messageReceived;
+                    this.condition.signalAll();
+                    this.lock.unlock();
+                } else {
+                    // TODO :
+                    //  - message from server
+                    //  - notify ControllerClient of the reception of the messsage using Oberver Pattern
+                    //  - (example : call method setChannels to update channels attribut)
 
-                        } catch (IOException | ClassNotFoundException e) {
-                        System.out.println("SERVER CLOSED !");
-                        break;
-                    }
+                    System.out.println("Message coming from server , maybe update channel");
                 }
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("SERVER CLOSED !");
+                break;
             }
-        });
-        threadReadMessage.start();
+        }
     }
 }
