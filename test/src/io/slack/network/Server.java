@@ -1,5 +1,7 @@
 package io.slack.network;
 
+import io.slack.network.communication.Message;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,14 +10,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.*;
 
 public class Server {
     // user tcp connected
-    static CopyOnWriteArrayList<ClientTreatment> activatedClient;
-    // user authenticated
-    private ConcurrentHashMap<Integer, String> concurrentUserAuthenticated;
+    static CopyOnWriteArrayList<ClientHandler> activatedClient;
+    // user authenticated <Socket,  email>
+    private ConcurrentHashMap<Socket, String> concurrentUserAuthenticated;
     private ExecutorService exectutorService;
     private CompletionService<Integer> completionService;
     private ServerSocket serverSocket;
@@ -28,22 +33,32 @@ public class Server {
         this.completionService = new ExecutorCompletionService<>(this.exectutorService);
         this.serverSocket = new ServerSocket(50_500);
 
-        this.runServer();
+        Thread threadReadMessage = new Thread(() -> this.runServer());
+        threadReadMessage.start();
 
     }
 
-    public void runServer() throws IOException, InterruptedException, ExecutionException, ClassNotFoundException {
+    /**
+     * Method to run the Server
+     */
+    public void runServer() {
 
         while (true) {
-            Socket socketClient = this.serverSocket.accept();
+            try {
+                Socket socketClient = this.serverSocket.accept();
 
-            // lance un thread
-            ClientTreatment clientTreatment = new ClientTreatment(socketClient, activatedClient, concurrentUserAuthenticated);
-            activatedClient.add(clientTreatment);
-            this.completionService.submit(clientTreatment);
+                // lance un thread
+                ClientHandler clientHandler = new ClientHandler(socketClient, activatedClient, concurrentUserAuthenticated);
+                activatedClient.add(clientHandler);
+                this.completionService.submit(clientHandler);
 
+            } catch (IOException e) {
+                System.out.println("runServer : error IOEXception");
+                e.printStackTrace();
+            }
         }
     }
+
 
     public void shutdown() {
         this.exectutorService.shutdown();

@@ -16,7 +16,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
 
     @Override
     public Channel insert(Channel object) throws Exception {
-        String query = "insert into channel value ( ?, ?, ? );";
+        String query = "insert into channels value ( ?, ?, ? );";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, object.getName());
             statement.setString(2, object.getAdmin().getEmail());
@@ -37,7 +37,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
 
     @Override
     public void delete(String key) throws Exception {
-        String query = "delete from channel where name = ? ;";
+        String query = "delete from channels where name = ? ;";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, key);
             try(ResultSet resultSet = statement.executeQuery()){
@@ -48,7 +48,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
 
     @Override
     public Channel find(String key) throws Exception {
-        String query = "SELECT * FROM channel WHERE name = ?";
+        String query = "SELECT * FROM channels WHERE name = ?";
         try(PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, key);
             try(ResultSet resultSet = statement.executeQuery()) {
@@ -65,7 +65,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
     public List<Channel> findAll() throws Exception {
         List<Channel> channels = new ArrayList<>();
         try(Statement statement = connection.createStatement()) {
-            try(ResultSet resultSet = statement.executeQuery("SELECT * FROM channel")) {
+            try(ResultSet resultSet = statement.executeQuery("SELECT * FROM channels")) {
                 while (resultSet.next()) {
                     User user = DAOFactory.getUser().find( resultSet.getString(2) );
                     Channel channel = new Channel( resultSet.getString(1) , user);

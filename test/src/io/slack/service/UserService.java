@@ -7,6 +7,13 @@ import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.utils.EmailUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * TODO Add parameters to update OR add update for each User attribute
+ */
+
 /**
  * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
  */
@@ -52,40 +59,56 @@ public class UserService {
 		}
 	}
 
-	/*
-    public static boolean[] checkUserData(String email, String mdp){
-        boolean[] res = {true, true};
-        String[] message = new String[3];
-        //email
-        if(! EmailUtils.isEmail(email) ){
-            res[0]=false;
-            for(int i=0; i<message.length; i++){
-                if(message[i]==null) message[i]="veuillez retaper un email au bon format [ exemple aaa@lip6.fr ]";
-            }
-        }
-        if(DatabaseUser.getDatabase().existEmail(email)) {
-            res[0]=false;
-            for(int i=0; i<message.length; i++){
-                if(message[i]==null) message[i]="email déjà utilisé";
-            }
-        }
+	// User update
+	public Message update(String email) {
+		try {
+			User user = userDAO.find(email);
+			if (user == null) {			// User not found
+				return new Message(404);
+			}
+			if (!EmailUtils.isEmail(email)) {	// Invalid email
+				return new Message(403);
+			}
+			userDAO.update(user);
+			return new MessageAttachment<>(200, user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Message(500);
+		}
+	}
 
-        //password
-        if(! EmailUtils.isPassword(mdp)){
+	// Finds User
+	public Message get(String email) {
+		try {
+			User user = userDAO.find(email);
+			if (user == null) {			// User not found
+				return new Message(404);
+			}
+			if (!EmailUtils.isEmail(email)) {	// Invalid email
+				return new Message(403);
+			}
+			return new MessageAttachment<>(200, user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Message(500);
+		}
+	}
 
-            res[1]=false;
-            for(int i=0; i<message.length; i++){
-                if(message[i]==null) message[i]="veuillez taper un mot de passe au bon format  [ minimum 8 caractère : 1 maj | 1 min | 1 chiffre | 1 caractère spécial ]";
-            }
-        }
+	// Gets all Users
+	public Message getAll() {
+		try {
+			List<User> users = userDAO.findAll();
+			if (users.isEmpty()) {			// No Users
+				return new Message(404);
+			}
+			return new MessageAttachment<>(200, (ArrayList) users);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Message(500);
+		}
+	}
 
-        if( ! res[0] || ! res[1] )
-            Fenetre.getFenetre().affichePopup(message);
-
-        return res;
-    }*/
-
-
+	// Connects User
 	public Message authenticate(String email, String password) {
 		try {
 			User user = userDAO.find(email);
