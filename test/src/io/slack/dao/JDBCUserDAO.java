@@ -32,8 +32,13 @@ public class JDBCUserDAO implements DAO<User> {
 
 	@Override
 	public User update(User object) throws SQLException {
-		delete( object.getEmail() );
+		if(find(object.getEmail())!=null)
+			delete( object.getEmail() );
 		return insert( object);
+	}
+	public User update(String email, User object) throws SQLException {
+		delete( email );
+		return update(object);
 
 	}
 

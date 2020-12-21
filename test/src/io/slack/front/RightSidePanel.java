@@ -75,7 +75,11 @@ public class RightSidePanel extends JPanel implements ActionListener {
         listeBouton.add(button);
         //ControllerClient.addChat(chat);
     }
-    public void removeAllUsers(){listeBouton.clear();}
+    public void removeAllUsers(){
+        listeBouton.clear();
+        bar.removeAll();
+        this.repaint();
+    }
 
 
     @Override

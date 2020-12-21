@@ -109,15 +109,17 @@ public class ControllerClient {
     }
     public static void setCurrentChannel(Channel currentChannel) {
         ControllerClient.currentChannel = currentChannel;
-        ArrayList<User> userList = new ArrayList<>();
+        ArrayList<User> userList = getUserListInChannel(currentChannel);
         RightSidePanel.getPanel().removeAllUsers();
         for(User user : userList){
             RightSidePanel.getPanel().addAUser(user);
         }
     }
-    public static void resetCurrentChannel(){ControllerClient.currentChannel=null; }
+    public static void resetCurrentChannel(){
+        ControllerClient.currentChannel=null;
+        RightSidePanel.getPanel().removeAllUsers();
+    }
 
-    //TODO to do
     public static void addChannel(Channel chat) {
         //TODO call the network to register user in the channel
 
@@ -126,14 +128,14 @@ public class ControllerClient {
 
     public static Channel createChannel(String nom){
         Channel channel=new Channel(nom, currentUser);
-        channel.addMessage( new io.slack.model.Message(new User("root@slack.com", "root", "createur"), "Welcome to the '"+channel.getName()+"' channel") );
+        channel.addMessage( new io.slack.model.Message(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getName()+"' channel") );
 
-        //TODO call the network
+        //TODO call the network to create a channel
 
         return channel;
     }
 
-    //TODO call the network to get the list of users in a channem
+    //TODO call the network to get the list of users in a channel
     public static ArrayList<User> getUserListInChannel(Channel channel){
         return new ArrayList<>();
     }

@@ -135,10 +135,12 @@ public class ToolBar extends JPanel implements ActionListener {
 
         if( source == logo){
             Fenetre.getFenetre().backToHome();
+            ControllerClient.resetCurrentChannel();
         }
 
         if(source == profil){
-            Fenetre.getFenetre().setContenu( new UIUser( ControllerClient.getCurrentUser() ) );
+            ControllerClient.profil();
+            ControllerClient.resetCurrentChannel();
         }
 
 
