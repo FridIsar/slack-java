@@ -10,6 +10,7 @@ import io.slack.model.Channel;
 import io.slack.model.Credentials;
 import io.slack.model.MessageImage;
 import io.slack.model.User;
+import io.slack.network.Client;
 import io.slack.network.HandlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
@@ -17,6 +18,7 @@ import io.slack.utils.EmailUtils;
 import io.slack.utils.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ControllerClient {
@@ -24,36 +26,41 @@ public class ControllerClient {
 
     private static User currentUser =null;
     private static boolean connect = false;
+    private static Client client=null;
 
     public static boolean isConnect(){return connect; }
 
     public static User getCurrentUser(){ return currentUser; }
 
-    //TODO to do
-    public static boolean login(String email, String password) {
+    public static void login(String email, String password) {
+        try {
+            client = new Client();
+            client.runClient();
+            Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
+            Message received = client.sendMessage(message);
 
-        //TODO call the network
-        Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
-        // adapt the credential
-
-
-
-        connect=true;
-        return true;
+            //if( received ) TODO conditions on the received message
+            connect=true;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
 
-    //TODO to do
-    public static boolean createAcc(String pseudo, String email, String password ) {
+    public static void createAcc(String pseudo, String email, String password ) {
 
-        Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
-        // adapt the credential
+        try {
+            client = new Client();
+            client.runClient();
+            Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNUP.getValue(), new Credentials()); //TODO adapt the credentials
+            Message received = client.sendMessage(message);
 
-
-        connect=true;
-        return true;
-
+            //if( received ) TODO conditions on the received message
+            connect=true;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
    public static void profil() {
@@ -64,6 +71,7 @@ public class ControllerClient {
     public static void disconnect() {
         currentUser =null;
         connect=false;
+        client=null;
 
         ToolBar.getToolBar().addMyButton();
         LeftSidePanel.getPanel().addMyButton();
@@ -127,12 +135,19 @@ public class ControllerClient {
     }
 
     public static Channel createChannel(String nom){
-        Channel channel=new Channel(nom, currentUser);
-        channel.addMessage( new io.slack.model.Message(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getName()+"' channel") );
+        try {
+            Channel channel=new Channel(nom, currentUser);
+            Message message = new MessageAttachment<Credentials>(ClientMessageType.CREATECHANNEL.getValue(), new Credentials());
+            Message received = client.sendMessage(message);
 
-        //TODO call the network to create a channel
+            channel.addMessage( new io.slack.model.Message(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getName()+"' channel") );
 
-        return channel;
+
+            return channel;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     //TODO call the network to get the list of users in a channel
@@ -142,6 +157,10 @@ public class ControllerClient {
 
     public static Channel getChannel(int i) {
         return channels.get(i);
+    }
+
+    public static void deleteChannel(){
+
     }
 
 
@@ -167,14 +186,29 @@ public class ControllerClient {
     }
 
     public static void sendMessage(Channel channel, String textMessage ){
-        if( isFileAttached ){
-            //TODO call the network to add a message in a channel
-            channel.addMessage( new MessageImage(currentUser, textMessage , FileUtils.getImage(attachedFile ) ));
-            resetAttachedFile();
-        }else
-            channel.addMessage(new io.slack.model.Message(currentUser, textMessage) );
+            try {
+                client.runClient();
+                if( isFileAttached ) {
+                    Message message = new MessageAttachment<Credentials>(ClientMessageType.ADDMESSAGECHANNEL.getValue(), new Credentials());
+                    Message received = client.sendMessage(message);
+                    channel.addMessage(new MessageImage(currentUser, textMessage, FileUtils.getImage(attachedFile)));
+                    resetAttachedFile();
+                }else {
+                    Message message = new MessageAttachment<Credentials>(ClientMessageType.ADDMESSAGECHANNEL.getValue(), new Credentials());
+                    Message received = client.sendMessage(message);
+                    channel.addMessage(new io.slack.model.Message(currentUser, textMessage));
+                }
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
 
     }
+
+
+
+
+
+
 
 
 
