@@ -2,6 +2,7 @@ package io.slack.service;
 
 import io.slack.dao.DAO;
 import io.slack.dao.DAOFactory;
+import io.slack.dao.JDBCUserDAO;
 import io.slack.model.User;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
@@ -87,7 +88,7 @@ public class UserService {
 			if (!EmailUtils.isEmail(email) || !EmailUtils.isEmail(newEmail)) {	// Invalid email
 				return new Message(403);
 			}
-			userDAO.update(newEmail, user);
+			((JDBCUserDAO)userDAO).update(newEmail, user);
 			return new MessageAttachment<>(200, user);
 		} catch (Exception e) {
 			e.printStackTrace();
