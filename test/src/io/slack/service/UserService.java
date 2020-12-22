@@ -77,6 +77,24 @@ public class UserService {
 		}
 	}
 
+	// User update with email change
+	public Message update(String email, String newEmail) {
+		try {
+			User user = userDAO.find(email);
+			if (user == null) {			// User not found
+				return new Message(404);
+			}
+			if (!EmailUtils.isEmail(email) || !EmailUtils.isEmail(newEmail)) {	// Invalid email
+				return new Message(403);
+			}
+			userDAO.update(newEmail, user);
+			return new MessageAttachment<>(200, user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Message(500);
+		}
+	}
+
 	// Finds User
 	public Message get(String email) {
 		try {
