@@ -7,7 +7,7 @@ import io.slack.front.ui.UIUser;
 import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
 import io.slack.model.Channel;
-import io.slack.model.Credentials;
+import io.slack.network.model.Credentials;
 import io.slack.model.MessageImage;
 import io.slack.model.User;
 import io.slack.network.Client;
@@ -138,7 +138,9 @@ public class ControllerClient {
         try {
             Channel channel=new Channel(nom, currentUser);
             Message message = new MessageAttachment<Credentials>(ClientMessageType.CREATECHANNEL.getValue(), new Credentials());
-            Message received = client.sendMessage(message);
+            Message received;
+            if(client!=null)
+                received = client.sendMessage(message);
 
             channel.addMessage( new io.slack.model.Message(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getName()+"' channel") );
 

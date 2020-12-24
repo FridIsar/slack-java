@@ -1,6 +1,6 @@
 package io.slack.network.HandlerMessages.TypeMessagesHandler.User;
 
-import io.slack.model.Credentials;
+import io.slack.network.model.Credentials;
 import io.slack.network.ClientHandler;
 import io.slack.network.HandlerMessages.ClientMessageHandler;
 import io.slack.network.communication.Message;

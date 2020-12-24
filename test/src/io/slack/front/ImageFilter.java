@@ -1,8 +1,5 @@
 package io.slack.front;
 
-/**
- * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
- */
 import io.slack.utils.FileUtils;
 
 import javax.swing.filechooser.FileFilter;

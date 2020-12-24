@@ -1,4 +1,5 @@
-package io.slack.model;
+package io.slack.network.model;
+
 
 import java.io.Serializable;
 
