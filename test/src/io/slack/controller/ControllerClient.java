@@ -9,6 +9,7 @@ import io.slack.front.ToolBar;
 import io.slack.model.Channel;
 import io.slack.model.Post;
 import io.slack.network.model.PostAndChannelCredentials;
+import io.slack.network.model.UserAndChannelCredentials;
 import io.slack.network.model.UserCredentials;
 import io.slack.model.PostImage;
 import io.slack.model.User;
@@ -70,22 +71,34 @@ public class ControllerClient {
         Fenetre.getFenetre().setContenu( new UIUser(currentUser) );
     }
 
-    //TODO call the network to retire the user from the connected users list
     public static void disconnect() {
-        currentUser =null;
-        connect=false;
-        client=null;
 
-        ToolBar.getToolBar().addMyButton();
-        LeftSidePanel.getPanel().addMyButton();
+        Message message = new MessageAttachment<UserCredentials>(ClientMessageType.DISCONNECT.getValue(), new UserCredentials(currentUser.getEmail(), currentUser.getPassword()));
+        try {
+            client.sendMessage(message);
+            currentUser =null;
+            connect=false;
+            client=null;
 
-        Fenetre.getFenetre().backToHome();
+            ToolBar.getToolBar().addMyButton();
+            LeftSidePanel.getPanel().addMyButton();
+
+            Fenetre.getFenetre().backToHome();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    //TODO call the network to access DAOFactory.getUser().delete( user.getEmail() ) with a credentials Message
+
     public static void deleteAccount() {
-        //DatabaseUser.getDatabase().deleteUser(user.getId());
-	    disconnect();
+        Message message=new MessageAttachment<UserCredentials>(ClientMessageType.DELETEUSER.getValue(), new UserCredentials(currentUser.getEmail(), currentUser.getPassword()));
+        try {
+            client.sendMessage(message);
+            disconnect();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -99,7 +112,12 @@ public class ControllerClient {
         if(user.getPassword().equals(oldPassword)){
             if(EmailUtils.isPassword(newPassword)) {
                 user.setPassword(newPassword);
-                //TODO call the network to update the user instance
+                Message message = new MessageAttachment<UserCredentialsOptions>(ClientMessageType.UPDATEUSER.getValue(), new UserCredentialsOptions(user.getEmail(), newPassword, user.getPseudo()));
+                try {
+                    client.sendMessage(message);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }else{
                 Fenetre.getFenetre().affichePopup(new String[] {"veuillez taper un mot de passe au bon format  [ minimum 8 caractère : 1 maj | 1 min | 1 chiffre | 1 caractère spécial ]"} );
             }
@@ -132,8 +150,6 @@ public class ControllerClient {
     }
 
     public static void addChannel(Channel chat) {
-        //TODO call the network to register user in the channel
-
         channels.add(chat);
     }
 
@@ -155,8 +171,27 @@ public class ControllerClient {
         return null;
     }
 
-    //TODO call the network to get the list of users in a channel
+    public static void addUserInChannel(User user, Channel channel){
+        UserAndChannelCredentials attachment = new UserAndChannelCredentials(user.getEmail(), channel.getTitle());
+        Message message = new MessageAttachment<UserAndChannelCredentials>(ClientMessageType.ADDUSERCHANNEL.getValue(), attachment);
+        try {
+            client.sendMessage(message);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ArrayList<User> getUserListInChannel(Channel channel){
+
+        try {
+            Message message = new MessageAttachment<Channel>(ClientMessageType.GETUSERSCHANNEL.getValue(), channel);
+            Message received = client.sendMessage(message);
+
+            //TODO get the arrayList
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return new ArrayList<>();
     }
 

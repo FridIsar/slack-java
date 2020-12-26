@@ -76,7 +76,6 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         bar.setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y_BAR+=82 ));
         bar.add(button);
         listeBouton.add(button);
-        ControllerClient.addChannel(chat);
     }
 
 
