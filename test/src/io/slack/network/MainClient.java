@@ -1,6 +1,6 @@
 package io.slack.network;
 
-import io.slack.network.model.Credentials;
+import io.slack.network.model.UserCredentials;
 import io.slack.network.HandlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
@@ -11,7 +11,7 @@ public class MainClient {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Client client1 = new Client();
-        Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
+        Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNIN.getValue(), new UserCredentials("root@slack.com","password"));
         client1.sendMessage(message);
         message = new Message(ClientMessageType.GETCHANNELS.getValue());
         client1.sendMessage(message);

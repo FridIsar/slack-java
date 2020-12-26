@@ -1,13 +1,14 @@
 package io.slack.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Message {
+public class Post implements Serializable {
     private String message = null;
     private Date dateEnvoie;
     private User auteur = null;
 
-    public Message(User auteur, String message) {
+    public Post(User auteur, String message) {
         this.auteur=auteur;
         this.message = message;
         dateEnvoie = new Date();

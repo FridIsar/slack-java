@@ -10,7 +10,7 @@ public class MessageAttachment<T extends Serializable> extends Message {
 
 	private final T attachment;
 
-	public MessageAttachment (MessageAttachment<T> messageAttachment) {
+	public MessageAttachment(MessageAttachment<T> messageAttachment) {
 		super(messageAttachment);
 		this.attachment = messageAttachment.getAttachment();
 	}

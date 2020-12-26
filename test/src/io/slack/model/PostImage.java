@@ -2,11 +2,11 @@ package io.slack.model;
 
 import java.awt.Image;
 
-public class MessageImage extends Message {
+public class PostImage extends Post {
 
     private Image image = null;
 
-    public MessageImage(User auteur, String message, Image image) {
+    public PostImage(User auteur, String message, Image image) {
         super(auteur, message);
         this.image = image;
     }

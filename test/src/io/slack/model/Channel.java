@@ -19,7 +19,7 @@ public class Channel implements Serializable, Comparable<Channel> {
 	private Date createdAt;
 	private Image icon;
 	private List<User> users = new ArrayList<>();
-	private List<Message> messages = new ArrayList<>();
+	private List<Post> posts = new ArrayList<>();
 
 	public Channel() {}
 
@@ -65,13 +65,13 @@ public class Channel implements Serializable, Comparable<Channel> {
 		this.users.remove(user);
 	}
 
-	public List<Message> getMessages() {
-		return messages;
+	public List<Post> getMessages() {
+		return posts;
 	}
 
-	public void addMessage(Message message){this.messages.add((message)); }
+	public void addPost(Post post){this.posts.add((post)); }
 
-	public void removeMessage(Message message){this.messages.remove((message)); }
+	public void removeMessage(Post post){this.posts.remove((post)); }
 
 	public Image getIcon() {
 		return icon;

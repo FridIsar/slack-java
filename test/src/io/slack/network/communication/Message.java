@@ -6,7 +6,7 @@ public class Message implements Serializable {
 
     protected final int code;
 
-    public Message (Message message) {
+    public Message(Message message) {
         this.code = message.getCode();
     }
 

@@ -7,13 +7,15 @@ import io.slack.front.ui.UIUser;
 import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
 import io.slack.model.Channel;
-import io.slack.network.model.Credentials;
-import io.slack.model.MessageImage;
+import io.slack.model.Post;
+import io.slack.network.model.UserCredentials;
+import io.slack.model.PostImage;
 import io.slack.model.User;
 import io.slack.network.Client;
 import io.slack.network.HandlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
+import io.slack.network.model.UserCredentialsOptions;
 import io.slack.utils.EmailUtils;
 import io.slack.utils.FileUtils;
 
@@ -36,7 +38,7 @@ public class ControllerClient {
         try {
             client = new Client();
             client.runClient();
-            Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNIN.getValue(), new Credentials());
+            Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNIN.getValue(), new UserCredentials(email,password));
             Message received = client.sendMessage(message);
 
             //if( received ) TODO conditions on the received message
@@ -53,7 +55,7 @@ public class ControllerClient {
         try {
             client = new Client();
             client.runClient();
-            Message message = new MessageAttachment<Credentials>(ClientMessageType.SIGNUP.getValue(), new Credentials()); //TODO adapt the credentials
+            Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNUP.getValue(), new UserCredentialsOptions(email, password, pseudo));
             Message received = client.sendMessage(message);
 
             //if( received ) TODO conditions on the received message
@@ -134,15 +136,15 @@ public class ControllerClient {
         channels.add(chat);
     }
 
-    public static Channel createChannel(String nom){
+    public static Channel createChannel(String title){
         try {
-            Channel channel=new Channel(nom, currentUser);
-            Message message = new MessageAttachment<Credentials>(ClientMessageType.CREATECHANNEL.getValue(), new Credentials());
+            Channel channel=new Channel(title, currentUser);
+            Message message = new MessageAttachment<Channel>(ClientMessageType.CREATECHANNEL.getValue(), channel);
             Message received;
             if(client!=null)
                 received = client.sendMessage(message);
 
-            channel.addMessage( new io.slack.model.Message(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getName()+"' channel") );
+            channel.addPost( new Post(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getName()+"' channel") );
 
 
             return channel;
@@ -191,14 +193,16 @@ public class ControllerClient {
             try {
                 client.runClient();
                 if( isFileAttached ) {
-                    Message message = new MessageAttachment<Credentials>(ClientMessageType.ADDMESSAGECHANNEL.getValue(), new Credentials());
+                    Post post = new PostImage(currentUser, textMessage, FileUtils.getImage(attachedFile));
+                    Message message = new MessageAttachment<Post>(ClientMessageType.ADDMESSAGECHANNEL.getValue(), post);
                     Message received = client.sendMessage(message);
-                    channel.addMessage(new MessageImage(currentUser, textMessage, FileUtils.getImage(attachedFile)));
+                    channel.addPost(post);
                     resetAttachedFile();
                 }else {
-                    Message message = new MessageAttachment<Credentials>(ClientMessageType.ADDMESSAGECHANNEL.getValue(), new Credentials());
+                    Post post = new Post(currentUser, textMessage);
+                    Message message = new MessageAttachment<Post>(ClientMessageType.ADDMESSAGECHANNEL.getValue(), post);
                     Message received = client.sendMessage(message);
-                    channel.addMessage(new io.slack.model.Message(currentUser, textMessage));
+                    channel.addPost(post);
                 }
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
@@ -248,7 +252,7 @@ public class ControllerClient {
         }
 
         for(int i=0; i<50; i++){
-            example.addMessage( new io.slack.model.Message(currentUser, "test "+i ) );
+            example.addPost( new Post(currentUser, "test "+i ) );
         }
     }
 

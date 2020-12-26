@@ -2,8 +2,8 @@ package io.slack.front;
 
 import io.slack.front.ui.UIMessage;
 import io.slack.front.ui.UIMessageImage;
-import io.slack.model.Message;
-import io.slack.model.MessageImage;
+import io.slack.model.Post;
+import io.slack.model.PostImage;
 import io.slack.model.User;
 import io.slack.utils.FileUtils;
 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 
 public class HomePage extends CentralePage {
-    private ArrayList<Message> contenu = new ArrayList<Message> ();
+    private ArrayList<Post> contenu = new ArrayList<Post> ();
 
     private JTextPane textPane = new JTextPane();
     private JScrollPane jScrollPane= new JScrollPane(textPane);
@@ -50,10 +50,10 @@ public class HomePage extends CentralePage {
     }
 
     public void remplirAccueil(){
-        MessageImage m1 = new MessageImage(new User("root@slack.com", "root", "createur"),"image 1 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        MessageImage m2 = new MessageImage(new User("root@slack.com", "root", "createur"),"image 2 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        MessageImage m3 = new MessageImage(new User("root@slack.com", "root", "createur"),"image 3 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        MessageImage m4 = new MessageImage(new User("root@slack.com", "root", "createur"),"image 4 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        PostImage m1 = new PostImage(new User("root@slack.com", "root", "createur"),"image 1 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        PostImage m2 = new PostImage(new User("root@slack.com", "root", "createur"),"image 2 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        PostImage m3 = new PostImage(new User("root@slack.com", "root", "createur"),"image 3 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        PostImage m4 = new PostImage(new User("root@slack.com", "root", "createur"),"image 4 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
 
         contenu.add(m1);
         contenu.add(m2);
@@ -66,9 +66,9 @@ public class HomePage extends CentralePage {
         StyledDocument doc = textPane.getStyledDocument();
         textPane.getDocument().remove(0, doc.getLength() );
         for(int i =0; i<contenu.size(); i++){
-            Message mess = contenu.get(i);
-            if(mess instanceof MessageImage)
-                textPane.insertComponent( new UIMessageImage( (MessageImage)mess ).dessiner() );
+            Post mess = contenu.get(i);
+            if(mess instanceof PostImage)
+                textPane.insertComponent( new UIMessageImage( (PostImage)mess ).dessiner() );
             else
                 textPane.insertComponent( new UIMessage( mess ).dessiner() );
 

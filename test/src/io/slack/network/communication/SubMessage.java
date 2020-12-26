@@ -4,7 +4,7 @@ package io.slack.network.communication;
 public class SubMessage extends Message {
     private String specificSubMessage;
 
-    public SubMessage (int code, String specificSubMessage) {
+    public SubMessage(int code, String specificSubMessage) {
         super(code);
         this.specificSubMessage = specificSubMessage;
     }

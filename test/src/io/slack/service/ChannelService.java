@@ -6,7 +6,6 @@ import io.slack.model.Channel;
 import io.slack.model.User;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
-import io.slack.utils.EmailUtils;
 
 import java.util.ArrayList;
 import java.util.List;

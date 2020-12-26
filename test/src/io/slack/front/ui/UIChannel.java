@@ -4,9 +4,8 @@ import io.slack.controller.ControllerClient;
 import io.slack.front.ImageFilter;
 import io.slack.front.CentralePage;
 import io.slack.model.Channel;
-import io.slack.model.Message;
-import io.slack.model.MessageImage;
-import io.slack.utils.FileUtils;
+import io.slack.model.Post;
+import io.slack.model.PostImage;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -75,12 +74,12 @@ public class UIChannel extends CentralePage implements ActionListener {
         textPane.getDocument().remove(0, doc.getLength() );
         //add UIMessage to the pane
         for(int i=0; i<channel.getMessages().size(); i++){
-            Message message = channel.getMessages().get(i);
+            Post post = channel.getMessages().get(i);
             JTextPane messageUI;
-            if(message instanceof MessageImage){
-                messageUI = new UIMessageImage((MessageImage) message).dessiner();
+            if(post instanceof PostImage){
+                messageUI = new UIMessageImage((PostImage) post).dessiner();
             }else{
-                messageUI = new UIMessage(message).dessiner();
+                messageUI = new UIMessage(post).dessiner();
             }
             textPane.insertComponent(messageUI);
             SimpleAttributeSet style = new SimpleAttributeSet();

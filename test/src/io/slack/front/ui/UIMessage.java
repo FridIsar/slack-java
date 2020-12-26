@@ -1,6 +1,6 @@
 package io.slack.front.ui;
 
-import io.slack.model.Message;
+import io.slack.model.Post;
 
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
@@ -12,13 +12,13 @@ import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 
 public class UIMessage extends JPanel {
-    protected Message message;
+    protected Post post;
 
-    public UIMessage(Message message) {
+    public UIMessage(Post post) {
         setPreferredSize (new Dimension(1000, 100) ) ;
         setLayout(null);
 
-        this.message=message;
+        this.post = post;
     }
 
     public JTextPane dessiner(){
@@ -36,13 +36,13 @@ public class UIMessage extends JPanel {
         StyledDocument doc = textPane.getStyledDocument();
 
         try {
-            if(message.getAuteur() != null) {
+            if(post.getAuteur() != null) {
                 SimpleDateFormat simpleformat = new SimpleDateFormat("dd MMM yyyy, hh");
                 StyleConstants.setFontSize(style, 12);
-                doc.insertString(doc.getLength(), "\t" + message.getAuteur().getPseudo() + ", " + simpleformat.format(message.getDateEnvoie()) + "h\n", style);
+                doc.insertString(doc.getLength(), "\t" + post.getAuteur().getPseudo() + ", " + simpleformat.format(post.getDateEnvoie()) + "h\n", style);
             }
             StyleConstants.setFontSize(style, 20);
-            doc.insertString(doc.getLength(), message.getMessage()+"\n", style );
+            doc.insertString(doc.getLength(), post.getMessage()+"\n", style );
 
         } catch (BadLocationException e) {
             e.printStackTrace();
