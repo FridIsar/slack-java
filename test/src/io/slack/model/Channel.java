@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class Channel implements Serializable, Comparable<Channel> {
 
-	private String name;
+	private String title;
 	private User admin;
 	private Date createdAt;
 	private Image icon;
@@ -23,18 +23,18 @@ public class Channel implements Serializable, Comparable<Channel> {
 
 	public Channel() {}
 
-	public Channel(String name, User admin) {
-		this.name = name;
+	public Channel(String title, User admin) {
+		this.title = title;
 		this.admin=admin;
 		this.createdAt=new Date(Instant.now().toEpochMilli());
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public User getAdmin() {
@@ -86,21 +86,21 @@ public class Channel implements Serializable, Comparable<Channel> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Channel channel = (Channel) o;
-		return name.equals(channel.name);
+		return title.equals(channel.title);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		return Objects.hash(title);
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return title;
 	}
 
 	@Override
 	public int compareTo(Channel o) {
-		return name.compareTo(o.name);
+		return title.compareTo(o.title);
 	}
 }

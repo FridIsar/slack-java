@@ -8,6 +8,7 @@ import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
 import io.slack.model.Channel;
 import io.slack.model.Post;
+import io.slack.network.model.PostAndChannelCredentials;
 import io.slack.network.model.UserCredentials;
 import io.slack.model.PostImage;
 import io.slack.model.User;
@@ -81,7 +82,7 @@ public class ControllerClient {
         Fenetre.getFenetre().backToHome();
     }
 
-    //TODO call the network to access DAOFactory.getUser().delete( user.getEmail() )
+    //TODO call the network to access DAOFactory.getUser().delete( user.getEmail() ) with a credentials Message
     public static void deleteAccount() {
         //DatabaseUser.getDatabase().deleteUser(user.getId());
 	    disconnect();
@@ -144,7 +145,7 @@ public class ControllerClient {
             if(client!=null)
                 received = client.sendMessage(message);
 
-            channel.addPost( new Post(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getName()+"' channel") );
+            channel.addPost( new Post(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getTitle()+"' channel") );
 
 
             return channel;
@@ -192,18 +193,17 @@ public class ControllerClient {
     public static void sendMessage(Channel channel, String textMessage ){
             try {
                 client.runClient();
+                Post post;
                 if( isFileAttached ) {
-                    Post post = new PostImage(currentUser, textMessage, FileUtils.getImage(attachedFile));
-                    Message message = new MessageAttachment<Post>(ClientMessageType.ADDMESSAGECHANNEL.getValue(), post);
-                    Message received = client.sendMessage(message);
-                    channel.addPost(post);
+                    post = new PostImage(currentUser, textMessage, FileUtils.getImage(attachedFile));
                     resetAttachedFile();
                 }else {
-                    Post post = new Post(currentUser, textMessage);
-                    Message message = new MessageAttachment<Post>(ClientMessageType.ADDMESSAGECHANNEL.getValue(), post);
-                    Message received = client.sendMessage(message);
-                    channel.addPost(post);
+                    post = new Post(currentUser, textMessage);
                 }
+                PostAndChannelCredentials attachment = new PostAndChannelCredentials(post, currentChannel.getTitle());
+                Message message = new MessageAttachment<PostAndChannelCredentials>(ClientMessageType.ADDPOSTCHANNEL.getValue(), attachment);
+                Message received = client.sendMessage(message);
+                channel.addPost(post);
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }

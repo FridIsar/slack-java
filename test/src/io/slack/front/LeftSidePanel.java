@@ -3,7 +3,6 @@ package io.slack.front;
 import io.slack.controller.ControllerClient;
 import io.slack.front.ui.UIChannel;
 import io.slack.model.Channel;
-import io.slack.model.User;
 import io.slack.utils.FileUtils;
 import io.slack.utils.GraphicsUtils;
 
@@ -69,7 +68,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             image = FileUtils.getImage( "Icons/logo.png" );
         }
         button = new JButton(new ImageIcon(image.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
-        button.setText(chat.getName());
+        button.setText(chat.getTitle());
         GraphicsUtils.buttonWithText(button);
         button.addActionListener(this);
 

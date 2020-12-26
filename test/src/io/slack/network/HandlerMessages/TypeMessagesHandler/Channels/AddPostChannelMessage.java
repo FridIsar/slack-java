@@ -4,10 +4,11 @@ import io.slack.model.Channel;
 import io.slack.network.ClientHandler;
 import io.slack.network.HandlerMessages.ClientMessageHandler;
 import io.slack.network.communication.Message;
+import io.slack.network.model.PostAndChannelCredentials;
 
-public class AddMessageChannelMessage extends Subject implements ClientMessageHandler<Channel> {
+public class AddPostChannelMessage extends Subject implements ClientMessageHandler<PostAndChannelCredentials> {
     @Override
-    public Message handle(Channel dataMessage, ClientHandler clientHandler) {
+    public Message handle(PostAndChannelCredentials dataMessage, ClientHandler clientHandler) {
         // 1 - some processing on channels
         //
         // 2 - Retrieve list of users to notify - Channel.getUsers -> into list of emails

@@ -17,13 +17,13 @@ public class MemoryChannelDAO implements DAO<Channel> {
 
 	@Override
 	public Channel insert(Channel object) {
-		channels.put(object.getName(), object);
+		channels.put(object.getTitle(), object);
 		return object;
 	}
 
 	@Override
 	public Channel update(Channel object) {
-		channels.put(object.getName(), object);
+		channels.put(object.getTitle(), object);
 		return object;
 	}
 

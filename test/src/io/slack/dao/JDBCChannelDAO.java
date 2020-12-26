@@ -18,7 +18,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
     public Channel insert(Channel object) throws Exception {
         String query = "insert into channels value ( ?, ?, ? );";
         try(PreparedStatement statement = connection.prepareStatement(query)){
-            statement.setString(1, object.getName());
+            statement.setString(1, object.getTitle());
             statement.setString(2, object.getAdmin().getEmail());
             statement.setDate(3, object.getCreatedAt());
 
@@ -31,7 +31,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
 
     @Override
     public Channel update(Channel object) throws Exception {
-        delete(object.getName());
+        delete(object.getTitle());
         return insert(object);
     }
 

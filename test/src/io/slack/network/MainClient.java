@@ -15,7 +15,7 @@ public class MainClient {
         client1.sendMessage(message);
         message = new Message(ClientMessageType.GETCHANNELS.getValue());
         client1.sendMessage(message);
-        message = new Message(ClientMessageType.ADDMESSAGECHANNEL.getValue());
+        message = new Message(ClientMessageType.ADDPOSTCHANNEL.getValue());
         client1.sendMessage(message);
     }
 }

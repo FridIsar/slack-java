@@ -8,6 +8,8 @@ public class Post implements Serializable {
     private Date dateEnvoie;
     private User auteur = null;
 
+    public Post(){}
+
     public Post(User auteur, String message) {
         this.auteur=auteur;
         this.message = message;
