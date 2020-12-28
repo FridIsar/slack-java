@@ -30,6 +30,7 @@ public class JDBCUserDAO implements DAO<User> {
 		}
 	}
 
+	//todo do it correctly
 	@Override
 	public User update(User object) throws SQLException {
 		if(find(object.getEmail())!=null)

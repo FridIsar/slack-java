@@ -9,6 +9,7 @@ public class Post implements Serializable {
     private Date sendingDate;
     private User auteur = null;
     private Channel channel=null;
+    private int id;
 
     public Post(){}
 
@@ -37,6 +38,14 @@ public class Post implements Serializable {
 
     public User getAuteur() {
         return auteur;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Channel getChannel() {

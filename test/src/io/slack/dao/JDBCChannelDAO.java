@@ -29,6 +29,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
         }
     }
 
+    //todo do it correctly
     @Override
     public Channel update(Channel object) throws Exception {
         delete(object.getTitle());

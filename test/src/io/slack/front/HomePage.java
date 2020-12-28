@@ -50,10 +50,10 @@ public class HomePage extends CentralePage {
     }
 
     public void remplirAccueil(){
-        PostImage m1 = new PostImage(new User("root@slack.com", "root", "createur"),"image 1 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        PostImage m2 = new PostImage(new User("root@slack.com", "root", "createur"),"image 2 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        PostImage m3 = new PostImage(new User("root@slack.com", "root", "createur"),"image 3 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
-        PostImage m4 = new PostImage(new User("root@slack.com", "root", "createur"),"image 4 : petit test de la page d'accueil ", FileUtils.getImage( "Icons/logo.png" ) );
+        PostImage m1 = new PostImage(new User("root@slack.com", "root", "createur"),"image 1 : petit test de la page d'accueil ", null, FileUtils.getImage( "Icons/logo.png" ) );
+        PostImage m2 = new PostImage(new User("root@slack.com", "root", "createur"),"image 2 : petit test de la page d'accueil ", null, FileUtils.getImage( "Icons/logo.png" ) );
+        PostImage m3 = new PostImage(new User("root@slack.com", "root", "createur"),"image 3 : petit test de la page d'accueil ", null, FileUtils.getImage( "Icons/logo.png" ) );
+        PostImage m4 = new PostImage(new User("root@slack.com", "root", "createur"),"image 4 : petit test de la page d'accueil ", null, FileUtils.getImage( "Icons/logo.png" ) );
 
         contenu.add(m1);
         contenu.add(m2);

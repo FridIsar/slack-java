@@ -102,7 +102,7 @@ public class ControllerClient {
     public static void updateUser(User user, String email, String pseudo) {
         user.setEmail(email);
         user.setPseudo(pseudo);
-        //TODO call the network to check if email is not used & if not, update the user instance (add a method in UserService)
+        //todo
     }
 
     public static void updatePassword(User user, String oldPassword, String newPassword) {
@@ -192,6 +192,20 @@ public class ControllerClient {
         return new ArrayList<>();
     }
 
+    public static ArrayList<User> getPostListInChannel(Channel channel){
+
+        try {
+            Message message = new MessageAttachment<Channel>(ClientMessageType.GETPOSTSCHANNEL.getValue(), channel);
+            Message received = client.sendMessage(message);
+
+            //TODO get the arrayList
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
     public static Channel getChannel(int i) {
         return channels.get(i);
     }
@@ -222,7 +236,6 @@ public class ControllerClient {
         isFileAttached = false;
     }
 
-    //todo review this
     public static void sendMessage(Channel channel, String textMessage ){
         sendMessage(currentUser,channel,textMessage);
     }
@@ -295,7 +308,7 @@ public class ControllerClient {
 
 
     public static void main(String[] args){
-        test();
+        //test();
         Fenetre.getFrame().setVisible(true);
 
     }
