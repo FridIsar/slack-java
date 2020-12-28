@@ -39,7 +39,7 @@ public class UIMessage extends JPanel {
             if(post.getAuteur() != null) {
                 SimpleDateFormat simpleformat = new SimpleDateFormat("dd MMM yyyy, hh");
                 StyleConstants.setFontSize(style, 12);
-                doc.insertString(doc.getLength(), "\t" + post.getAuteur().getPseudo() + ", " + simpleformat.format(post.getDateEnvoie()) + "h\n", style);
+                doc.insertString(doc.getLength(), "\t" + post.getAuteur().getPseudo() + ", " + simpleformat.format(post.getSendingDate()) + "h\n", style);
             }
             StyleConstants.setFontSize(style, 20);
             doc.insertString(doc.getLength(), post.getMessage()+"\n", style );

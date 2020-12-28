@@ -1,11 +1,12 @@
 package io.slack.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
+import java.time.Instant;
 
 public class Post implements Serializable {
     private String message = null;
-    private Date dateEnvoie;
+    private Date sendingDate;
     private User auteur = null;
     private Channel channel=null;
 
@@ -15,19 +16,19 @@ public class Post implements Serializable {
         this.auteur=auteur;
         this.message = message;
         this.channel=channel;
-        dateEnvoie = new Date();
+        sendingDate = new Date(Instant.now().toEpochMilli());
     }
 
     public String getMessage() {
         return message;
     }
 
-    public Date getDateEnvoie() {
-        return dateEnvoie;
+    public Date getSendingDate() {
+        return sendingDate;
     }
 
-    public void setDateEnvoie(Date dateEnvoie) {
-        this.dateEnvoie = dateEnvoie;
+    public void setSendingDate(Date sendingDate) {
+        this.sendingDate = sendingDate;
     }
 
     public void setMessage(String message) {
