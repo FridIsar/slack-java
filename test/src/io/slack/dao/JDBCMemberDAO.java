@@ -3,6 +3,7 @@ package io.slack.dao;
 import io.slack.model.Channel;
 import io.slack.model.Member;
 import io.slack.model.User;
+import io.slack.service.UserService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,8 +20,9 @@ public class JDBCMemberDAO implements DAO<Member>{
     public Member insert(Member object) throws Exception {
         String query = "insert into members values (?, ?);";
         try(PreparedStatement statement = connection.prepareStatement(query)){
+            UserService userService = new UserService();
             statement.setString(1, object.getChannel().getTitle());
-            statement.setString(2, object.getUser().getEmail());
+            statement.setInt(2, userService.getID(object.getUser().getEmail()));
 
             try(ResultSet resultSet = statement.executeQuery()){
                 return object;
@@ -37,10 +39,11 @@ public class JDBCMemberDAO implements DAO<Member>{
     @Override
     public void delete(String key) throws Exception {}
     public void delete(String key1, String key2) throws Exception {
-        String query = "delete from members where channel_name = ? and user_email = ?;";
+        String query = "delete from members where channel_name = ? and user_id = ?;";
         try(PreparedStatement statement=connection.prepareStatement(query)){
+            UserService userService = new UserService();
             statement.setString(1,key1);
-            statement.setString(2,key2);
+            statement.setInt(2,userService.getID(key2));
             try(ResultSet resultSet=statement.executeQuery()){}
         }
     }
@@ -48,14 +51,15 @@ public class JDBCMemberDAO implements DAO<Member>{
     @Override
     public Member find(String key) throws Exception {return null;}
     public Member find(String key1, String key2) throws Exception{
-        String query = "SELECT * from members where channel_name = ? and user_email = ?;";
+        String query = "SELECT * from members where channel_name = ? and user_id = ?;";
         try(PreparedStatement statement=connection.prepareStatement(query)){
+            UserService userService = new UserService();
             statement.setString(1,key1);
-            statement.setString(2,key2);
+            statement.setInt(2,userService.getID(key2));
             try(ResultSet resultSet=statement.executeQuery()){
                 if(resultSet.next()){
                     Channel channel = DAOFactory.getChannel().find(resultSet.getString(1));
-                    User user = DAOFactory.getUser().find(resultSet.getString(2));
+                    User user = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
                     return  new Member(channel,user);
                 }
             }
@@ -68,9 +72,10 @@ public class JDBCMemberDAO implements DAO<Member>{
         List<Member> members = new ArrayList<>();
         try(Statement statement = connection.createStatement()){
             try(ResultSet resultSet = statement.executeQuery("select * from members")){
+                UserService userService = new UserService();
                 while(resultSet.next()){
                     Channel channel = DAOFactory.getChannel().find(resultSet.getString(1));
-                    User user = DAOFactory.getUser().find(resultSet.getString(2));
+                    User user = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
                     members.add( new Member(channel,user) );
                 }
             }

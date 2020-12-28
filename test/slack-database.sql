@@ -16,11 +16,11 @@ CREATE TABLE channels (
 );
 
 CREATE TABLE friends (
-     usr1_email VARCHAR(255),
-     usr2_email VARCHAR(255),
-     PRIMARY KEY(usr1_email, usr2_email),
-     FOREIGN KEY(usr1_email) REFERENCES users(email),
-     FOREIGN KEY(usr2_email) REFERENCES users(email)
+     usr1_id INT,
+     usr2_id INT,
+     PRIMARY KEY(usr1_id , usr2_id),
+     FOREIGN KEY(usr1_id) REFERENCES users(id),
+     FOREIGN KEY(usr2_id) REFERENCES users(id)
 );
 
 CREATE TABLE posts (
@@ -34,9 +34,9 @@ CREATE TABLE posts (
 
 CREATE TABLE members (
      channel_name VARCHAR(255),
-     user_email VARCHAR(255),
+     user_id INT,
      nickname VARCHAR(255),
      PRIMARY KEY(channel_name, user_email),
-     FOREIGN KEY(user_email) REFERENCES users(email),
+     FOREIGN KEY(user_id) REFERENCES users(id),
      FOREIGN KEY(channel_name) REFERENCES channels(name)
 );

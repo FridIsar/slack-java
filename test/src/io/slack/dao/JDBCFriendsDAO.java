@@ -2,6 +2,7 @@ package io.slack.dao;
 
 import io.slack.model.Friend;
 import io.slack.model.User;
+import io.slack.service.UserService;
 
 
 import java.sql.*;
@@ -16,8 +17,9 @@ public class JDBCFriendsDAO implements DAO<Friend> {
     public Friend insert(Friend object) throws Exception {
         String query = "insert into friends values (?, ?);";
         try(PreparedStatement statement = connection.prepareStatement(query)){
-            statement.setString(1, object.getFirstUser().getEmail());
-            statement.setString(2, object.getSecUser().getEmail());
+            UserService userService = new UserService();
+            statement.setInt(1, userService.getID( object.getFirstUser().getEmail() ) );
+            statement.setInt(2, userService.getID( object.getSecUser().getEmail() ) );
 
             try(ResultSet resultSet = statement.executeQuery()){
                 return object;
@@ -34,10 +36,11 @@ public class JDBCFriendsDAO implements DAO<Friend> {
     @Override
     public void delete(String key) throws Exception {}
     public void delete(String key1, String key2) throws Exception {
-        String query = "delete from friends where usr1_email = ? and usr2_email = ?;";
+        String query = "delete from friends where usr1_id = ? and usr2_id = ?;";
         try(PreparedStatement statement=connection.prepareStatement(query)){
-            statement.setString(1,key1);
-            statement.setString(2,key2);
+            UserService userService = new UserService();
+            statement.setInt(1,userService.getID(key1));
+            statement.setInt(2,userService.getID(key2));
             try(ResultSet resultSet=statement.executeQuery()){}
         }
     }
@@ -45,14 +48,15 @@ public class JDBCFriendsDAO implements DAO<Friend> {
     @Override
     public Friend find(String key) throws Exception {return null;}
     public Friend find(String key1, String key2) throws Exception{
-        String query = "SELECT * from friends where usr1_email = ? and usr2_email = ?;";
+        String query = "SELECT * from friends where usr1_id = ? and usr2_id = ?;";
         try(PreparedStatement statement=connection.prepareStatement(query)){
-            statement.setString(1,key1);
-            statement.setString(2,key2);
+            UserService userService = new UserService();
+            statement.setInt(1, userService.getID(key1));
+            statement.setInt(2, userService.getID(key2));
             try(ResultSet resultSet=statement.executeQuery()){
                 if(resultSet.next()){
-                    User user1 = DAOFactory.getUser().find(resultSet.getString(1));
-                    User user2 = DAOFactory.getUser().find(resultSet.getString(2));
+                    User user1 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(1)) );
+                    User user2 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
                     return  new Friend(user1,user2);
                 }
             }
@@ -65,9 +69,10 @@ public class JDBCFriendsDAO implements DAO<Friend> {
         List<Friend> friends = new ArrayList<>();
         try(Statement statement = connection.createStatement()){
             try(ResultSet resultSet = statement.executeQuery("select * from friends")){
+                UserService userService = new UserService();
                 while(resultSet.next()){
-                    User user1 = DAOFactory.getUser().find(resultSet.getString(1));
-                    User user2 = DAOFactory.getUser().find(resultSet.getString(2));
+                    User user1 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(1)) );
+                    User user2 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
                     friends.add( new Friend(user1,user2) );
                 }
             }

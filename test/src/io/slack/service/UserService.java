@@ -105,6 +105,29 @@ public class UserService {
 		}
 	}
 
+	public int getID(String email){
+		try{
+			if(userDAO instanceof JDBCUserDAO){
+				return  ((JDBCUserDAO) userDAO).getID(email);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return -1;
+	}
+
+	public String getEmail(int id){
+		try{
+			if(userDAO instanceof JDBCUserDAO){
+				return ((JDBCUserDAO) userDAO).getEmail(id);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	// Gets all Users
 	public Message getAll() {
 		try {
