@@ -60,7 +60,9 @@ public class JDBCUserDAO implements DAO<User> {
 			statement.setString(1, key);
 			try(ResultSet resultSet = statement.executeQuery()) {
 				if (resultSet.next()) {
-					return new User(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
+					User user= new User(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
+					user.setCreatedAt(resultSet.getDate(4));
+					return user;
 				}
 			}
 		}
@@ -74,6 +76,7 @@ public class JDBCUserDAO implements DAO<User> {
 			try(ResultSet resultSet = statement.executeQuery("SELECT * FROM users")) {
 				while (resultSet.next()) {
 					User user = new User(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
+					user.setCreatedAt(resultSet.getDate(4));
 					users.add(user);
 				}
 			}

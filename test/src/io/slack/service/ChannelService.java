@@ -10,14 +10,6 @@ import io.slack.network.communication.MessageAttachment;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO Add parameters to update OR add update for each Channel attribute
- */
-
-/**
- * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
- */
-
 public class ChannelService {
 
 	private final DAO<Channel> channelDAO = DAOFactory.getChannel();

@@ -161,7 +161,7 @@ public class ControllerClient {
             if(client!=null)
                 received = client.sendMessage(message);
 
-            channel.addPost( new Post(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getTitle()+"' channel") );
+            channel.addPost( new Post(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getTitle()+"' channel", channel) );
 
 
             return channel;
@@ -233,7 +233,7 @@ public class ControllerClient {
                     post = new PostImage(currentUser, textMessage, FileUtils.getImage(attachedFile));
                     resetAttachedFile();
                 }else {
-                    post = new Post(currentUser, textMessage);
+                    post = new Post(currentUser, textMessage, currentChannel);
                 }
                 PostAndChannelCredentials attachment = new PostAndChannelCredentials(post, currentChannel.getTitle());
                 Message message = new MessageAttachment<PostAndChannelCredentials>(ClientMessageType.ADDPOSTCHANNEL.getValue(), attachment);
@@ -287,7 +287,7 @@ public class ControllerClient {
         }
 
         for(int i=0; i<50; i++){
-            example.addPost( new Post(currentUser, "test "+i ) );
+            example.addPost( new Post(currentUser, "test "+i, currentChannel ) );
         }
     }
 

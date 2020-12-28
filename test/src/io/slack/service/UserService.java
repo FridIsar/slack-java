@@ -11,14 +11,6 @@ import io.slack.utils.EmailUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO Add parameters to update OR add update for each User attribute
- */
-
-/**
- * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
- */
-
 public class UserService {
 
 	private final DAO<User> userDAO = DAOFactory.getUser();
