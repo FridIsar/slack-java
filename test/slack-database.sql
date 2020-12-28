@@ -1,9 +1,10 @@
 CREATE TABLE users(
+    id INT AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     username VARCHAR(255),
     creation_date DATE,
-    PRIMARY KEY(email)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE channels (
@@ -34,8 +35,8 @@ CREATE TABLE posts (
 CREATE TABLE members (
      channel_name VARCHAR(255),
      user_email VARCHAR(255),
+     nickname VARCHAR(255),
      PRIMARY KEY(channel_name, user_email),
      FOREIGN KEY(user_email) REFERENCES users(email),
      FOREIGN KEY(channel_name) REFERENCES channels(name)
 );
-

@@ -11,8 +11,6 @@ import io.slack.network.communication.MessageAttachment;
 import java.util.ArrayList;
 import java.util.List;
 
-//todo update email when we update the users table
-
 public class FriendService {
 
     private final JDBCFriendsDAO friendDAO = new JDBCFriendsDAO();
