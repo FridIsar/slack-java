@@ -7,15 +7,15 @@ import java.time.Instant;
 public class Post implements Serializable {
     private String message = null;
     private Date sendingDate;
-    private User auteur = null;
+    private User author = null;
     private Channel channel=null;
     private int id;
     private Date modificationDate=null;
 
     public Post(){}
 
-    public Post(User auteur, String message, Channel channel) {
-        this.auteur=auteur;
+    public Post(User author, String message, Channel channel) {
+        this.author = author;
         this.message = message;
         this.channel=channel;
         sendingDate = new Date(Instant.now().toEpochMilli());
@@ -37,8 +37,8 @@ public class Post implements Serializable {
         this.message = message;
     }
 
-    public User getAuteur() {
-        return auteur;
+    public User getAuthor() {
+        return author;
     }
 
     public void setId(int id) {

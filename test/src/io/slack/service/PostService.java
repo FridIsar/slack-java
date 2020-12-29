@@ -27,7 +27,26 @@ public class PostService {
     }
 
     //todo
+    public Message get(){return null;}
+
+    //todo after the find method in jdbc
     public Message delete(){return null;}
+
+    public Message update(Post post){
+        try{
+            /*todo finish find
+            Post post1 = postDAO.find();
+            if(post1 == null){
+                return new Message(404);
+            }
+             */
+            postDAO.update(post);
+            return new MessageAttachment<Post>(200,post);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Message(500);
+        }
+    }
 
     public Message getAllFromChannel(Channel channel){
         try{
