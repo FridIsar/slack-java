@@ -8,6 +8,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE channels (
+    id INT AUTO_INCREMENT,
     name VARCHAR(255) UNIQUE,
     admin_id INT,
     creation_date DATE,
@@ -26,21 +27,21 @@ CREATE TABLE friends (
 CREATE TABLE posts (
      id INT AUTO_INCREMENT,
      message TEXT,
-     channel_name VARCHAR(255),
+     channel_id INT,
      user_id INT,
      sending_date DATE,
      modification_date DATE,
      with_attachment boolean,
-     PRIMARY KEY(channel_name,id),
-     FOREIGN KEY(channel_name) REFERENCES channels(name),
+     PRIMARY KEY(channel_id,id),
+     FOREIGN KEY(channel_id) REFERENCES channels(id),
      FOREIGN KEY(usr_email) REFERENCES users(email)
 );
 
 CREATE TABLE members (
-     channel_name VARCHAR(255),
+     channel_id INT,
      user_id INT,
      nickname VARCHAR(255),
-     PRIMARY KEY(channel_name, user_email),
+     PRIMARY KEY(channel_id, user_email),
      FOREIGN KEY(user_id) REFERENCES users(id),
-     FOREIGN KEY(channel_name) REFERENCES channels(name)
+     FOREIGN KEY(channel_id) REFERENCES channels(id)
 );

@@ -16,11 +16,11 @@ public class JDBCPostDAO implements DAO<Post> {
 
     @Override
     public Post insert(Post object) throws Exception {
-        String query = "insert into posts (message, channel_name, user_id, sending_date, with_attachment) values ( ?, ?, ?, ?, ?);";
+        String query = "insert into posts (message, channel_id, user_id, sending_date, with_attachment) values ( ?, ?, ?, ?, ?);";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1,object.getMessage());
-            statement.setString(2,object.getChannel().getTitle());
-            statement.setInt(3,object.getId());
+            statement.setInt(2,object.getChannel().getId());
+            statement.setInt(3,object.getAuteur().getId());
             statement.setDate(4,object.getSendingDate());
             statement.setBoolean(5,object instanceof PostImage || object instanceof PostPdf);
 
@@ -41,9 +41,9 @@ public class JDBCPostDAO implements DAO<Post> {
     @Override
     public void delete(String key) throws Exception { }
     public void delete(Post post) throws Exception{
-        String query = "delete from posts where channel_name = ? and id = ? ;";
+        String query = "delete from posts where channel_id = ? and id = ? ;";
         try(PreparedStatement statement= connection.prepareStatement(query)){
-            statement.setString(1,post.getChannel().getTitle());
+            statement.setInt(1,post.getChannel().getId());
             statement.setInt(2,post.getId());
             try(ResultSet resultSet = statement.executeQuery()){
 
@@ -51,7 +51,7 @@ public class JDBCPostDAO implements DAO<Post> {
         }
     }
 
-    //todo if we can find a list of posts from a channel's name and words contained in the textMessage
+    //todo see if we can find a list of posts from a channel's name and words contained in the textMessage
     @Override
     public Post find(String key) throws Exception {
         return null;
@@ -60,7 +60,7 @@ public class JDBCPostDAO implements DAO<Post> {
     public List<Post> findAllFromChannel(Channel channel) throws Exception {
         List<Post> posts = new ArrayList<>();
         try(Statement statement = connection.createStatement()){
-            try(ResultSet resultSet = statement.executeQuery("select * from posts where channel_name = '"+channel.getTitle() +"';")){
+            try(ResultSet resultSet = statement.executeQuery("select * from posts where channel_id = '"+channel.getId() +"';")){
                 UserService userService = new UserService();
                 while (resultSet.next()){
                     User user =DAOFactory.getUser().find(userService.getEmail( resultSet.getInt(4) ) );

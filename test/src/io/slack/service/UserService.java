@@ -80,7 +80,7 @@ public class UserService {
 			if (!EmailUtils.isEmail(email) || !EmailUtils.isEmail(newEmail)) {	// Invalid email
 				return new Message(403);
 			}
-			((JDBCUserDAO)userDAO).update(newEmail, user);
+			((JDBCUserDAO)userDAO).update(user);
 			return new MessageAttachment<>(200, user);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -2,6 +2,8 @@ package io.slack.service;
 
 import io.slack.dao.DAO;
 import io.slack.dao.DAOFactory;
+import io.slack.dao.JDBCChannelDAO;
+import io.slack.dao.JDBCUserDAO;
 import io.slack.model.Channel;
 import io.slack.model.User;
 import io.slack.network.communication.Message;
@@ -76,6 +78,30 @@ public class ChannelService {
 			return new Message(500);
 		}
 	}
+
+	public int getID(String name){
+		try{
+			if(channelDAO instanceof JDBCChannelDAO){
+				return  ((JDBCChannelDAO) channelDAO).getID(name);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return -1;
+	}
+
+	public String getName(int id){
+		try{
+			if(channelDAO instanceof JDBCChannelDAO){
+				return ((JDBCChannelDAO) channelDAO).getName(id);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 	// Gets all channels
 	public Message getAll() {
