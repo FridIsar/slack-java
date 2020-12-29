@@ -9,10 +9,10 @@ CREATE TABLE users(
 
 CREATE TABLE channels (
     name VARCHAR(255) UNIQUE,
-    admin_email VARCHAR(255),
+    admin_id INT,
     creation_date DATE,
     PRIMARY KEY(id),
-    FOREIGN KEY (admin_email) REFERENCES users(email)
+    FOREIGN KEY (admin_id) REFERENCES users(id)
 );
 
 CREATE TABLE friends (
@@ -29,6 +29,7 @@ CREATE TABLE posts (
      channel_name VARCHAR(255),
      user_id INT,
      sending_date DATE,
+     modification_date DATE,
      with_attachment boolean,
      PRIMARY KEY(channel_name,id),
      FOREIGN KEY(channel_name) REFERENCES channels(name),

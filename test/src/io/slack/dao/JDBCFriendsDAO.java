@@ -17,9 +17,8 @@ public class JDBCFriendsDAO implements DAO<Friend> {
     public Friend insert(Friend object) throws Exception {
         String query = "insert into friends values (?, ?);";
         try(PreparedStatement statement = connection.prepareStatement(query)){
-            UserService userService = new UserService();
-            statement.setInt(1, userService.getID( object.getFirstUser().getEmail() ) );
-            statement.setInt(2, userService.getID( object.getSecUser().getEmail() ) );
+            statement.setInt(1, object.getFirstUser().getId() );
+            statement.setInt(2, object.getSecUser().getId() );
 
             try(ResultSet resultSet = statement.executeQuery()){
                 return object;

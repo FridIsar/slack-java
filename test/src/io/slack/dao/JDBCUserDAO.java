@@ -25,22 +25,26 @@ public class JDBCUserDAO implements DAO<User> {
 			statement.setDate(4, object.getCreatedAt());
 
 			try(ResultSet resultSet = statement.executeQuery()){
+				resultSet.last();
+				object.setId(resultSet.getInt(1));
 				return object;
 			}
 		}
 	}
 
-	//todo do it correctly
 	@Override
 	public User update(User object) throws SQLException {
-		if(find(object.getEmail())!=null)
-			delete( object.getEmail() );
-		return insert( object);
-	}
-	public User update(String email, User object) throws SQLException {
-		delete( email );
-		return update(object);
+		String query = "update users set email = ? , password = ? ,  username = ? where id = ?;";
+		try(PreparedStatement statement= connection.prepareStatement(query)){
+			statement.setString(1,object.getEmail());
+			statement.setString(2,object.getPassword());
+			statement.setString(3,object.getPseudo());
+			statement.setInt(4,object.getId());
 
+			try(ResultSet resultSet = statement.executeQuery()){
+				return object;
+			}
+		}
 	}
 
 	@Override
@@ -63,6 +67,7 @@ public class JDBCUserDAO implements DAO<User> {
 				if (resultSet.next()) {
 					User user= new User(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
 					user.setCreatedAt(resultSet.getDate(5));
+					user.setId(resultSet.getInt(1));
 					return user;
 				}
 			}
@@ -104,6 +109,7 @@ public class JDBCUserDAO implements DAO<User> {
 				while (resultSet.next()) {
 					User user = new User(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
 					user.setCreatedAt(resultSet.getDate(5));
+					user.setId(resultSet.getInt(1));
 					users.add(user);
 				}
 			}

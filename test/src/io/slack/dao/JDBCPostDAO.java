@@ -20,8 +20,7 @@ public class JDBCPostDAO implements DAO<Post> {
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1,object.getMessage());
             statement.setString(2,object.getChannel().getTitle());
-            UserService userService = new UserService();
-            statement.setInt(3,userService.getID(object.getAuteur().getEmail()));
+            statement.setInt(3,object.getId());
             statement.setDate(4,object.getSendingDate());
             statement.setBoolean(5,object instanceof PostImage || object instanceof PostPdf);
 

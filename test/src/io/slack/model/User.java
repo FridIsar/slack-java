@@ -11,6 +11,7 @@ public class User implements Comparable<User>, Serializable {
     private String password;
     private String pseudo;
     private Date createdAt;
+    private int id;
 
     public User() {}
 
@@ -53,6 +54,14 @@ public class User implements Comparable<User>, Serializable {
         this.createdAt = createdAt;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,4 +84,5 @@ public class User implements Comparable<User>, Serializable {
     public int compareTo(User o) {
         return pseudo.compareToIgnoreCase(o.pseudo);
     }
+
 }

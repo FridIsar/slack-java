@@ -20,9 +20,8 @@ public class JDBCMemberDAO implements DAO<Member>{
     public Member insert(Member object) throws Exception {
         String query = "insert into members values (?, ?);";
         try(PreparedStatement statement = connection.prepareStatement(query)){
-            UserService userService = new UserService();
             statement.setString(1, object.getChannel().getTitle());
-            statement.setInt(2, userService.getID(object.getUser().getEmail()));
+            statement.setInt(2, object.getUser().getId());
 
             try(ResultSet resultSet = statement.executeQuery()){
                 return object;

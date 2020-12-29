@@ -10,6 +10,7 @@ public class Post implements Serializable {
     private User auteur = null;
     private Channel channel=null;
     private int id;
+    private Date modificationDate=null;
 
     public Post(){}
 
@@ -50,5 +51,13 @@ public class Post implements Serializable {
 
     public Channel getChannel() {
         return channel;
+    }
+
+    public Date getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
     }
 }

@@ -2,6 +2,7 @@ package io.slack.dao;
 
 import io.slack.model.Channel;
 import io.slack.model.User;
+import io.slack.service.UserService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +20,8 @@ public class JDBCChannelDAO implements DAO<Channel> {
         String query = "insert into channels value ( ?, ?, ? );";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, object.getTitle());
-            statement.setString(2, object.getAdmin().getEmail());
+            UserService userService = new UserService();
+            statement.setInt(2, userService.getID(object.getAdmin().getEmail()));
             statement.setDate(3, object.getCreatedAt());
 
             try(ResultSet resultSet = statement.executeQuery()){
@@ -29,7 +31,6 @@ public class JDBCChannelDAO implements DAO<Channel> {
         }
     }
 
-    //todo do it correctly
     @Override
     public Channel update(Channel object) throws Exception {
         delete(object.getTitle());
