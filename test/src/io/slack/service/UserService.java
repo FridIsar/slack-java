@@ -53,34 +53,19 @@ public class UserService {
 	}
 
 	// User update
-	public Message update(String email) {
+	public Message update(int id, String email, String password, String username) {
 		try {
-			User user = userDAO.find(email);
+			User user = userDAO.find(String.valueOf(id));
 			if (user == null) {			// User not found
 				return new Message(404);
 			}
-			if (!EmailUtils.isEmail(email)) {	// Invalid email
+			if (!EmailUtils.isEmail(email) || !EmailUtils.isPassword(password) || username == null) {	// Invalid
 				return new Message(403);
 			}
+			user.setEmail(email);
+			user.setPassword(password);
+			user.setPseudo(username);
 			userDAO.update(user);
-			return new MessageAttachment<>(200, user);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Message(500);
-		}
-	}
-
-	// User update with email change
-	public Message update(String email, String newEmail) {
-		try {
-			User user = userDAO.find(email);
-			if (user == null) {			// User not found
-				return new Message(404);
-			}
-			if (!EmailUtils.isEmail(email) || !EmailUtils.isEmail(newEmail)) {	// Invalid email
-				return new Message(403);
-			}
-			((JDBCUserDAO)userDAO).update(user);
 			return new MessageAttachment<>(200, user);
 		} catch (Exception e) {
 			e.printStackTrace();
