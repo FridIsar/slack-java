@@ -1,6 +1,9 @@
 package io.slack.dao;
 
+import io.slack.model.Channel;
+import io.slack.model.Post;
 import io.slack.model.User;
+import io.slack.service.UserService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -108,6 +111,22 @@ public class JDBCUserDAO implements DAO<User> {
 		try(Statement statement = connection.createStatement()) {
 			try(ResultSet resultSet = statement.executeQuery("SELECT * FROM users")) {
 				while (resultSet.next()) {
+					User user = new User(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+					user.setCreatedAt(resultSet.getDate(5));
+					user.setId(resultSet.getInt(1));
+					users.add(user);
+				}
+			}
+		}
+		return users;
+	}
+
+	public List<User> findAllFromChannel(Channel channel) throws Exception {
+		List<User> users = new ArrayList<>();
+		try(Statement statement = connection.createStatement()){//TODO SQL REQUEST IN USERSCHANNELSRELATION TABLE
+			try(ResultSet resultSet = statement.executeQuery("select * from users where channel_id = '"+channel.getId() +"';")){
+				UserService userService = new UserService();
+				while (resultSet.next()){
 					User user = new User(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
 					user.setCreatedAt(resultSet.getDate(5));
 					user.setId(resultSet.getInt(1));

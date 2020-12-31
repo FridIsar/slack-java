@@ -2,7 +2,10 @@ package io.slack.service;
 
 import io.slack.dao.DAO;
 import io.slack.dao.DAOFactory;
+import io.slack.dao.JDBCPostDAO;
 import io.slack.dao.JDBCUserDAO;
+import io.slack.model.Channel;
+import io.slack.model.Post;
 import io.slack.model.User;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
@@ -13,7 +16,7 @@ import java.util.List;
 
 public class UserService {
 
-	private final DAO<User> userDAO = DAOFactory.getUser();
+	private final JDBCUserDAO userDAO = new JDBCUserDAO();
 
 	// User creation
 	public Message create(String email, String password, String pseudo) {
@@ -102,6 +105,18 @@ public class UserService {
 		return -1;
 	}
 
+	public User getUser(String email){
+		try{
+			if(userDAO instanceof JDBCUserDAO){
+				return  ((JDBCUserDAO) userDAO).find(email);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
 	public String getEmail(int id){
 		try{
 			if(userDAO instanceof JDBCUserDAO){
@@ -121,6 +136,19 @@ public class UserService {
 				return new Message(404);
 			}
 			return new MessageAttachment<>(200, (ArrayList) users);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Message(500);
+		}
+	}
+
+	public Message getAllFromChannel(Channel channel){
+		try{
+			List<User> users = userDAO.findAllFromChannel(channel);
+			if(users.isEmpty()){
+				return new Message(404);
+			}
+			return new MessageAttachment<ArrayList>(200, (ArrayList)users);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Message(500);

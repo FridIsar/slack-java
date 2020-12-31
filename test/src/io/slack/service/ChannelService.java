@@ -72,7 +72,7 @@ public class ChannelService {
 			if (channel == null) {        // Channel does not exist
 				return new Message(404);
 			}
-			return new MessageAttachment<>(200, channel);
+			return new MessageAttachment<Channel>(200, channel);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Message(500);
@@ -95,6 +95,17 @@ public class ChannelService {
 		try{
 			if(channelDAO instanceof JDBCChannelDAO){
 				return ((JDBCChannelDAO) channelDAO).getName(id);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Channel getChannel(String name){
+		try{
+			if(channelDAO instanceof JDBCChannelDAO){
+				return ((JDBCChannelDAO) channelDAO).find(name);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
