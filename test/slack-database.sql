@@ -49,7 +49,7 @@ CREATE TABLE members (
      channel_id INT,
      user_id INT,
      nickname VARCHAR(255),
-     PRIMARY KEY(channel_id, user_email),
+     PRIMARY KEY(channel_id, user_id),
      FOREIGN KEY(user_id) REFERENCES users(id),
      FOREIGN KEY(channel_id) REFERENCES channels(id)
 );

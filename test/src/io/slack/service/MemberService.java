@@ -58,6 +58,19 @@ public class MemberService {
         }
     }
 
+    public Message getAllFromChannel(Channel channel){
+        try{
+            List<User> users = memberDAO.findAllFromChannel(channel);
+            if(users.isEmpty()){
+                return new Message(404);
+            }
+            return new MessageAttachment<ArrayList>(200, (ArrayList)users);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Message(500);
+        }
+    }
+
     public Message getAll(){
         try{
             List<Member> members = memberDAO.findAll();
