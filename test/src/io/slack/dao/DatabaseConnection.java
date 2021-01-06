@@ -18,7 +18,7 @@ public class DatabaseConnection {
 
 	private final Connection connection;
 
-	private DatabaseConnection() {
+	public DatabaseConnection() {
 		connection = init();
 	}
 

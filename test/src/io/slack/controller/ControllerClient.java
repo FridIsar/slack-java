@@ -417,7 +417,7 @@ public class ControllerClient {
 
 
     public static void main(String[] args){
-        test();
+        //test();
         Fenetre.getFrame().setVisible(true);
 
     }

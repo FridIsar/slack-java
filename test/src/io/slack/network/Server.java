@@ -1,5 +1,7 @@
 package io.slack.network;
 
+import io.slack.dao.DatabaseConnection;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,8 +22,10 @@ public class Server {
 
         this.exectutorService = Executors.newFixedThreadPool(5);
         this.completionService = new ExecutorCompletionService<>(this.exectutorService);
-        this.serverSocket = new ServerSocket(40_000);
-        System.out.println("40_000");
+        this.serverSocket = new ServerSocket(50500);
+        System.out.println("50500");
+
+        DatabaseConnection db = new DatabaseConnection();
         Thread threadReadMessage = new Thread(() -> this.runServer());
         threadReadMessage.start();
 
