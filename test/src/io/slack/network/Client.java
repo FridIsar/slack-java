@@ -5,6 +5,7 @@ import io.slack.model.Post;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.network.handlerMessages.ClientMessageType;
+import io.slack.network.model.UserInChannel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -126,6 +127,9 @@ public class Client {
                 }
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("SERVER CLOSED !");
+
+                // SERVER CLOSES ->
+                this.controllerClient.receiveErrorServer();
                 break;
             }
         }
@@ -139,22 +143,23 @@ public class Client {
             case  706:
                 // ADDPOSTCHANNEL -> un User a enovyé un Post dans un Channel dont fait partie Client
                 // désencapsuler le MessageAttachement et envoyer la donnée Post
-                // this.controllerClient.receivePost( (Post) messageReceived.getAttachment());
+                this.controllerClient.receivePost( (Post) messageReceived.getAttachment());
                 break;
 
             case 707 :
                 // DELETEPOSTCHANNEL -> un User a supprimé un Post dans un Channel dont fait partie Client
                 // désencapsuler le MessageAttachement et envoyer la donnée Post
-                // this.controllerClient.receiveDeletePost( (Post) messageReceived.getAttachment());
+                this.controllerClient.receiveDeletePost( (Post) messageReceived.getAttachment());
                 break;
 
             case 705 :
                 // DELETEUSERCHANNEL -> un User admin d'un Channel a retiré un membre User du channel dont fait partie Client
                 // TODO :
                 //  Passer en paramètre un model de network UserInChannel
-                // this.controllerClient.receiveRemoveUserInChannel( );
-
+                UserInChannel userInChannel = (UserInChannel) messageReceived.getAttachment();
+                this.controllerClient.receiveRemoveUserInChannel( userInChannel.getUser(), userInChannel.getChannel());
                 break;
+
             default:
                 break;
         }
