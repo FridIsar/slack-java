@@ -8,45 +8,40 @@ import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.network.model.PostAndChannelCredentials;
 import io.slack.service.ChannelService;
+import io.slack.service.MemberService;
 import io.slack.service.PostService;
 import io.slack.service.UserService;
 
 import java.awt.*;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AddPostChannelMessage extends Subject implements ClientMessageHandler<PostAndChannelCredentials> {
     @Override
     public Message handle(PostAndChannelCredentials dataMessage, ClientHandler clientHandler) {
-        // 1 - some processing on channels
+        System.out.println("Handling add post to channel ...");
+
         String authorEmail = dataMessage.getAuthorEmail();
         String textMessage = dataMessage.getTextMessage();
         String channelTitle = dataMessage.getChannelTitle();
-        Image attached = dataMessage.getAttached();
+        //Image attached = dataMessage.getAttached();
+        //TODO RECUPERER PATH POUR ENREGISTREMENT DANS BDD
 
         ChannelService cs = new ChannelService();
-        Channel channel = cs.getChannel(channelTitle); //((MessageAttachment) channelMsg).getAttachment();
+        Channel channel = cs.getChannel(channelTitle);
 
         UserService us = new UserService();
         User user = us.getUser(authorEmail);
 
-        // 2 - Retrieve list of users to notify - Channel.getUsers -> into list of emails
-        java.util.List usersToNotify = channel.getUsers();
-
         PostService ps = new PostService();
         Message message = ps.create(user, textMessage, channel);
 
-
-        // 3 - call notifyAll(Message messageNotify)
-
         if (message.getCode() == 200)   {
-            Thread threadNotify = new Thread(() -> {
-                // TODO :
-                // ServerMessageType -> code test = 1000 = UPDATE CHANNEL
-                Message messageNotify = message;
-                this.notifyAll(clientHandler.getActivatedClient(), messageNotify);
-            });
-            threadNotify.start();
+            this.notifyChannelMembers(clientHandler, channel, message);
         }
+
         return message;
     }
 

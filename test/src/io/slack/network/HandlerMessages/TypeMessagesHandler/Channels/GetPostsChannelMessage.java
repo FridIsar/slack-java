@@ -12,7 +12,7 @@ import java.awt.*;
 public class GetPostsChannelMessage implements ClientMessageHandler<Channel> {
     @Override
     public Message handle(Channel dataMessage, ClientHandler clientHandler) {
-
+        System.out.println("Handling get posts by channel ...");
         String channelTitle = dataMessage.getTitle();
 
         ChannelService cs = new ChannelService();

@@ -12,7 +12,7 @@ import io.slack.service.UserService;
 public class GetUsersChannelMessage implements ClientMessageHandler<Channel> {
     @Override
     public Message handle(Channel dataMessage, ClientHandler clientHandler) {
-
+        System.out.println("Handling get users by channel ...");
         String channelTitle = dataMessage.getTitle();
 
         ChannelService cs = new ChannelService();
