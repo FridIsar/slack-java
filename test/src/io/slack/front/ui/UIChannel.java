@@ -23,7 +23,6 @@ public class UIChannel extends CentralePage implements ActionListener {
     private JButton send = new JButton("send");
     private JTextField texteMessage = new JTextField();
     private JButton joindre = new JButton("joindre");
-    private JButton parametre = new JButton( "parametre");
     //
     private JTextPane textPane = new JTextPane();
     private JScrollPane jScrollPane= new JScrollPane(textPane);

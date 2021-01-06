@@ -92,7 +92,8 @@ public class RightSidePanel extends JPanel implements ActionListener {
 
         for(JButton button : listeBouton){
             if(source == button){
-                User user = ControllerClient.getUserTest(listeBouton.indexOf(button));
+                //User user = ControllerClient.getUserTest(listeBouton.indexOf(button));
+                User user = ControllerClient.getUserInCurrentChannel(listeBouton.indexOf(button));
                 Fenetre.getFenetre().setContenu( new UIUser(user) );
 
             }

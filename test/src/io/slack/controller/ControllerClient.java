@@ -200,8 +200,8 @@ public class ControllerClient {
         }
     }
 
-    public static void removeUserInChannel(User user, Channel channel){
-        UserAndChannelCredentials attachment = new UserAndChannelCredentials(user.getEmail(), channel.getTitle());
+    public static void removeUserInChannel(String email, Channel channel){
+        UserAndChannelCredentials attachment = new UserAndChannelCredentials(email, channel.getTitle());
         Message message = new MessageAttachment<UserAndChannelCredentials>(ClientMessageType.DELETEUSERCHANNEL.getValue(), attachment);
         try {
             client.sendMessage(message);
@@ -376,7 +376,7 @@ public class ControllerClient {
 
 
     public static void main(String[] args){
-        //test();
+        test();
         Fenetre.getFrame().setVisible(true);
 
     }
