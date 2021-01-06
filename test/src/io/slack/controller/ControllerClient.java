@@ -19,7 +19,7 @@ import io.slack.utils.FileUtils;
 import io.slack.utils.Utils;
 
 import javax.print.DocFlavor;
-import javax.rmi.CORBA.Util;
+//import javax.rmi.CORBA.Util;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;

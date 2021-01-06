@@ -21,7 +21,9 @@ public class UserService {
 	// User creation
 	public Message create(String email, String password, String pseudo) {
 		try {
+			System.out.println("find est pas passé");
 			User user = userDAO.find(email);
+			System.out.println("find est passé");
 			if (user != null) {			// User already exists
 				return new Message(403);
 			}
@@ -32,6 +34,7 @@ public class UserService {
 			userDAO.insert(user);
 			return new MessageAttachment<>(200, user);
 		} catch (Exception e) {
+			System.out.println("erreur");
 			e.printStackTrace();
 			return new Message(500);
 		}

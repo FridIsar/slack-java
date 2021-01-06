@@ -26,12 +26,16 @@ public class JDBCUserDAO implements DAO<User> {
 			statement.setString(2, object.getPassword());
 			statement.setString(3, object.getPseudo());
 			statement.setDate(4, object.getCreatedAt());
+			statement.executeUpdate();
+			User user = this.find(object.getEmail());
 
-			try(ResultSet resultSet = statement.executeQuery()){
-				resultSet.last();
-				object.setId(resultSet.getInt(1));
-				return object;
-			}
+
+			/*try(statement.executeUpdate()){
+				//resultSet.last();
+				//object.setId(resultSet.getInt(1));
+				//return object;
+			}*/
+			return user;
 		}
 	}
 
@@ -63,7 +67,7 @@ public class JDBCUserDAO implements DAO<User> {
 
 	@Override
 	public User find(String key) throws SQLException {
-		String query = "SELECT * FROM users WHERE email = ? UNION SELECT * FROM users WHERE  id = ?";
+		String query = "SELECT * FROM users WHERE email = ? UNION SELECT * FROM users WHERE  id = ?;";
 		try(PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, key);
 			statement.setString(2, key);
