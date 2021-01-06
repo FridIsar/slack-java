@@ -15,8 +15,7 @@ public class GetUsersChannelMessage implements ClientMessageHandler<Channel> {
         System.out.println("Handling get users by channel ...");
         String channelTitle = dataMessage.getTitle();
 
-        ChannelService cs = new ChannelService();
-        Channel channel = cs.getChannel(channelTitle);
+        Channel channel = dataMessage;
 
         MemberService ms = new MemberService();
         Message message = ms.getAllFromChannel(channel);

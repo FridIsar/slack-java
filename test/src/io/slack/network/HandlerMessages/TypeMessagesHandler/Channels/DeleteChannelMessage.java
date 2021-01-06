@@ -16,7 +16,7 @@ public class DeleteChannelMessage extends Subject implements ClientMessageHandle
 
         ChannelService cs = new ChannelService();
 
-        Channel channel = (Channel) ((MessageAttachment) cs.get(title)).getAttachment();
+        Channel channel = dataMessage;//Channel channel = (Channel) ((MessageAttachment) cs.get(title)).getAttachment();
         //keeping channel object in memory to notify the ex-channel's members of its deletion
 
         Message message = cs.delete(title);

@@ -20,7 +20,7 @@ public class CreateChannelMessage extends Subject implements ClientMessageHandle
         ChannelService cs = new ChannelService();
         Message message = cs.create(title, admin);
 
-        Channel channel = (Channel) ((MessageAttachment) message).getAttachment();
+        Channel channel = dataMessage;//(Channel) ((MessageAttachment) message).getAttachment();
 
         if (message.getCode() == 200)   {
             this.notifyChannelMembers(clientHandler, channel, message);
