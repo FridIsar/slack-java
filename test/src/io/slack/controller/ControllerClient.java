@@ -20,6 +20,7 @@ import io.slack.utils.Utils;
 
 import javax.print.DocFlavor;
 import javax.rmi.CORBA.Util;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -135,6 +136,9 @@ public class ControllerClient {
         }
     }
 
+    public static void getAllChannelUser(User user){
+        
+    }
 
 
 //////////////// management of channels  ////////////////
@@ -182,6 +186,10 @@ public class ControllerClient {
         return null;
     }
 
+    public static void changeChannelIcon(Image image, Channel channel){
+
+    }
+
     public static void addUserInChannel(String email, Channel channel){
         UserAndChannelCredentials attachment = new UserAndChannelCredentials(email, channel.getTitle());
         Message message = new MessageAttachment<UserAndChannelCredentials>(ClientMessageType.ADDUSERCHANNEL.getValue(), attachment);
@@ -222,12 +230,12 @@ public class ControllerClient {
         return currentChannel.getUsers().get(i);
     }
 
-    /*public static ArrayList<User> getUserListInChannel(Channel channel){
+    public static ArrayList<User> getUserListInChannel(Channel channel){
 
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETUSERSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
-
+            //todo
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -240,13 +248,13 @@ public class ControllerClient {
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETPOSTSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
-
+            //todo
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         return new ArrayList<>();
-    }*/
+    }
 
     public static Channel getChannel(int i) {
         return channels.get(i);

@@ -121,7 +121,7 @@ public class UIChannel extends CentralePage implements ActionListener {
             JFileChooser jFileChooser = new JFileChooser();
             jFileChooser.addChoosableFileFilter(new ImageFilter());
             jFileChooser.setAcceptAllFileFilterUsed(false);
-            jFileChooser.setDialogTitle("Choisir un fichier");
+            jFileChooser.setDialogTitle("Choose a file");
             int result = jFileChooser.showSaveDialog(this);
             if(result == JFileChooser.APPROVE_OPTION){
                ControllerClient.setAttachedFile(jFileChooser.getSelectedFile());

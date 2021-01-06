@@ -2,6 +2,7 @@ package io.slack.front.ui;
 
 import io.slack.controller.ControllerClient;
 import io.slack.front.CentralePage;
+import io.slack.front.ImageFilter;
 import io.slack.model.Channel;
 import io.slack.utils.FileUtils;
 
@@ -143,7 +144,14 @@ public class UIChannelSettings extends CentralePage implements ActionListener {
         }
 
         if(source == changePicture){
+            JFileChooser jFileChooser = new JFileChooser();
+            jFileChooser.addChoosableFileFilter(new ImageFilter());
+            jFileChooser.setAcceptAllFileFilterUsed(false);
+            jFileChooser.setDialogTitle("Choose a file");
+            int result = jFileChooser.showSaveDialog(this);
+            if(result == JFileChooser.APPROVE_OPTION){
 
+            }
         }
 
         if(source == mute){

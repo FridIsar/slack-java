@@ -6,10 +6,7 @@ import io.slack.model.User;
 import io.slack.service.ChannelService;
 import io.slack.service.UserService;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,14 +72,26 @@ public class JDBCMemberDAO implements DAO<Member>{
             try(ResultSet resultSet = statement.executeQuery("select * from members where channel_id = '"+channel.getId() +"';")){
                 UserService userService = new UserService();
                 while (resultSet.next()){
-                    User user = new User(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
-                    user.setCreatedAt(resultSet.getDate(5));
-                    user.setId(resultSet.getInt(1));
+                    User user = userService.getUser(userService.getEmail( resultSet.getInt(2) ) );
                     users.add(user);
                 }
             }
         }
         return users;
+    }
+
+    public List<Channel> findAllFromUser(User user) throws SQLException {
+        List<Channel> channels = new ArrayList<>();
+        try(Statement statement = connection.createStatement()){
+            try(ResultSet resultSet = statement.executeQuery("select * from members where channel_id = '"+user.getId() +"';")) {
+                ChannelService channelService = new ChannelService();
+                while (resultSet.next()) {
+                    Channel channel = channelService.getChannel(channelService.getName(resultSet.getInt(1)));
+                    channels.add(channel);
+                }
+            }
+        }
+        return channels;
     }
 
     @Override
