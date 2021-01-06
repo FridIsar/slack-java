@@ -9,7 +9,6 @@ import io.slack.front.ToolBar;
 import io.slack.model.Channel;
 import io.slack.model.Post;
 import io.slack.network.model.*;
-import io.slack.model.PostImage;
 import io.slack.model.User;
 import io.slack.network.Client;
 import io.slack.network.HandlerMessages.ClientMessageType;
@@ -17,7 +16,10 @@ import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.utils.EmailUtils;
 import io.slack.utils.FileUtils;
+import io.slack.utils.Utils;
 
+import javax.print.DocFlavor;
+import javax.rmi.CORBA.Util;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -158,7 +160,7 @@ public class ControllerClient {
                 received = client.sendMessage(message);
                 if(received.hasAttachment()){
                     Channel channel= (Channel)( ((MessageAttachment)received).getAttachment() );
-                    sendMessage(new User("root@slack.com", "root", "creator"), channel,"Welcome to the '"+channel.getTitle()+"' channel");
+                    sendPost(new User("root@slack.com", "root", "creator"), channel,"Welcome to the '"+channel.getTitle()+"' channel");
                     return channel;
                 }
             }
@@ -168,14 +170,44 @@ public class ControllerClient {
         return null;
     }
 
-    public static void addUserInChannel(User user, Channel channel){
-        UserAndChannelCredentials attachment = new UserAndChannelCredentials(user.getEmail(), channel.getTitle());
+    public static void addUserInChannel(String email, Channel channel){
+        UserAndChannelCredentials attachment = new UserAndChannelCredentials(email, channel.getTitle());
         Message message = new MessageAttachment<UserAndChannelCredentials>(ClientMessageType.ADDUSERCHANNEL.getValue(), attachment);
         try {
             client.sendMessage(message);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void receiveAddUserInChannel(User user, Channel channel){
+        for(Channel c : channels){
+            if(c.equals(channel)){
+                c.addUser(user);
+            }
+        }
+    }
+
+    public static void removeUserInChannel(User user, Channel channel){
+        UserAndChannelCredentials attachment = new UserAndChannelCredentials(user.getEmail(), channel.getTitle());
+        Message message = new MessageAttachment<UserAndChannelCredentials>(ClientMessageType.DELETEUSERCHANNEL.getValue(), attachment);
+        try {
+            client.sendMessage(message);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void receiveRemoveUserInChannel(User user, Channel channel){
+        for(Channel c : channels){
+            if(c.equals(channel)){
+                c.removeUser(user);
+            }
+        }
+    }
+
+    public static User getUserInCurrentChannel(int i){
+        return currentChannel.getUsers().get(i);
     }
 
     public static ArrayList<User> getUserListInChannel(Channel channel){
@@ -218,7 +250,7 @@ public class ControllerClient {
 
 
 
-///////////////// management of the messages ////////////////
+///////////////// management of the posts ////////////////
 
     private static File attachedFile=null;
     private static boolean isFileAttached = false;
@@ -236,10 +268,10 @@ public class ControllerClient {
         isFileAttached = false;
     }
 
-    public static void sendMessage(Channel channel, String textMessage ){
-        sendMessage(currentUser,channel,textMessage);
+    public static void sendPost(Channel channel, String textMessage ){
+        sendPost(currentUser,channel,textMessage);
     }
-    public static void sendMessage(User user, Channel channel, String textMessage){
+    public static void sendPost(User user, Channel channel, String textMessage){
         try {
             client.runClient();
             PostAndChannelCredentials attachment;
@@ -260,13 +292,39 @@ public class ControllerClient {
         }
     }
 
+    public static void receivePost(Post post){
+        for(Channel channel : channels){
+            if(post.getChannel().equals(channel)){
+                channel.addPost(post);
+                break;
+            }
+        }
+    }
+
+    public static void deletePost(){ //todo
+
+    }
+
+    public static void receiveDeletePost(Post post){
+        for(Channel channel : channels){
+            if(post.getChannel().equals(channel)){
+                channel.removePost(post);
+            }
+        }
+    }
 
 
 
 
 
+//////////////////// server error //////////////
 
-
+    public static void receiveErrorServer(){
+        int waitingTime = 15;
+        Fenetre.getFenetre().affichePopup(new String[]{"the application will close in "+ waitingTime +" seconds..."}, "serveur error");
+        Utils.wait(waitingTime);
+        System.exit(1);
+    }
 
 
 

@@ -107,7 +107,7 @@ public class UIChannel extends CentralePage implements ActionListener {
         Object source = e.getSource();
 
         if( source == send){
-            ControllerClient.sendMessage(channel,texteMessage.getText());
+            ControllerClient.sendPost(channel,texteMessage.getText());
             try {
                 dessiner();
             } catch (BadLocationException badLocationException) {

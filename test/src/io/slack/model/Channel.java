@@ -72,7 +72,7 @@ public class Channel implements Serializable, Comparable<Channel> {
 
 	public void addPost(Post post){this.posts.add((post)); }
 
-	public void removeMessage(Post post){this.posts.remove((post)); }
+	public void removePost(Post post){this.posts.remove((post)); }
 
 	public Image getIcon() {
 		return icon;
