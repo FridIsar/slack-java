@@ -108,7 +108,13 @@ public class ControllerClient {
     public static void updateUser(User user, String email, String pseudo) {
         user.setEmail(email);
         user.setPseudo(pseudo);
-        //todo
+        Message message = new MessageAttachment<UserCredentialsOptions>(ClientMessageType.UPDATEUSER.getValue(), new UserCredentialsOptions(email, user.getPassword(), pseudo ));
+
+        try {
+            client.sendMessage(message);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void updatePassword(User user, String oldPassword, String newPassword) {
