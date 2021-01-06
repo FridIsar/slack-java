@@ -171,6 +171,8 @@ public class ControllerClient {
     }
     public static void setCurrentChannel(Channel currentChannel) {
         ControllerClient.currentChannel = currentChannel;
+        getUserListInChannel(currentChannel);
+        getPostListInChannel(currentChannel);
         //ArrayList<User> userList = getUserListInChannel(currentChannel);
         RightSidePanel.getPanel().removeAllUsers();
         for(User user : currentChannel.getUsers()){
@@ -255,7 +257,10 @@ public class ControllerClient {
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETUSERSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
-            //todo
+
+            if(received.hasAttachment()){
+                channel.setUsers( (ArrayList<User>)( ( (MessageAttachment)received).getAttachment() )  );
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -268,7 +273,10 @@ public class ControllerClient {
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETPOSTSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
-            //todo
+
+            if(received.hasAttachment()){
+                channel.setPosts( (ArrayList<Post>)( ( (MessageAttachment)received).getAttachment() )  );
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -86,6 +86,14 @@ public class Channel implements Serializable, Comparable<Channel> {
 		return id;
 	}
 
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
