@@ -20,8 +20,8 @@ public class Server {
 
         this.exectutorService = Executors.newFixedThreadPool(5);
         this.completionService = new ExecutorCompletionService<>(this.exectutorService);
-        this.serverSocket = new ServerSocket(50_500);
-        System.out.println("50_500");
+        this.serverSocket = new ServerSocket(40_000);
+        System.out.println("40_000");
         Thread threadReadMessage = new Thread(() -> this.runServer());
         threadReadMessage.start();
 

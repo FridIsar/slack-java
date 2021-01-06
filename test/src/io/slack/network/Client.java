@@ -18,10 +18,10 @@ public class Client {
     final Socket socket;
     final InetAddress ip;
     // test local
-    final int serverPort = 50_500;
+    // final int serverPort = 50_500;
 
     // port Serveur Ubuntu :
-    //final int serverPort = 40_000;
+    final int serverPort = 40_000;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private Message response;
@@ -33,11 +33,11 @@ public class Client {
 
     public Client() throws IOException {
         // test localhost :
-        this.ip = InetAddress.getByName("127.0.0.1");
+        // this.ip = InetAddress.getByName("127.0.0.1");
 
         // adresse Serveur Ubuntu :
 
-        //this.ip = InetAddress.getByName("20.39.243.239");
+        this.ip = InetAddress.getByName("20.39.243.239");
         this.socket = new Socket(ip, serverPort);
         this.runClient();
     }
@@ -46,11 +46,11 @@ public class Client {
         this.controllerClient = controllerClient;
 
         // test localhost :
-        this.ip = InetAddress.getByName("127.0.0.1");
+        //this.ip = InetAddress.getByName("127.0.0.1");
 
         // adresse Serveur Ubuntu :
 
-        //this.ip = InetAddress.getByName("20.39.243.239");
+        this.ip = InetAddress.getByName("20.39.243.239");
         this.socket = new Socket(ip, serverPort);
         this.runClient();
     }
