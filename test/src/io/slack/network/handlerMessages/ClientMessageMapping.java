@@ -22,6 +22,7 @@ public class ClientMessageMapping {
             put(ClientMessageType.DELETECHANNEL.getValue(), new DeleteChannelMessage());
             put(ClientMessageType.ADDUSERCHANNEL.getValue(), new AddUserChannelMessage());
             put(ClientMessageType.GETUSERSCHANNEL.getValue(), new GetUsersChannelMessage());
+            put(ClientMessageType.GETCHANNELSUSER.getValue(), new GetChannelsUserMessage());
             put(ClientMessageType.DELETEUSERCHANNEL.getValue(), new DeleteUserChannelMessage());
 
             put(ClientMessageType.GETCHANNELS.getValue(), new GetChannelsMessage());

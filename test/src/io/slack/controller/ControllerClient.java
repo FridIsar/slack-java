@@ -26,11 +26,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ControllerClient {
-    ////////////// management of users ///////////////////
-
+    //user
     private static User currentUser =null;
     private static boolean connect = false;
     private static Client client=null;
+
+    //channel
+    private static Channel currentChannel = null;
+    private static ArrayList<Channel> channels = new ArrayList<>();
+
+    //post
+    private static File attachedFile=null;
+    private static boolean isFileAttached = false;
+
+////////////// management of users ///////////////////
 
     public static boolean isConnect(){return connect; }
 
@@ -39,13 +48,14 @@ public class ControllerClient {
     public static void login(String email, String password) {
         try {
             client = new Client();
-            client.runClient();
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNIN.getValue(), new UserCredentials(email,password));
             Message received = client.sendMessage(message);
 
             if( received.hasAttachment() ){
                 currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
                 connect=true;
+
+                getAllChannelUser(currentUser);
             }//todo affiche popup according to error code
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -58,7 +68,6 @@ public class ControllerClient {
 
         try {
             client = new Client();
-            client.runClient();
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNUP.getValue(), new UserCredentialsOptions(email, password, pseudo));
             Message received = client.sendMessage(message);
 
@@ -67,6 +76,20 @@ public class ControllerClient {
                 connect=true;
             }//todo affiche popup according to error code
         } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void getAllChannelUser(User user){
+        Message message = new MessageAttachment<User>(ClientMessageType.GETCHANNELSUSER.getValue(), user);
+        try {
+            Message received = client.sendMessage(message);
+
+            if(received.hasAttachment() ){
+                channels = (ArrayList<Channel>)( ( (MessageAttachment)received).getAttachment() );
+            }
+
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -83,6 +106,9 @@ public class ControllerClient {
             currentUser =null;
             connect=false;
             client=null;
+
+            currentChannel=null;
+            channels=null;
 
             ToolBar.getToolBar().addMyButton();
             LeftSidePanel.getPanel().addMyButton();
@@ -136,15 +162,9 @@ public class ControllerClient {
         }
     }
 
-    public static void getAllChannelUser(User user){
-        
-    }
-
 
 //////////////// management of channels  ////////////////
 
-    private static Channel currentChannel = null;
-    private static ArrayList<Channel> channels = new ArrayList<>();
 
     public static Channel getCurrentChannel() {
         return currentChannel;
@@ -270,10 +290,6 @@ public class ControllerClient {
 
 ///////////////// management of the posts ////////////////
 
-    private static File attachedFile=null;
-    private static boolean isFileAttached = false;
-
-
     public static void setAttachedFile(File file) {
         if(file!=null) {
             attachedFile = file;
@@ -291,7 +307,6 @@ public class ControllerClient {
     }
     public static void sendPost(User user, Channel channel, String textMessage){
         try {
-            client.runClient();
             PostAndChannelCredentials attachment;
             //Post post;
             if( isFileAttached ) {
@@ -305,7 +320,7 @@ public class ControllerClient {
             Message message = new MessageAttachment<PostAndChannelCredentials>(ClientMessageType.ADDPOSTCHANNEL.getValue(), attachment);
             Message received = client.sendMessage(message);
             //channel.addPost(post);
-        } catch (IOException | InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
