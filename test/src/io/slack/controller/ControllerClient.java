@@ -39,6 +39,16 @@ public class ControllerClient {
     private static File attachedFile=null;
     private static boolean isFileAttached = false;
 
+    private static ControllerClient controllerClient = new ControllerClient();
+
+    public ControllerClient(){
+        try {
+            client=new Client(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 ////////////// management of users ///////////////////
 
     public static boolean isConnect(){return connect; }
@@ -47,7 +57,6 @@ public class ControllerClient {
 
     public static void login(String email, String password) {
         try {
-            client = new Client();
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNIN.getValue(), new UserCredentials(email,password));
             Message received = client.sendMessage(message);
 
@@ -57,7 +66,7 @@ public class ControllerClient {
 
                 getAllChannelUser(currentUser);
             }//todo affiche popup according to error code
-        } catch (IOException | InterruptedException e) {
+        } catch ( InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -67,7 +76,6 @@ public class ControllerClient {
     public static void createAcc(String pseudo, String email, String password ) {
 
         try {
-            client = new Client();
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNUP.getValue(), new UserCredentialsOptions(email, password, pseudo));
             Message received = client.sendMessage(message);
 
@@ -75,7 +83,7 @@ public class ControllerClient {
                 currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
                 connect=true;
             }//todo affiche popup according to error code
-        } catch (IOException | InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -222,7 +230,7 @@ public class ControllerClient {
         }
     }
 
-    public static void receiveAddUserInChannel(User user, Channel channel){
+    public void receiveAddUserInChannel(User user, Channel channel){
         for(Channel c : channels){
             if(c.equals(channel)){
                 c.addUser(user);
@@ -240,7 +248,7 @@ public class ControllerClient {
         }
     }
 
-    public static void receiveRemoveUserInChannel(User user, Channel channel){
+    public void receiveRemoveUserInChannel(User user, Channel channel){
         for(Channel c : channels){
             if(c.equals(channel)){
                 c.removeUser(user);
@@ -360,7 +368,7 @@ public class ControllerClient {
 
 //////////////////// server error //////////////
 
-    public static void receiveErrorServer(){
+    public void receiveErrorServer(){
         int waitingTime = 15;
         Fenetre.getFenetre().affichePopup(new String[]{"the application will close in "+ waitingTime +" seconds..."}, "serveur error");
         Utils.wait(waitingTime);
