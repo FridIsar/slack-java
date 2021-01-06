@@ -1,6 +1,10 @@
 package io.slack.network;
 
+import io.slack.controller.ControllerClient;
+import io.slack.model.Post;
 import io.slack.network.communication.Message;
+import io.slack.network.communication.MessageAttachment;
+import io.slack.network.handlerMessages.ClientMessageType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,7 +28,22 @@ public class Client {
     private final Lock lock = new ReentrantLock();
     private final Condition condition = lock.newCondition();
 
+    private ControllerClient controllerClient;
+
     public Client() throws IOException {
+        // test localhost :
+        this.ip = InetAddress.getByName("127.0.0.1");
+
+        // adresse Serveur Ubuntu :
+
+        //this.ip = InetAddress.getByName("20.39.243.239");
+        this.socket = new Socket(ip, serverPort);
+        this.runClient();
+    }
+
+    public Client(ControllerClient controllerClient) throws IOException {
+        this.controllerClient = controllerClient;
+
         // test localhost :
         this.ip = InetAddress.getByName("127.0.0.1");
 
@@ -39,7 +58,7 @@ public class Client {
      * Method to run the Client
      * @throws IOException
      */
-    public void runClient() throws IOException {
+    private void runClient() throws IOException {
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
 
@@ -83,7 +102,7 @@ public class Client {
     /**
      * Method to read continuously entrering Message (s) coming from the server
      */
-    public void readContinuouslyMessages() {
+    private void readContinuouslyMessages() {
         while (true) {
             try {
                 Message messageReceived = (Message) ois.readObject();
@@ -109,6 +128,35 @@ public class Client {
                 System.out.println("SERVER CLOSED !");
                 break;
             }
+        }
+    }
+
+    private void handlerMessageSentByServer(MessageAttachment messageReceived) {
+        // TODO :
+        //  /!\ remplacer le new par this.controllerClient
+
+        switch (messageReceived.getCode()) {
+            case  706:
+                // ADDPOSTCHANNEL -> un User a enovyé un Post dans un Channel dont fait partie Client
+                // désencapsuler le MessageAttachement et envoyer la donnée Post
+                // this.controllerClient.receivePost( (Post) messageReceived.getAttachment());
+                break;
+
+            case 707 :
+                // DELETEPOSTCHANNEL -> un User a supprimé un Post dans un Channel dont fait partie Client
+                // désencapsuler le MessageAttachement et envoyer la donnée Post
+                // this.controllerClient.receiveDeletePost( (Post) messageReceived.getAttachment());
+                break;
+
+            case 705 :
+                // DELETEUSERCHANNEL -> un User admin d'un Channel a retiré un membre User du channel dont fait partie Client
+                // TODO :
+                //  Passer en paramètre un model de network UserInChannel
+                // this.controllerClient.receiveRemoveUserInChannel( );
+
+                break;
+            default:
+                break;
         }
     }
 }
