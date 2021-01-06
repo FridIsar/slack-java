@@ -42,8 +42,10 @@ public class ControllerClient {
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNIN.getValue(), new UserCredentials(email,password));
             Message received = client.sendMessage(message);
 
-            //if( received ) TODO conditions on the received message
-            connect=true;
+            if( received.hasAttachment() ){
+                currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
+                connect=true;
+            }//todo affiche popup according to error code
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -59,8 +61,10 @@ public class ControllerClient {
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNUP.getValue(), new UserCredentialsOptions(email, password, pseudo));
             Message received = client.sendMessage(message);
 
-            //if( received ) TODO conditions on the received message
-            connect=true;
+            if( received.hasAttachment() ){
+                currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
+                connect=true;
+            }//todo affiche popup according to error code
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -137,11 +141,13 @@ public class ControllerClient {
     }
     public static void setCurrentChannel(Channel currentChannel) {
         ControllerClient.currentChannel = currentChannel;
-        ArrayList<User> userList = getUserListInChannel(currentChannel);
+        //ArrayList<User> userList = getUserListInChannel(currentChannel);
         RightSidePanel.getPanel().removeAllUsers();
-        for(User user : userList){
+        for(User user : currentChannel.getUsers()){
             RightSidePanel.getPanel().addAUser(user);
         }
+
+
     }
     public static void resetCurrentChannel(){
         ControllerClient.currentChannel=null;
@@ -210,13 +216,12 @@ public class ControllerClient {
         return currentChannel.getUsers().get(i);
     }
 
-    public static ArrayList<User> getUserListInChannel(Channel channel){
+    /*public static ArrayList<User> getUserListInChannel(Channel channel){
 
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETUSERSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
 
-            //TODO get the arrayList
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -230,13 +235,12 @@ public class ControllerClient {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETPOSTSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
 
-            //TODO get the arrayList
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         return new ArrayList<>();
-    }
+    }*/
 
     public static Channel getChannel(int i) {
         return channels.get(i);
