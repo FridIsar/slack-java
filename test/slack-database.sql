@@ -16,14 +16,6 @@ CREATE TABLE channels (
     FOREIGN KEY (admin_id) REFERENCES users(id)
 );
 
-CREATE TABLE usersChannelsRelation  (
-    user_id INT NOT NULL,
-    channel_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (channel_id) REFERENCES channels(id),
-    UNIQUE (user_id, channel_id)
-)
-
 CREATE TABLE friends (
      usr1_id INT,
      usr2_id INT,
