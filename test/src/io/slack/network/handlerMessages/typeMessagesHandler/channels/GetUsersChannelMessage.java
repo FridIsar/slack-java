@@ -1,13 +1,11 @@
-package io.slack.network.HandlerMessages.TypeMessagesHandler.Channels;
+package io.slack.network.handlerMessages.typeMessagesHandler.channels;
 
 import io.slack.model.Channel;
 import io.slack.network.ClientHandler;
-import io.slack.network.HandlerMessages.ClientMessageHandler;
+import io.slack.network.handlerMessages.ClientMessageHandler;
 import io.slack.network.communication.Message;
 import io.slack.service.ChannelService;
 import io.slack.service.MemberService;
-import io.slack.service.PostService;
-import io.slack.service.UserService;
 
 public class GetUsersChannelMessage implements ClientMessageHandler<Channel> {
     @Override

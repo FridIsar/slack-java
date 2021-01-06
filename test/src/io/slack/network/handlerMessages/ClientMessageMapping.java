@@ -1,7 +1,7 @@
-package io.slack.network.HandlerMessages;
+package io.slack.network.handlerMessages;
 
-import io.slack.network.HandlerMessages.TypeMessagesHandler.Channels.*;
-import io.slack.network.HandlerMessages.TypeMessagesHandler.User.*;
+import io.slack.network.handlerMessages.typeMessagesHandler.channels.*;
+import io.slack.network.handlerMessages.typeMessagesHandler.user.*;
 
 import java.util.HashMap;
 import java.util.Map;

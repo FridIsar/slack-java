@@ -1,4 +1,4 @@
-package io.slack.network.HandlerMessages.TypeMessagesHandler.Channels;
+package io.slack.network.handlerMessages.typeMessagesHandler.channels;
 
 import io.slack.network.communication.Message;
 

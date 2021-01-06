@@ -1,28 +1,28 @@
-package io.slack.network.HandlerMessages;
+package io.slack.network.handlerMessages;
 
 public enum  ClientMessageType {
     //user
-    SIGNIN(100),
-    SIGNUP(101),
-    DELETEUSER(102),
-    DISCONNECT(103),
+    SIGNIN(600),
+    SIGNUP(601),
+    DELETEUSER(602),
+    DISCONNECT(603),
 
-    CHECKEMAIL(104), //todo send a string or an object ?
-    UPDATEUSER(105),
+    CHECKEMAIL(604), //todo send a string or an object ?
+    UPDATEUSER(605),
 
     //channel
-    CREATECHANNEL(200),
-    DELETECHANNEL(201),
+    CREATECHANNEL(700),
+    DELETECHANNEL(701),
 
-    GETCHANNELS(202),
+    GETCHANNELS(702),
 
-    ADDUSERCHANNEL(203),
-    GETUSERSCHANNEL(204),
-    DELETEUSERCHANNEL(205),
+    ADDUSERCHANNEL(703),
+    GETUSERSCHANNEL(704),
+    DELETEUSERCHANNEL(705),
 
-    ADDPOSTCHANNEL(206),
-    DELETEPOSTCHANNEL(207),
-    GETPOSTSCHANNEL(208);
+    ADDPOSTCHANNEL(706),
+    DELETEPOSTCHANNEL(707),
+    GETPOSTSCHANNEL(708);
 
 
     private int value;

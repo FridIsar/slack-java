@@ -1,9 +1,9 @@
-package io.slack.network.HandlerMessages.TypeMessagesHandler.Channels;
+package io.slack.network.handlerMessages.typeMessagesHandler.channels;
 
 import io.slack.model.Channel;
 import io.slack.model.User;
 import io.slack.network.ClientHandler;
-import io.slack.network.HandlerMessages.ClientMessageHandler;
+import io.slack.network.handlerMessages.ClientMessageHandler;
 import io.slack.network.communication.Message;
 import io.slack.network.model.UserAndChannelCredentials;
 import io.slack.service.ChannelService;
