@@ -39,7 +39,16 @@ public class ClientHandler implements Callable, Observer {
         while(true) {
             try {
                 // on lit le Message
-                Message messageReceived = (Message) this.ois.readObject();
+                System.out.println("waiting message");
+                Message messageReceived = null;
+                try {
+                    messageReceived = (MessageAttachment) this.ois.readObject();
+                } catch (IOException e) {
+                    System.out.println("erreur received");
+                    e.printStackTrace();
+                }
+
+                System.out.println("message received "+messageReceived.getCode());
                 Message messageToSend = ClientMessageMapping.getMapping().get(messageReceived.getCode()).handle(
                         messageReceived.hasAttachment() ? ((MessageAttachment) messageReceived).getAttachment() : null,
                         this);

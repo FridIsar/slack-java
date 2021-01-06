@@ -76,7 +76,7 @@ public class Client {
     public Message sendMessage(Message sendMessage) throws InterruptedException {
         Message response = null;
 
-        System.out.println("sendMessage");
+        System.out.println("sendMessage "+sendMessage.getCode());
         try {
             System.out.println("writing sendMessage...");
             oos.writeObject(sendMessage);
@@ -84,7 +84,7 @@ public class Client {
             System.out.println("Writing error sendMessage");
             e.printStackTrace();
         }
-
+        System.out.println("waiting for lock");
         // Waiting until response variable is set
         this.lock.lock();
         this.condition.await();
@@ -92,7 +92,13 @@ public class Client {
         if (this.response == null) {
             System.out.println("sendMessage An error occurred : response null");
         } else {
-            response = new Message(this.response);
+            if (this.response.hasAttachment())   {
+                response = new MessageAttachment((MessageAttachment) this.response);
+                System.out.println("User"+((MessageAttachment) response).getAttachment());
+            }
+            else  {
+                response = new Message(this.response);
+            }
         }
         this.response = null;
         this.lock.unlock();

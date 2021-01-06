@@ -17,19 +17,21 @@ public class JDBCChannelDAO implements DAO<Channel> {
 
     @Override
     public Channel insert(Channel object) throws Exception {
+        System.out.println("methode isnet");
         String query = "insert into channels (name, admin_id, creation_date ) value ( ?, ?, ? );";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, object.getTitle());
-            UserService userService = new UserService();
             statement.setInt(2, object.getAdmin().getId());
             statement.setDate(3, object.getCreatedAt());
+            System.out.println("ligne 24");
+            statement.executeUpdate();
+            Channel channel = this.find(object.getTitle());
+            System.out.println("channel dao is "+channel);
+            return channel;
 
-            try(ResultSet resultSet = statement.executeQuery()){
-                resultSet.last();
-                object.setId(resultSet.getInt(1));
-                return object;
-            }
-
+        } catch (Exception e)   {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -62,14 +64,31 @@ public class JDBCChannelDAO implements DAO<Channel> {
             statement.setString(1, key);
             try(ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    User user = DAOFactory.getUser().find( resultSet.getString(2) );
-                    Channel channel = new Channel(resultSet.getString(1), user );
+                    User user = DAOFactory.getUser().find( resultSet.getString(3) );
+                    Channel channel = new Channel(resultSet.getString(2), user );
                     channel.setId(resultSet.getInt(1));
                     return channel;
                 }
             }
         }
         return null;
+    }
+
+
+    public List<Channel> findFromAdmin(int key) throws Exception {
+        List<Channel> channels = new ArrayList<>();
+        try(Statement statement = connection.createStatement()) {
+            try(ResultSet resultSet = statement.executeQuery("SELECT * FROM channels WHERE admin_id = "+key+";")) {
+                while (resultSet.next()) {
+                    System.out.println(resultSet+ " result");
+                    User user = DAOFactory.getUser().find( resultSet.getString(3) );
+                    Channel channel = new Channel( resultSet.getString(2) , user);
+                    channel.setId(resultSet.getInt(1));
+                    channels.add(channel);
+                }
+            }
+        }
+        return channels;
     }
 
     public int getID(String key) throws Exception{
@@ -104,8 +123,8 @@ public class JDBCChannelDAO implements DAO<Channel> {
         try(Statement statement = connection.createStatement()) {
             try(ResultSet resultSet = statement.executeQuery("SELECT * FROM channels")) {
                 while (resultSet.next()) {
-                    User user = DAOFactory.getUser().find( resultSet.getString(2) );
-                    Channel channel = new Channel( resultSet.getString(1) , user);
+                    User user = DAOFactory.getUser().find( resultSet.getString(3) );
+                    Channel channel = new Channel( resultSet.getString(2) , user);
                     channel.setId(resultSet.getInt(1));
                     channels.add(channel);
                 }

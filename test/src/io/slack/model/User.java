@@ -77,7 +77,13 @@ public class User implements Comparable<User>, Serializable {
 
     @Override
     public String toString() {
-        return pseudo;
+        return "User{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", pseudo='" + pseudo + '\'' +
+                ", createdAt=" + createdAt +
+                ", id=" + id +
+                '}';
     }
 
     @Override

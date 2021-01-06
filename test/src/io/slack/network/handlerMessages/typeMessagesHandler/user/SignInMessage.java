@@ -1,5 +1,6 @@
 package io.slack.network.handlerMessages.typeMessagesHandler.user;
 
+import io.slack.network.communication.MessageAttachment;
 import io.slack.network.model.UserCredentials;
 import io.slack.network.ClientHandler;
 import io.slack.network.handlerMessages.ClientMessageHandler;
@@ -18,7 +19,7 @@ public class SignInMessage implements ClientMessageHandler<UserCredentials> {
 
         System.out.println("haut");
         UserService userService = new UserService();
-        Message message = userService.authenticate(email, password);
+        Message message = (MessageAttachment) userService.authenticate(email, password);
         System.out.println("bas");
 
         if (message.getCode() == 200) {

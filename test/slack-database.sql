@@ -1,5 +1,5 @@
 CREATE TABLE users(
-    id INT AUTO_INCREMENT,
+    id INT AUTO_INCREMENT NOT NULL,
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     username VARCHAR(255),
@@ -8,7 +8,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE channels (
-    id INT AUTO_INCREMENT,
+    id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(255) UNIQUE,
     admin_id INT,
     creation_date DATE,
@@ -25,7 +25,7 @@ CREATE TABLE friends (
 );
 
 CREATE TABLE posts (
-     id INT AUTO_INCREMENT,
+     id INT AUTO_INCREMENT NOT NULL,
      message TEXT,
      channel_id INT,
      user_id INT,

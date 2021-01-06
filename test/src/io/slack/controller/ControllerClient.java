@@ -62,9 +62,12 @@ public class ControllerClient {
 
             if( received.hasAttachment() ){
                 currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
+                System.out.println("email login "+currentUser.getEmail());
                 connect=true;
 
                 getAllChannelUser(currentUser);
+                ToolBar.getToolBar().addMyButton();
+                LeftSidePanel.getPanel().addMyButton();
             }//todo affiche popup according to error code
         } catch ( InterruptedException e) {
             e.printStackTrace();
@@ -81,7 +84,10 @@ public class ControllerClient {
 
             if( received.hasAttachment() ){
                 currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
+                System.out.println("email "+currentUser.getEmail());
                 connect=true;
+                ToolBar.getToolBar().addMyButton();
+                LeftSidePanel.getPanel().addMyButton();
             }//todo affiche popup according to error code
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -95,6 +101,10 @@ public class ControllerClient {
 
             if(received.hasAttachment() ){
                 channels = (ArrayList<Channel>)( ( (MessageAttachment)received).getAttachment() );
+                System.out.println("all channels "+channels);
+                for(Channel channel : channels){
+                    LeftSidePanel.getPanel().addAChat(channel);
+                }
             }
 
         } catch (InterruptedException e) {
@@ -203,10 +213,13 @@ public class ControllerClient {
             Message message = new MessageAttachment<ChannelCredentials>(ClientMessageType.CREATECHANNEL.getValue(), new ChannelCredentials(title,currentUser.getEmail()));
             Message received;
             if(client!=null) {
+                System.out.println("coucou");
                 received = client.sendMessage(message);
+                System.out.println("recevied "+received.getCode());
                 if(received.hasAttachment()){
                     Channel channel= (Channel)( ((MessageAttachment)received).getAttachment() );
                     sendPost(new User("root@slack.com", "root", "creator"), channel,"Welcome to the '"+channel.getTitle()+"' channel");
+                    System.out.println("channel recup "+channel);
                     return channel;
                 }
             }
@@ -388,11 +401,15 @@ public class ControllerClient {
     }
 
     public static void test(){
-        User nidhal = new User("nidhal@gmail.com","root","nidhal");
+        User nidhal = new User("isar@gmail.com","@Glitch1","isar");
         connect=true;
         currentUser = nidhal;
+        currentUser.setId(1);
+        getAllChannelUser(nidhal);
 
-        //left pannel
+
+
+        /*//left pannel
         for(int i=0; i<20; i++){
             //Channel channel = createChannel("channel"+i);
             Channel channel = new Channel("channel"+i, currentUser);
@@ -412,12 +429,12 @@ public class ControllerClient {
 
         for(int i=0; i<50; i++){
             example.addPost( new Post(currentUser, "test "+i, currentChannel ) );
-        }
+        }*/
     }
 
 
     public static void main(String[] args){
-        //test();
+        test();
         Fenetre.getFrame().setVisible(true);
 
     }

@@ -74,6 +74,9 @@ public class MemberService {
     public Message getAllFromUser(User user){
         try{
             List<Channel> channels = memberDAO.findAllFromUser(user);
+            ChannelService cs = new ChannelService();
+            channels.addAll(cs.getFromAdmin(user));
+            System.out.println(channels);
             if(channels.isEmpty()){
                 return new Message(404);
             }

@@ -9,8 +9,8 @@ import io.slack.model.User;
 
 public class DAOFactory {
 
-	private static final boolean useJdbcUser = false;
-	private static final boolean useJdbcChannel = false;
+	private static final boolean useJdbcUser = true;
+	private static final boolean useJdbcChannel = true;
 
 	public static DAO<User> getUser() {
 		if (useJdbcUser) {

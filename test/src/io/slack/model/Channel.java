@@ -113,7 +113,15 @@ public class Channel implements Serializable, Comparable<Channel> {
 
 	@Override
 	public String toString() {
-		return title;
+		return "Channel{" +
+				"title='" + title + '\'' +
+				", admin=" + admin +
+				", createdAt=" + createdAt +
+				", icon=" + icon +
+				", id=" + id +
+				", users=" + users +
+				", posts=" + posts +
+				'}';
 	}
 
 	@Override

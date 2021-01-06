@@ -1,5 +1,7 @@
 package io.slack.dao;
 
+import io.slack.model.User;
+
 import java.util.List;
 
 /**
@@ -17,5 +19,4 @@ public interface DAO<T> {
 	T find(String key) throws Exception;
 
 	List<T> findAll() throws Exception;
-
 }

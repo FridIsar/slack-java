@@ -28,13 +28,21 @@ public class Subject {
         MemberService ms = new MemberService();
         Message membersMessage = ms.getAllFromChannel(channel);
 
+        System.out.println("message "+membersMessage.getCode());
+
         ArrayList<User> members = (ArrayList<User>) ((MessageAttachment) membersMessage).getAttachment();
 
         CopyOnWriteArrayList<ClientHandler> connectedUsers = clientHandler.getActivatedClient();
         ConcurrentHashMap<Socket, String> concurrentUserAuthenticated = clientHandler.getConcurrentUserAuthenticated();
         CopyOnWriteArrayList<ClientHandler> connectedMembers = new CopyOnWriteArrayList<ClientHandler>();
 
+
+        String emailAdmin = channel.getAdmin().getEmail();
+
         for (ClientHandler connectedUser : connectedUsers)    {
+            if (concurrentUserAuthenticated.get(connectedUser.getSocket()).equals(emailAdmin))   {
+                connectedMembers.add(connectedUser);
+            }
             for (User memberUser : members) {
                 String userEmail = concurrentUserAuthenticated.get(connectedUser.getSocket());
                 if (userEmail.equals(memberUser.getEmail()))    {

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class UserService {
 
-	private final JDBCUserDAO userDAO = new JDBCUserDAO();
+	private final DAO<User> userDAO = DAOFactory.getUser();
 
 	// User creation
 	public Message create(String email, String password, String pseudo) {

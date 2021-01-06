@@ -6,26 +6,24 @@ import io.slack.network.ClientHandler;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.network.handlerMessages.ClientMessageHandler;
+import io.slack.network.model.ChannelCredentials;
 import io.slack.network.model.UserCredentials;
 import io.slack.service.ChannelService;
+import io.slack.service.UserService;
 
-public class CreateChannelMessage extends Subject implements ClientMessageHandler<Channel> {
+public class CreateChannelMessage extends Subject implements ClientMessageHandler<ChannelCredentials> {
     @Override
-    public Message handle(Channel dataMessage, ClientHandler clientHandler) {
+    public Message handle(ChannelCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling create channel ...");
 
         String title = dataMessage.getTitle();
-        User admin = dataMessage.getAdmin();
+        String adminEmail = dataMessage.getAdminEmail();
 
+        UserService us = new UserService();
+        User admin = us.getUser(adminEmail);
         ChannelService cs = new ChannelService();
         Message message = cs.create(title, admin);
-
-        Channel channel = dataMessage;//(Channel) ((MessageAttachment) message).getAttachment();
-
-        if (message.getCode() == 200)   {
-            this.notifyChannelMembers(clientHandler, channel, message);
-        }
-
+        Channel channel = cs.getChannel(title);
         return message;
     }
 }

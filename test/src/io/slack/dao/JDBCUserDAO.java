@@ -76,6 +76,7 @@ public class JDBCUserDAO implements DAO<User> {
 					User user= new User(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
 					user.setCreatedAt(resultSet.getDate(5));
 					user.setId(resultSet.getInt(1));
+					System.out.println(user.getId()+" is id");
 					return user;
 				}
 			}
