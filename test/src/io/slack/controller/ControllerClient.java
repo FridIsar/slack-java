@@ -11,7 +11,7 @@ import io.slack.model.Post;
 import io.slack.network.model.*;
 import io.slack.model.User;
 import io.slack.network.Client;
-import io.slack.network.HandlerMessages.ClientMessageType;
+import io.slack.network.handlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.utils.EmailUtils;
