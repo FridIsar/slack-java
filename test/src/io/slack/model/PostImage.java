@@ -6,8 +6,8 @@ public class PostImage extends Post {
 
     private Image image = null;
 
-    public PostImage(User auteur, String message, Image image) {
-        super(auteur, message);
+    public PostImage(User auteur, String message, Channel channel, Image image) {
+        super(auteur, message, channel);
         this.image = image;
     }
 

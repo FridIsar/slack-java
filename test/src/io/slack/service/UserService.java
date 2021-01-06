@@ -2,7 +2,10 @@ package io.slack.service;
 
 import io.slack.dao.DAO;
 import io.slack.dao.DAOFactory;
+import io.slack.dao.JDBCPostDAO;
 import io.slack.dao.JDBCUserDAO;
+import io.slack.model.Channel;
+import io.slack.model.Post;
 import io.slack.model.User;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
@@ -11,17 +14,9 @@ import io.slack.utils.EmailUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO Add parameters to update OR add update for each User attribute
- */
-
-/**
- * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
- */
-
 public class UserService {
 
-	private final DAO<User> userDAO = DAOFactory.getUser();
+	private final JDBCUserDAO userDAO = new JDBCUserDAO();
 
 	// User creation
 	public Message create(String email, String password, String pseudo) {
@@ -61,34 +56,19 @@ public class UserService {
 	}
 
 	// User update
-	public Message update(String email) {
+	public Message update(int id, String email, String password, String username) {
 		try {
-			User user = userDAO.find(email);
+			User user = userDAO.find(String.valueOf(id));
 			if (user == null) {			// User not found
 				return new Message(404);
 			}
-			if (!EmailUtils.isEmail(email)) {	// Invalid email
+			if (!EmailUtils.isEmail(email) || !EmailUtils.isPassword(password) || username == null) {	// Invalid
 				return new Message(403);
 			}
+			user.setEmail(email);
+			user.setPassword(password);
+			user.setPseudo(username);
 			userDAO.update(user);
-			return new MessageAttachment<>(200, user);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Message(500);
-		}
-	}
-
-	// User update with email change
-	public Message update(String email, String newEmail) {
-		try {
-			User user = userDAO.find(email);
-			if (user == null) {			// User not found
-				return new Message(404);
-			}
-			if (!EmailUtils.isEmail(email) || !EmailUtils.isEmail(newEmail)) {	// Invalid email
-				return new Message(403);
-			}
-			((JDBCUserDAO)userDAO).update(newEmail, user);
 			return new MessageAttachment<>(200, user);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,6 +91,41 @@ public class UserService {
 			e.printStackTrace();
 			return new Message(500);
 		}
+	}
+
+	public int getID(String email){
+		try{
+			if(userDAO instanceof JDBCUserDAO){
+				return  ((JDBCUserDAO) userDAO).getID(email);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return -1;
+	}
+
+	public User getUser(String email){
+		try{
+			if(userDAO instanceof JDBCUserDAO){
+				return  ((JDBCUserDAO) userDAO).find(email);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
+	public String getEmail(int id){
+		try{
+			if(userDAO instanceof JDBCUserDAO){
+				return ((JDBCUserDAO) userDAO).getEmail(id);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	// Gets all Users

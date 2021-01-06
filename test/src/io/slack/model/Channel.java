@@ -18,6 +18,7 @@ public class Channel implements Serializable, Comparable<Channel> {
 	private User admin;
 	private Date createdAt;
 	private Image icon;
+	private int id;
 	private List<User> users = new ArrayList<>();
 	private List<Post> posts = new ArrayList<>();
 
@@ -79,6 +80,14 @@ public class Channel implements Serializable, Comparable<Channel> {
 
 	public void setIcon(Image icon) {
 		this.icon = icon;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	@Override

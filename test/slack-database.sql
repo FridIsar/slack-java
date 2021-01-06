@@ -1,5 +1,5 @@
-CREATE TABLE users (
-    id INT,
+CREATE TABLE users(
+    id INT AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     username VARCHAR(255),
@@ -8,7 +8,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE channels (
-    id INT,
+    id INT AUTO_INCREMENT,
     name VARCHAR(255) UNIQUE,
     admin_id INT,
     creation_date DATE,
@@ -17,23 +17,31 @@ CREATE TABLE channels (
 );
 
 CREATE TABLE friends (
-     pers1_id INT,
-     pers2_id INT,
-     PRIMARY KEY(pers1_id, pers2_id),
-     FOREIGN KEY(pers1_id) REFERENCES users(id),
-     FOREIGN KEY(pers2_id) REFERENCES users(id)
+     usr1_id INT,
+     usr2_id INT,
+     PRIMARY KEY(usr1_id , usr2_id),
+     FOREIGN KEY(usr1_id) REFERENCES users(id),
+     FOREIGN KEY(usr2_id) REFERENCES users(id)
 );
 
-CREATE TABLE chats (
-     id INT,
-     PRIMARY KEY(id)
+CREATE TABLE posts (
+     id INT AUTO_INCREMENT,
+     message TEXT,
+     channel_id INT,
+     user_id INT,
+     sending_date DATE,
+     modification_date DATE,
+     with_attachment boolean,
+     PRIMARY KEY(channel_id,id),
+     FOREIGN KEY(channel_id) REFERENCES channels(id),
+     FOREIGN KEY(usr_email) REFERENCES users(email)
 );
 
 CREATE TABLE members (
-     chat_id INT,
+     channel_id INT,
      user_id INT,
-     PRIMARY KEY(chat_id, user_id),
+     nickname VARCHAR(255),
+     PRIMARY KEY(channel_id, user_id),
      FOREIGN KEY(user_id) REFERENCES users(id),
-     FOREIGN KEY(chat_id) REFERENCES chats(id)
+     FOREIGN KEY(channel_id) REFERENCES channels(id)
 );
-

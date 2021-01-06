@@ -2,6 +2,8 @@ package io.slack.service;
 
 import io.slack.dao.DAO;
 import io.slack.dao.DAOFactory;
+import io.slack.dao.JDBCChannelDAO;
+import io.slack.dao.JDBCUserDAO;
 import io.slack.model.Channel;
 import io.slack.model.User;
 import io.slack.network.communication.Message;
@@ -9,14 +11,6 @@ import io.slack.network.communication.MessageAttachment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * TODO Add parameters to update OR add update for each Channel attribute
- */
-
-/**
- * @author Olivier Pitton <olivier@indexima.com> on 16/12/2020
- */
 
 public class ChannelService {
 
@@ -78,12 +72,47 @@ public class ChannelService {
 			if (channel == null) {        // Channel does not exist
 				return new Message(404);
 			}
-			return new MessageAttachment<>(200, channel);
+			return new MessageAttachment<Channel>(200, channel);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Message(500);
 		}
 	}
+
+	public int getID(String name){
+		try{
+			if(channelDAO instanceof JDBCChannelDAO){
+				return  ((JDBCChannelDAO) channelDAO).getID(name);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return -1;
+	}
+
+	public String getName(int id){
+		try{
+			if(channelDAO instanceof JDBCChannelDAO){
+				return ((JDBCChannelDAO) channelDAO).getName(id);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Channel getChannel(String name){
+		try{
+			if(channelDAO instanceof JDBCChannelDAO){
+				return ((JDBCChannelDAO) channelDAO).find(name);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 	// Gets all channels
 	public Message getAll() {

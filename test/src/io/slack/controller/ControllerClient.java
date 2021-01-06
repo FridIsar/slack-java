@@ -8,16 +8,12 @@ import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
 import io.slack.model.Channel;
 import io.slack.model.Post;
-import io.slack.network.model.PostAndChannelCredentials;
-import io.slack.network.model.UserAndChannelCredentials;
-import io.slack.network.model.UserCredentials;
-import io.slack.model.PostImage;
+import io.slack.network.model.*;
 import io.slack.model.User;
 import io.slack.network.Client;
-import io.slack.network.HandlerMessages.ClientMessageType;
+import io.slack.network.handlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
-import io.slack.network.model.UserCredentialsOptions;
 import io.slack.utils.EmailUtils;
 import io.slack.utils.FileUtils;
 
@@ -105,7 +101,7 @@ public class ControllerClient {
     public static void updateUser(User user, String email, String pseudo) {
         user.setEmail(email);
         user.setPseudo(pseudo);
-        //TODO call the network to check if email is not used & if not, update the user instance (add a method in UserService)
+        //todo
     }
 
     public static void updatePassword(User user, String oldPassword, String newPassword) {
@@ -155,16 +151,16 @@ public class ControllerClient {
 
     public static Channel createChannel(String title){
         try {
-            Channel channel=new Channel(title, currentUser);
-            Message message = new MessageAttachment<Channel>(ClientMessageType.CREATECHANNEL.getValue(), channel);
+            Message message = new MessageAttachment<ChannelCredentials>(ClientMessageType.CREATECHANNEL.getValue(), new ChannelCredentials(title,currentUser.getEmail()));
             Message received;
-            if(client!=null)
+            if(client!=null) {
                 received = client.sendMessage(message);
-
-            channel.addPost( new Post(new User("root@slack.com", "root", "creator"), "Welcome to the '"+channel.getTitle()+"' channel") );
-
-
-            return channel;
+                if(received.hasAttachment()){
+                    Channel channel= (Channel)( ((MessageAttachment)received).getAttachment() );
+                    sendMessage(new User("root@slack.com", "root", "creator"), channel,"Welcome to the '"+channel.getTitle()+"' channel");
+                    return channel;
+                }
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -185,6 +181,20 @@ public class ControllerClient {
 
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETUSERSCHANNEL.getValue(), channel);
+            Message received = client.sendMessage(message);
+
+            //TODO get the arrayList
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
+    public static ArrayList<User> getPostListInChannel(Channel channel){
+
+        try {
+            Message message = new MessageAttachment<Channel>(ClientMessageType.GETPOSTSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
 
             //TODO get the arrayList
@@ -226,23 +236,27 @@ public class ControllerClient {
     }
 
     public static void sendMessage(Channel channel, String textMessage ){
-            try {
-                client.runClient();
-                Post post;
-                if( isFileAttached ) {
-                    post = new PostImage(currentUser, textMessage, FileUtils.getImage(attachedFile));
-                    resetAttachedFile();
-                }else {
-                    post = new Post(currentUser, textMessage);
-                }
-                PostAndChannelCredentials attachment = new PostAndChannelCredentials(post, currentChannel.getTitle());
-                Message message = new MessageAttachment<PostAndChannelCredentials>(ClientMessageType.ADDPOSTCHANNEL.getValue(), attachment);
-                Message received = client.sendMessage(message);
-                channel.addPost(post);
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+        sendMessage(currentUser,channel,textMessage);
+    }
+    public static void sendMessage(User user, Channel channel, String textMessage){
+        try {
+            client.runClient();
+            PostAndChannelCredentials attachment;
+            //Post post;
+            if( isFileAttached ) {
+                //post = new PostImage(currentUser, textMessage, FileUtils.getImage(attachedFile));
+                attachment = new PostAndChannelCredentials(user.getEmail(),textMessage, FileUtils.getImage(attachedFile) , channel.getTitle());
+                resetAttachedFile();
+            }else {
+                //post = new Post(currentUser, textMessage, currentChannel);
+                attachment = new PostAndChannelCredentials(user.getEmail(),textMessage, null , channel.getTitle());
             }
-
+            Message message = new MessageAttachment<PostAndChannelCredentials>(ClientMessageType.ADDPOSTCHANNEL.getValue(), attachment);
+            Message received = client.sendMessage(message);
+            //channel.addPost(post);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -287,13 +301,13 @@ public class ControllerClient {
         }
 
         for(int i=0; i<50; i++){
-            example.addPost( new Post(currentUser, "test "+i ) );
+            example.addPost( new Post(currentUser, "test "+i, currentChannel ) );
         }
     }
 
 
     public static void main(String[] args){
-        test();
+        //test();
         Fenetre.getFrame().setVisible(true);
 
     }

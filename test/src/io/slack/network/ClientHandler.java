@@ -1,7 +1,7 @@
 package io.slack.network;
 
-import io.slack.network.HandlerMessages.ClientMessageMapping;
-import io.slack.network.HandlerMessages.TypeMessagesHandler.Channels.Observer;
+import io.slack.network.handlerMessages.ClientMessageMapping;
+import io.slack.network.handlerMessages.typeMessagesHandler.channels.Observer;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 

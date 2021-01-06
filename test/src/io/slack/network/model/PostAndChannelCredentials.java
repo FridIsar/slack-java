@@ -1,22 +1,36 @@
 package io.slack.network.model;
 
-import io.slack.model.Post;
-
+import java.awt.*;
 import java.io.Serializable;
 
 public class PostAndChannelCredentials implements Serializable {
-    private Post post;
+    private String authorEmail;
+    private String textMessage;
+    private Image attached;
     private String channelTitle;
 
     public PostAndChannelCredentials() {  }
 
-    public PostAndChannelCredentials(Post post, String channelTitle) {
-        this.post = post;
+    public PostAndChannelCredentials(String authorEmail, String textMessage, Image attached, String channelTitle) {
+        this.authorEmail = authorEmail;
+        this.textMessage = textMessage;
+        this.attached = attached;
         this.channelTitle = channelTitle;
     }
 
-    public Post getPost() {
-        return post;
+    public String getAuthorEmail() {
+        return authorEmail;
+    }
+
+    public String getTextMessage() {
+        return textMessage;
+    }
+
+    public Image getAttached() {
+        return attached;
+    }
+    public boolean hasAttachment(){
+        return attached!=null;
     }
 
     public String getChannelTitle() {

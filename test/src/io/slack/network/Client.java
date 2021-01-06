@@ -12,7 +12,11 @@ import java.util.concurrent.locks.*;
 public class Client {
     final Socket socket;
     final InetAddress ip;
+    // test local
     final int serverPort = 50_500;
+
+    // port Serveur Ubuntu :
+    //final int serverPort = 40_000;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private Message response;
@@ -21,7 +25,12 @@ public class Client {
     private final Condition condition = lock.newCondition();
 
     public Client() throws IOException {
-        this.ip = InetAddress.getByName("localhost");
+        // test localhost :
+        this.ip = InetAddress.getByName("127.0.0.1");
+
+        // adresse Serveur Ubuntu :
+
+        //this.ip = InetAddress.getByName("20.39.243.239");
         this.socket = new Socket(ip, serverPort);
         this.runClient();
     }
@@ -49,8 +58,10 @@ public class Client {
 
         System.out.println("sendMessage");
         try {
+            System.out.println("writing sendMessage...");
             oos.writeObject(sendMessage);
         } catch (IOException e) {
+            System.out.println("Writing error sendMessage");
             e.printStackTrace();
         }
 
@@ -65,6 +76,7 @@ public class Client {
         }
         this.response = null;
         this.lock.unlock();
+        System.out.println(response.getCode());
         return response;
     }
 
@@ -79,7 +91,7 @@ public class Client {
 
                 if (messageReceived.getCode() >= 200 && messageReceived.getCode() <= 500) {
                     // Notify with signalAll that response has been set
-
+                    System.out.println(messageReceived.getCode());
                     this.lock.lock();
                     System.out.println("readContinuouslyMessages into lock");
                     this.response = messageReceived;
