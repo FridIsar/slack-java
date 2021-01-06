@@ -43,7 +43,7 @@ public class UIChannelSettings extends CentralePage implements ActionListener {
             add(addUser);
             add(removeUser);
             add(deleteChannel);
-            add(changeNickname);
+            add(changePicture);
         }
         add(mute);
         add(changeNickname);
@@ -78,15 +78,15 @@ public class UIChannelSettings extends CentralePage implements ActionListener {
         }*/
 
         JLabel labelTitle = new JLabel(channel.getTitle() +" settings");
-        labelTitle.setBounds(4*tc, 0, tc*10, tc);
+        labelTitle.setBounds(5*tc, 0, tc*10, tc);
         labelTitle.setFont(font);
         add(labelTitle);
 
-        g.drawImage(channel.getIcon()!=null ? channel.getIcon() : FileUtils.getImage( "Icons/logo.png" ), 1*tc, 0, tc*1, tc*1, this );
+        g.drawImage(channel.getIcon()!=null ? channel.getIcon() : FileUtils.getImage( "Icons/logo.png" ), 1*tc, 0, tc*2, tc*2, this );
 
         font = new Font("Arial", 0, 20);
 
-        changePicture.setBounds(1*tc, 2*tc, tc*4, tc*1 );
+        changePicture.setBounds(0, 2*tc, tc*4, tc*1 );
         changePicture.setFont(font);
         //
         deleteChannel.setBounds(0, 16 * tc, tc * 4, tc);
@@ -95,7 +95,7 @@ public class UIChannelSettings extends CentralePage implements ActionListener {
         mute.setBounds(14 * tc, 0 * tc, tc * 4, tc);
         mute.setFont(font);
         //
-        changeNickname.setBounds(14 * tc, 7 * tc, tc * 4, tc);
+        changeNickname.setBounds(13 * tc, 16 * tc, tc * 5, tc);
         changeNickname.setFont(font);
         //
         addUser.setBounds(3*tc, 7*tc, tc*4, tc*1);

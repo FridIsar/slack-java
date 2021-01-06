@@ -355,7 +355,9 @@ public class ControllerClient {
 
         //left pannel
         for(int i=0; i<20; i++){
-            Channel channel = createChannel("channel"+i);
+            //Channel channel = createChannel("channel"+i);
+            Channel channel = new Channel("channel"+i, currentUser);
+            channels.add(channel);
             LeftSidePanel.getPanel().addAChat(channel);
         }
 
