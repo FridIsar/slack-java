@@ -19,10 +19,8 @@ public class JDBCFriendsDAO implements DAO<Friend> {
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setInt(1, object.getFirstUser().getId() );
             statement.setInt(2, object.getSecUser().getId() );
-
-            try(ResultSet resultSet = statement.executeQuery()){
-                return object;
-            }
+            statement.executeUpdate();
+            return object;
         }
     }
 
@@ -40,7 +38,7 @@ public class JDBCFriendsDAO implements DAO<Friend> {
             UserService userService = new UserService();
             statement.setInt(1,userService.getID(key1));
             statement.setInt(2,userService.getID(key2));
-            try(ResultSet resultSet=statement.executeQuery()){}
+            statement.executeUpdate();
         }
     }
 

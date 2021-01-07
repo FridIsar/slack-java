@@ -43,15 +43,13 @@ public class JDBCChannelDAO implements DAO<Channel> {
             }
         }
     }
-
+//TODO FAIRE TOUS LES DELETE
     @Override
     public void delete(String key) throws Exception {
         String query = "delete from channels where name = ? ;";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, key);
-            try(ResultSet resultSet = statement.executeQuery()){
-
-            }
+            statement.executeUpdate();
         }
     }
 

@@ -17,7 +17,7 @@ public class Channel implements Serializable, Comparable<Channel> {
 	private String title;
 	private User admin;
 	private Date createdAt;
-	private Image icon;
+	private transient Image icon;
 	private int id;
 	private List<User> users = new ArrayList<>();
 	private List<Post> posts = new ArrayList<>();

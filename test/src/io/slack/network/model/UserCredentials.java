@@ -6,6 +6,9 @@ public class UserCredentials implements Comparable<UserCredentials>, Serializabl
     private String email;
     private String password;
 
+    public UserCredentials() {
+    }
+
     public UserCredentials(String email, String password) {
         this.email = email;
         this.password = password;

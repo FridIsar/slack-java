@@ -5,6 +5,8 @@ import io.slack.dao.DAOFactory;
 import io.slack.dao.JDBCChannelDAO;
 import io.slack.dao.JDBCUserDAO;
 import io.slack.model.Channel;
+import io.slack.model.Member;
+import io.slack.model.Post;
 import io.slack.model.User;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
@@ -41,6 +43,22 @@ public class ChannelService {
 			Channel channel = channelDAO.find(name);
 			if (channel == null) {        // Channel does not exist
 				return new Message(404);
+			}
+			PostService ps = new PostService();
+			Message message = ps.getAllFromChannel(channel);
+			if (message.hasAttachment())	{
+				ArrayList<Post> posts = (ArrayList) ((MessageAttachment) message).getAttachment();
+				for (Post post : posts)	{
+					ps.delete(post);
+				}
+			}
+			MemberService ms = new MemberService();
+			Message message2 = ms.getAllFromChannel(channel);
+			if (message.hasAttachment())	{
+				ArrayList<User> users = (ArrayList) ((MessageAttachment) message2).getAttachment();
+				for (User user : users)	{
+					ms.delete(name, user.getEmail());
+				}
 			}
 			channelDAO.delete(name);
 			return new MessageAttachment<>(200, null);

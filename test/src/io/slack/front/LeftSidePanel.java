@@ -70,6 +70,13 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         createChat.setFont( new Font(Font.DIALOG,Font.BOLD,25));
     }
 
+    public void refreshList(ArrayList<Channel> channels)    {
+        resetList();
+        for (Channel channel : channels)    {
+            addAChat(channel);
+        }
+    }
+
     public void addAChat(Channel chat){
         Image image = chat.getIcon();
 
@@ -94,6 +101,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         Object source = e.getSource();
 
         if( source == createChat ){
+            System.out.println("action create button");
             JTextField titre = new JTextField();
             titre.addKeyListener(new KeyAdapter() {
                 @Override
@@ -115,8 +123,10 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         for(JButton button : listeBouton){
             if( source == button ){
                 Channel channel = ControllerClient.getChannel( listeBouton.indexOf(button));
+                System.out.println("inside "+channel.getTitle());
                 ControllerClient.setCurrentChannel(channel);
                 Fenetre.getFenetre().setContenu( new UIChannel(channel));
+                System.out.println("last inside "+channel.getTitle());
             }
         }
     }

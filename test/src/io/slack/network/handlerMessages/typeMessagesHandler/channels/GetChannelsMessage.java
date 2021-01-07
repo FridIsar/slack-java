@@ -7,7 +7,10 @@ import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.network.model.ChannelCredentials;
 import io.slack.service.ChannelService;
+import io.slack.service.MemberService;
 import io.slack.service.PostService;
+
+import java.util.ArrayList;
 
 public class GetChannelsMessage implements ClientMessageHandler<ChannelCredentials> {
 
@@ -21,6 +24,22 @@ public class GetChannelsMessage implements ClientMessageHandler<ChannelCredentia
 
         ChannelService cs = new ChannelService();
         Message message = cs.get(channelTitle);
+
+        if (message.hasAttachment())    {
+            Channel channel = (Channel) ((MessageAttachment) message).getAttachment();
+            PostService ps = new PostService();
+            Message messageP = ps.getAllFromChannel(channel);
+            if (messageP.hasAttachment())   {
+                channel.setPosts((ArrayList) ((MessageAttachment) messageP).getAttachment());
+            }
+            MemberService ms = new MemberService();
+            Message messageM = ms.getAllFromChannel(channel);
+            if (messageP.hasAttachment())   {
+                channel.setPosts((ArrayList) ((MessageAttachment) messageP).getAttachment());
+            }
+            message = new MessageAttachment<Channel>(message.getCode(), channel);
+        }
+
 
         return message;
     }

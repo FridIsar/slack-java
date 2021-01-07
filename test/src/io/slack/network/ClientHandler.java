@@ -1,5 +1,6 @@
 package io.slack.network;
 
+import io.slack.network.handlerMessages.ClientMessageHandler;
 import io.slack.network.handlerMessages.ClientMessageMapping;
 import io.slack.network.handlerMessages.typeMessagesHandler.channels.Observer;
 import io.slack.network.communication.Message;
@@ -43,16 +44,21 @@ public class ClientHandler implements Callable, Observer {
                 Message messageReceived = null;
                 try {
                     messageReceived = (MessageAttachment) this.ois.readObject();
+                    System.out.println("message recevied at code "+messageReceived.getCode());
                 } catch (IOException e) {
                     System.out.println("erreur received");
                     e.printStackTrace();
                 }
 
-                Message messageToSend = ClientMessageMapping.getMapping().get(messageReceived.getCode()).handle(
-                        messageReceived.hasAttachment() ? ((MessageAttachment) messageReceived).getAttachment() : null,
-                        this);
-                System.out.println(((MessageAttachment) messageToSend).getAttachment() + " code "+messageToSend.getCode());
+                int code = (messageReceived.getCode());
+                ClientMessageHandler cmh = ClientMessageMapping.getMapping().get(code);
+                System.out.println("handler class is "+cmh.getClass()+messageReceived.hasAttachment());
+                Message messageToSend = cmh.handle(messageReceived.hasAttachment() ? ((MessageAttachment) messageReceived).getAttachment() : null,this);
+
+                System.out.println(" code "+messageToSend.getCode());
+                System.out.println("Server is calling ...");
                 this.oos.writeObject(messageToSend);
+                System.out.println("Server called ...");
 
             } catch (IOException e) {
                 System.out.println("CLIENT CLOSED !");
@@ -65,9 +71,13 @@ public class ClientHandler implements Callable, Observer {
     @Override
     public void notify(Message messageNotify) {
         try {
+            System.out.println("Server is notifying...");
+            System.out.println("notifying object "+messageNotify);
             this.oos.writeObject(messageNotify);
+            System.out.println("Server notified...");
         } catch (IOException e) {
             System.out.println("notify An error occurred");
+            e.printStackTrace();
         }
     }
 

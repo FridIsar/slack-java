@@ -59,9 +59,7 @@ public class JDBCUserDAO implements DAO<User> {
 		String query = "delete from users where email = ? ;";
 		try(PreparedStatement statement =connection.prepareStatement(query)){
 			statement.setString(1, key);
-			try(ResultSet resultSet = statement.executeQuery()){
-
-			}
+			statement.executeUpdate();
 		}
 	}
 

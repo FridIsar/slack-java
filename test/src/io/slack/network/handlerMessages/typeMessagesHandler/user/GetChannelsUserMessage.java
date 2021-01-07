@@ -21,6 +21,8 @@ public class GetChannelsUserMessage implements ClientMessageHandler<User> {
         MemberService ms = new MemberService();
         Message message = ms.getAllFromUser(dataMessage);
 
+        System.out.println("message channelsusermessage "+message.getCode());
+
         return message;
     }
 }

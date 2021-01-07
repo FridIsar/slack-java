@@ -6,6 +6,8 @@ public class UserAndChannelCredentials implements Serializable {
     private String userEmail;
     private String channelTitle;
 
+    public UserAndChannelCredentials()  {}
+
     public UserAndChannelCredentials(String userEmail, String channelTitle) {
         this.userEmail = userEmail;
         this.channelTitle = channelTitle;

@@ -9,7 +9,7 @@ public class UserInChannel implements Comparable<UserInChannel>, Serializable {
 
     private User user;
     private Channel channel;
-
+    public UserInChannel()  {}
     public UserInChannel(User user, Channel channel) {
         this.user = user;
         this.channel = channel;

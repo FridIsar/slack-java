@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public class Message implements Serializable {
 
-    protected final int code;
+    protected int code;
+
+    public Message()    {}
 
     public Message(Message message) {
         this.code = message.getCode();

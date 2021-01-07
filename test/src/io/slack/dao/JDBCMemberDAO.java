@@ -40,7 +40,7 @@ public class JDBCMemberDAO implements DAO<Member>{
             ChannelService channelService = new ChannelService();
             statement.setInt(1,channelService.getID(key1));
             statement.setInt(2,userService.getID(key2));
-            try(ResultSet resultSet=statement.executeQuery()){}
+            statement.executeUpdate();
         }
     }
 

@@ -8,7 +8,9 @@ import java.io.Serializable;
 
 public class MessageAttachment<T extends Serializable> extends Message {
 
-	private final T attachment;
+	private T attachment;
+
+	public MessageAttachment()	{}
 
 	public MessageAttachment(MessageAttachment<T> messageAttachment) {
 		super(messageAttachment);

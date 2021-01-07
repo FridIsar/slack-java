@@ -58,9 +58,7 @@ public class JDBCPostDAO implements DAO<Post> {
         try(PreparedStatement statement= connection.prepareStatement(query)){
             statement.setInt(1,post.getChannel().getId());
             statement.setInt(2,post.getId());
-            try(ResultSet resultSet = statement.executeQuery()){
-
-            }
+            statement.executeUpdate();
         }
     }
 

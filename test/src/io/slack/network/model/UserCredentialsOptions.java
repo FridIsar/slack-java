@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class UserCredentialsOptions extends UserCredentials implements Serializable {
     private String pseudo;
-
+    public UserCredentialsOptions() {}
     public UserCredentialsOptions(String email, String password, String pseudo) {
         super(email, password);
         this.pseudo = pseudo;

@@ -1,6 +1,7 @@
 package io.slack.controller;
 
 
+import io.slack.dao.DatabaseConnection;
 import io.slack.front.Fenetre;
 import io.slack.front.RightSidePanel;
 import io.slack.front.ui.UIUser;
@@ -93,15 +94,13 @@ public class ControllerClient {
         Message message = new MessageAttachment<User>(ClientMessageType.GETCHANNELSUSER.getValue(), user);
         try {
             Message received = client.sendMessage(message);
-
+            System.out.println("getallchannneluserc" +received.getCode());
             if(received.hasAttachment() ){
                 channels = (ArrayList<Channel>)( ( (MessageAttachment)received).getAttachment() );
                 for(Channel channel : channels){
                     LeftSidePanel.getPanel().addAChat(channel);
                 }
             }
-
-            System.out.println("get allfromchanneluser "+LeftSidePanel.getListeBouton());
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -187,8 +186,10 @@ public class ControllerClient {
     }
     public static void setCurrentChannel(Channel currentChannel) {
         ControllerClient.currentChannel = currentChannel;
+        System.out.println("getting post");
         getUserListInChannel(currentChannel);
         getPostListInChannel(currentChannel);
+        System.out.println("got post");
         //ArrayList<User> userList = getUserListInChannel(currentChannel);
         RightSidePanel.getPanel().removeAllUsers();
         for(User user : currentChannel.getUsers()){
@@ -231,10 +232,10 @@ public class ControllerClient {
     public static void addUserInChannel(String email, Channel channel){
         UserAndChannelCredentials attachment = new UserAndChannelCredentials(email, channel.getTitle());
         Message message = new MessageAttachment<UserAndChannelCredentials>(ClientMessageType.ADDUSERCHANNEL.getValue(), attachment);
-        System.out.println("attachment adduserinchannel "+((MessageAttachment) message).getAttachment());
+        //System.out.println("attachment adduserinchannel "+((MessageAttachment) message).getAttachment());
         try {
-            Message msg = client.sendMessage(message);
-            System.out.println(msg.getCode()+"code message receivesd");
+            Message receivedMessage = client.sendMessage(message);
+            System.out.println(receivedMessage.getCode()+"code message receivesd");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -245,6 +246,7 @@ public class ControllerClient {
             if(c.equals(channel)){
                 System.out.println("adding user in controllerclient "+user.getEmail());
                 c.addUser(user);
+                RightSidePanel.getPanel().addAUser(user);
             }
         }
     }
@@ -271,7 +273,7 @@ public class ControllerClient {
         return currentChannel.getUsers().get(i);
     }
 
-    public static ArrayList<User> getUserListInChannel(Channel channel){
+    public static void getUserListInChannel(Channel channel){
 
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETUSERSCHANNEL.getValue(), channel);
@@ -283,23 +285,19 @@ public class ControllerClient {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        return new ArrayList<>();
     }
 
-    public static ArrayList<User> getPostListInChannel(Channel channel){
+    public static void getPostListInChannel(Channel channel){
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETPOSTSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
-
+            System.out.println("getpostlist code "+message.getCode());
             if(received.hasAttachment()){
                 channel.setPosts( (ArrayList<Post>)( ( (MessageAttachment)received).getAttachment() )  );
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        return new ArrayList<>();
     }
 
     public static Channel getChannel(int i) {
@@ -307,7 +305,22 @@ public class ControllerClient {
     }
 
     public static void deleteChannel(){
-
+        try {
+            Message message = new MessageAttachment<Channel>(ClientMessageType.DELETECHANNEL.getValue(), currentChannel);
+            Message received;
+            if(client!=null) {
+                received = client.sendMessage(message);
+                if (received.getCode() == 200)  {
+                    channels.remove(currentChannel);
+                    LeftSidePanel.getPanel().refreshList(channels);
+                    RightSidePanel.getPanel().removeAllUsers();
+                    Fenetre.getFenetre().backToHome();
+                    resetCurrentChannel();
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -399,18 +412,16 @@ public class ControllerClient {
 
     public static void test() {
         System.out.println("starting test");
-        User nidhal = new User("isar@gmail.com","@Glitch1","isar");
-        connect=true;
-        currentUser = nidhal;
-        currentUser.setId(1);
         try {
             client = new Client(controllerClient);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        getAllChannelUser(currentUser);
         login("isar@gmail.com", "@Glitch1");
-        //createChannel("titre"+Math.random()*500);
+        getAllChannelUser(currentUser);
+        Channel channel = createChannel("titre"+Math.random()*500);
+        addUserInChannel("nidhal@gmail.com", channel);
+
 
 
 
@@ -441,7 +452,6 @@ public class ControllerClient {
     public static void main(String[] args){
         //test();
         Fenetre.getFrame().setVisible(true);
-
     }
 
 }

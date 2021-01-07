@@ -112,9 +112,9 @@ public class Client {
         while (true) {
             try {
 
-
+                System.out.println("Client waiting to receive...");
                 Message messageReceived = (Message) ois.readObject();
-                System.out.println(messageReceived.getCode() + "is message received client" + ((MessageAttachment) messageReceived).getAttachment().getClass());
+                System.out.println( "is message received client" + messageReceived.getCode());
 
                 if (messageReceived.getCode() >= 200 && messageReceived.getCode() <= 500) {
                     // Notify with signalAll that response has been set
@@ -137,7 +137,7 @@ public class Client {
                 e.printStackTrace();
 
                 // SERVER CLOSES ->
-                this.controllerClient.receiveErrorServer();
+                //this.controllerClient.receiveErrorServer();
                 break;
             }
         }
