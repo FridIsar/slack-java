@@ -20,10 +20,8 @@ public class JDBCMemberDAO implements DAO<Member>{
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setInt(1, object.getChannel().getId());
             statement.setInt(2, object.getUser().getId());
-
-            try(ResultSet resultSet = statement.executeQuery()){
-                return object;
-            }
+            statement.executeUpdate();
+            return object;
         }
     }
 

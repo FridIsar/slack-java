@@ -1,6 +1,7 @@
 package io.slack.network;
 
 import io.slack.controller.ControllerClient;
+import io.slack.model.Member;
 import io.slack.model.Post;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
@@ -18,7 +19,7 @@ public class Client {
     final Socket socket;
     final InetAddress ip;
     // test local
-    final int serverPort = 50_500;
+    final int serverPort = 50_600;
 
     // port Serveur Ubuntu :
     // final int serverPort = 40_000;
@@ -113,7 +114,7 @@ public class Client {
 
 
                 Message messageReceived = (Message) ois.readObject();
-                System.out.println(messageReceived.getCode() + "is message received client");
+                System.out.println(messageReceived.getCode() + "is message received client" + ((MessageAttachment) messageReceived).getAttachment().getClass());
 
                 if (messageReceived.getCode() >= 200 && messageReceived.getCode() <= 500) {
                     // Notify with signalAll that response has been set
@@ -133,6 +134,7 @@ public class Client {
                 }
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("SERVER CLOSED !");
+                e.printStackTrace();
 
                 // SERVER CLOSES ->
                 this.controllerClient.receiveErrorServer();
@@ -156,6 +158,12 @@ public class Client {
                 // DELETEPOSTCHANNEL -> un User a supprimé un Post dans un Channel dont fait partie Client
                 // désencapsuler le MessageAttachement et envoyer la donnée Post
                 this.controllerClient.receiveDeletePost( (Post) messageReceived.getAttachment());
+                break;
+
+            case 703 :
+                System.out.println("case 703");
+                Member member =  (Member) ((MessageAttachment) messageReceived).getAttachment();
+                this.controllerClient.receiveAddUserInChannel(member.getUser(), member.getChannel());
                 break;
 
             case 705 :

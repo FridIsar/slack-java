@@ -22,8 +22,8 @@ public class Server {
 
         this.exectutorService = Executors.newFixedThreadPool(5);
         this.completionService = new ExecutorCompletionService<>(this.exectutorService);
-        this.serverSocket = new ServerSocket(50500);
-        System.out.println("50500");
+        this.serverSocket = new ServerSocket(50600);
+        System.out.println("50600");
 
         DatabaseConnection db = new DatabaseConnection();
         Thread threadReadMessage = new Thread(() -> this.runServer());

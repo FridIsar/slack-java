@@ -70,7 +70,8 @@ public class Channel implements Serializable, Comparable<Channel> {
 		return posts;
 	}
 
-	public void addPost(Post post){this.posts.add((post)); }
+	public void addPost(Post post){this.posts.add((post));
+		System.out.println("addpost");}
 
 	public void removePost(Post post){this.posts.remove((post)); }
 

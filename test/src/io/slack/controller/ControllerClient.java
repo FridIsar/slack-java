@@ -231,8 +231,10 @@ public class ControllerClient {
     public static void addUserInChannel(String email, Channel channel){
         UserAndChannelCredentials attachment = new UserAndChannelCredentials(email, channel.getTitle());
         Message message = new MessageAttachment<UserAndChannelCredentials>(ClientMessageType.ADDUSERCHANNEL.getValue(), attachment);
+        System.out.println("attachment adduserinchannel "+((MessageAttachment) message).getAttachment());
         try {
-            client.sendMessage(message);
+            Message msg = client.sendMessage(message);
+            System.out.println(msg.getCode()+"code message receivesd");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -241,6 +243,7 @@ public class ControllerClient {
     public void receiveAddUserInChannel(User user, Channel channel){
         for(Channel c : channels){
             if(c.equals(channel)){
+                System.out.println("adding user in controllerclient "+user.getEmail());
                 c.addUser(user);
             }
         }
