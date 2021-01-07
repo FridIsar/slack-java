@@ -23,13 +23,14 @@ public class DatabaseConnection {
 	}
 
 	private Connection init() {
-		String dbUrl = "jdbc:mysql://db4free.net:3306/javaslack?autoReconnect=true&useSSL=false";
+		//String dbUrl = "jdbc:mysql://db4free.net:3306/javaslack?autoReconnect=true&useSSL=false";
+		String dbUrl = "jdbc:mysql://20.39.243.239:3306/javaslack?autoReconnect=true&useSSL=false";
 		// prev "jdbc:mysql://localhost:3306/slack";
 		String pwd = "password";
 		// prev "@Kaizoku2";
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
-			return DriverManager.getConnection(dbUrl, "slackroot", pwd); // prev "root"
+			return DriverManager.getConnection(dbUrl, "slacko", pwd); // prev "slackroot"
 		} catch (SQLException | ClassNotFoundException e){
 			throw new RuntimeException(e);
 		}
