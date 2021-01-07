@@ -29,8 +29,6 @@ public class AddPostChannelMessage extends Subject implements ClientMessageHandl
         String authorEmail = dataMessage.getAuthorEmail();
         String textMessage = dataMessage.getTextMessage();
         String channelTitle = dataMessage.getChannelTitle();
-        //Image attached = dataMessage.getAttached();
-        //TODO RECUPERER PATH POUR ENREGISTREMENT DANS BDD
 
         ChannelService cs = new ChannelService();
         Channel channel = cs.getChannel(channelTitle);

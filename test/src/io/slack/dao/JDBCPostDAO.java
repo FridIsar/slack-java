@@ -14,7 +14,7 @@ public class JDBCPostDAO implements DAO<Post> {
 
     private final Connection connection = DatabaseConnection.getConnection();
 
-    //todo each channel have his counter
+
     @Override
     public Post insert(Post object) throws Exception {
         String query = "insert into posts (message, channel_id, user_id, sending_date, with_attachment) values ( ?, ?, ?, ?, ?);";

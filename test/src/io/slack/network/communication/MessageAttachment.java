@@ -30,4 +30,12 @@ public class MessageAttachment<T extends Serializable> extends Message {
 	public T getAttachment() {
 		return attachment;
 	}
+
+	@Override
+	public String toString() {
+		return "MessageAttachment{" +
+				"attachment=" + attachment +
+				", code=" + code +
+				'}';
+	}
 }

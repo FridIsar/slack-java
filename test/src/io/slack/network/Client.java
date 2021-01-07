@@ -1,12 +1,11 @@
 package io.slack.network;
 
 import io.slack.controller.ControllerClient;
+import io.slack.model.Channel;
 import io.slack.model.Member;
 import io.slack.model.Post;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
-import io.slack.network.handlerMessages.ClientMessageType;
-import io.slack.network.model.UserInChannel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -166,11 +165,17 @@ public class Client {
                 this.controllerClient.receiveAddUserInChannel(member.getUser(), member.getChannel());
                 break;
 
+            case 701 :
+                System.out.println("case 701");
+                Channel channel =  (Channel) ((MessageAttachment) messageReceived).getAttachment();
+                this.controllerClient.receiveDeleteChannel(channel);
+                break;
+
             case 705 :
                 // DELETEUSERCHANNEL -> un User admin d'un Channel a retiré un membre User du channel dont fait partie Client
                 // TODO :
                 //  Passer en paramètre un model de network UserInChannel
-                UserInChannel userInChannel = (UserInChannel) messageReceived.getAttachment();
+                Member userInChannel = (Member) messageReceived.getAttachment();
                 this.controllerClient.receiveRemoveUserInChannel( userInChannel.getUser(), userInChannel.getChannel());
                 break;
 

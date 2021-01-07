@@ -17,7 +17,7 @@ public class DeleteUserMessage implements ClientMessageHandler<UserCredentials> 
         Message message = userService.delete(email);
 
         if (message.getCode() == 200)
-            clientHandler.getConcurrentUserAuthenticated().remove(clientHandler.getSocket(), email); //todo see with merieme
+            clientHandler.getConcurrentUserAuthenticated().remove(clientHandler.getSocket(), email);
         return message;
 
     }

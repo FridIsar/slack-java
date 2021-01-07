@@ -101,7 +101,6 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         Object source = e.getSource();
 
         if( source == createChat ){
-            System.out.println("action create button");
             JTextField titre = new JTextField();
             titre.addKeyListener(new KeyAdapter() {
                 @Override
@@ -114,8 +113,6 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             int option = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
             if(option == JOptionPane.OK_OPTION){
                 Channel channel = ControllerClient.createChannel(titre.getText());
-                //Channel chat = new Channel(titre.getText(), ControllerClient.getUserCourant());
-                ControllerClient.addChannel(channel); //todo mettre dans controllerclient
                 this.addAChat(channel);
             }
         }
@@ -123,10 +120,8 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         for(JButton button : listeBouton){
             if( source == button ){
                 Channel channel = ControllerClient.getChannel( listeBouton.indexOf(button));
-                System.out.println("inside "+channel.getTitle());
                 ControllerClient.setCurrentChannel(channel);
                 Fenetre.getFenetre().setContenu( new UIChannel(channel));
-                System.out.println("last inside "+channel.getTitle());
             }
         }
     }

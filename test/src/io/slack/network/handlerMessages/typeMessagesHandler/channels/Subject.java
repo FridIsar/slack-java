@@ -19,7 +19,6 @@ public class Subject {
 
     public void notifyAll(CopyOnWriteArrayList<ClientHandler> clientsToNotify, Message messageNotify) {
         for (ClientHandler clientHandler : clientsToNotify) {
-            System.out.println("dans le for");
             clientHandler.notify(messageNotify);
         }
     }
@@ -37,23 +36,16 @@ public class Subject {
         CopyOnWriteArrayList<ClientHandler> connectedMembers = new CopyOnWriteArrayList<ClientHandler>();
 
         for (ClientHandler connectedUser : connectedUsers)    {
-            System.out.println("premier  for "+connectedUsers.size());
             for (User memberUser : members) {
-                System.out.println("deuxieme for "+memberUser.getEmail());
                 String userEmail = concurrentUserAuthenticated.get(connectedUser.getSocket());
-                System.out.println("tropisieme for "+userEmail);
                 if (userEmail != null && userEmail.equals(memberUser.getEmail()))    {
                     connectedMembers.add(connectedUser);
-                    System.out.println("in member");
                 }
-                System.out.println("fin 2eme b");
             }
-            System.out.println("fin 1ere b");
         }
         Thread threadNotify = new Thread(() -> {
             Message message = messageToNotify;
             System.out.println("notifying..."+((MessageAttachment) message).getAttachment()+"code "+message.getCode());
-            System.out.println(connectedMembers);
             this.notifyAll(connectedMembers, message);
             System.out.println("notified");
         });

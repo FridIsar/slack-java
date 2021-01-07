@@ -7,7 +7,7 @@ public enum  ClientMessageType {
     DELETEUSER(602),
     DISCONNECT(603),
 
-    CHECKEMAIL(604), //todo send a string or an object ?
+    CHECKEMAIL(604),
     UPDATEUSER(605),
 
     //channel

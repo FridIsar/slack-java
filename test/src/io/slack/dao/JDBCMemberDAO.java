@@ -81,7 +81,7 @@ public class JDBCMemberDAO implements DAO<Member>{
     public List<Channel> findAllFromUser(User user) throws SQLException {
         List<Channel> channels = new ArrayList<>();
         try(Statement statement = connection.createStatement()){
-            try(ResultSet resultSet = statement.executeQuery("select * from members where channel_id = '"+user.getId() +"';")) {
+            try(ResultSet resultSet = statement.executeQuery("select * from members where user_id = '"+user.getId() +"';")) {
                 ChannelService channelService = new ChannelService();
                 while (resultSet.next()) {
                     Channel channel = channelService.getChannel(channelService.getName(resultSet.getInt(1)));

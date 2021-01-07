@@ -61,7 +61,7 @@ public class ChannelService {
 				}
 			}
 			channelDAO.delete(name);
-			return new MessageAttachment<>(200, null);
+			return new MessageAttachment<>(200, channel);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Message(500);

@@ -33,7 +33,6 @@ public class AddUserChannelMessage extends Subject implements ClientMessageHandl
         if (message.getCode() == 200)   {
             Message messageToSend = new MessageAttachment<Member>(ClientMessageType.ADDUSERCHANNEL.getValue(),
                     (Member) ((MessageAttachment) message).getAttachment());
-            System.out.println("code handler "+messageToSend.getCode());
             this.notifyChannelMembers(clientHandler, channel, messageToSend);
         }
 

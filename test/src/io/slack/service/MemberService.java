@@ -38,7 +38,7 @@ public class MemberService {
                 return new Message(404);
             }
             memberDAO.delete(title,email);
-            return new MessageAttachment<>(200, null);
+            return new MessageAttachment<>(200, member);
         } catch (Exception e) {
             e.printStackTrace();
             return new Message(500);

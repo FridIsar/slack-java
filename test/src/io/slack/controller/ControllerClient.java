@@ -94,7 +94,6 @@ public class ControllerClient {
         Message message = new MessageAttachment<User>(ClientMessageType.GETCHANNELSUSER.getValue(), user);
         try {
             Message received = client.sendMessage(message);
-            System.out.println("getallchannneluserc" +received.getCode());
             if(received.hasAttachment() ){
                 channels = (ArrayList<Channel>)( ( (MessageAttachment)received).getAttachment() );
                 for(Channel channel : channels){
@@ -139,6 +138,7 @@ public class ControllerClient {
         Message message=new MessageAttachment<UserCredentials>(ClientMessageType.DELETEUSER.getValue(), new UserCredentials(currentUser.getEmail(), currentUser.getPassword()));
         try {
             client.sendMessage(message);
+
             disconnect();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -186,10 +186,8 @@ public class ControllerClient {
     }
     public static void setCurrentChannel(Channel currentChannel) {
         ControllerClient.currentChannel = currentChannel;
-        System.out.println("getting post");
         getUserListInChannel(currentChannel);
         getPostListInChannel(currentChannel);
-        System.out.println("got post");
         //ArrayList<User> userList = getUserListInChannel(currentChannel);
         RightSidePanel.getPanel().removeAllUsers();
         for(User user : currentChannel.getUsers()){
@@ -216,6 +214,7 @@ public class ControllerClient {
                 if(received.hasAttachment()){
                     Channel channel= (Channel)( ((MessageAttachment)received).getAttachment() );
                     sendPost(channel.getAdmin(), channel,"Welcome to the '"+channel.getTitle()+"' channel");
+                    addChannel(channel);
                     return channel;
                 }
             }
@@ -235,7 +234,6 @@ public class ControllerClient {
         //System.out.println("attachment adduserinchannel "+((MessageAttachment) message).getAttachment());
         try {
             Message receivedMessage = client.sendMessage(message);
-            System.out.println(receivedMessage.getCode()+"code message receivesd");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -244,7 +242,6 @@ public class ControllerClient {
     public void receiveAddUserInChannel(User user, Channel channel){
         for(Channel c : channels){
             if(c.equals(channel)){
-                System.out.println("adding user in controllerclient "+user.getEmail());
                 c.addUser(user);
                 RightSidePanel.getPanel().addAUser(user);
             }
@@ -265,6 +262,7 @@ public class ControllerClient {
         for(Channel c : channels){
             if(c.equals(channel)){
                 c.removeUser(user);
+                RightSidePanel.getPanel().refreshList((ArrayList<User>) channel.getUsers());
             }
         }
     }
@@ -291,7 +289,6 @@ public class ControllerClient {
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETPOSTSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
-            System.out.println("getpostlist code "+message.getCode());
             if(received.hasAttachment()){
                 channel.setPosts( (ArrayList<Post>)( ( (MessageAttachment)received).getAttachment() )  );
             }
@@ -313,13 +310,21 @@ public class ControllerClient {
                 if (received.getCode() == 200)  {
                     channels.remove(currentChannel);
                     LeftSidePanel.getPanel().refreshList(channels);
-                    RightSidePanel.getPanel().removeAllUsers();
                     Fenetre.getFenetre().backToHome();
                     resetCurrentChannel();
                 }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void receiveDeleteChannel(Channel channel){
+        channels.remove(channel);
+        LeftSidePanel.getPanel().refreshList(channels);
+        if (currentChannel.equals(channel))    {
+            Fenetre.getFenetre().backToHome();
+            resetCurrentChannel();
         }
     }
 

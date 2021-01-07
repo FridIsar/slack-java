@@ -55,7 +55,6 @@ public class ClientHandler implements Callable, Observer {
                 System.out.println("handler class is "+cmh.getClass()+messageReceived.hasAttachment());
                 Message messageToSend = cmh.handle(messageReceived.hasAttachment() ? ((MessageAttachment) messageReceived).getAttachment() : null,this);
 
-                System.out.println(" code "+messageToSend.getCode());
                 System.out.println("Server is calling ...");
                 this.oos.writeObject(messageToSend);
                 System.out.println("Server called ...");
@@ -72,7 +71,7 @@ public class ClientHandler implements Callable, Observer {
     public void notify(Message messageNotify) {
         try {
             System.out.println("Server is notifying...");
-            System.out.println("notifying object "+messageNotify);
+            System.out.println("notifying object "+ messageNotify);
             this.oos.writeObject(messageNotify);
             System.out.println("Server notified...");
         } catch (IOException e) {

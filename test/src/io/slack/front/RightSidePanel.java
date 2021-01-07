@@ -3,6 +3,7 @@ package io.slack.front;
 import io.slack.controller.ControllerClient;
 import io.slack.front.ui.UIChannelSettings;
 import io.slack.front.ui.UIUser;
+import io.slack.model.Channel;
 import io.slack.model.User;
 import io.slack.utils.FileUtils;
 import io.slack.utils.GraphicsUtils;
@@ -102,6 +103,13 @@ public class RightSidePanel extends JPanel implements ActionListener {
 
                 }
             }
+        }
+    }
+
+    public void refreshList(ArrayList<User> users)    {
+        removeAllUsers();
+        for (User user : users)    {
+            addAUser(user);
         }
     }
 }

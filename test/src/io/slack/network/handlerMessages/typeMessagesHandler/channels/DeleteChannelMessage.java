@@ -20,8 +20,6 @@ public class DeleteChannelMessage extends Subject implements ClientMessageHandle
 
         Message message = cs.delete(title);
 
-        System.out.println("users "+dataMessage.getUsers());
-
         if (message.getCode() == 200)   {
             Message messageToSend = new MessageAttachment<>(ClientMessageType.DELETECHANNEL.getValue(),
                     null);
