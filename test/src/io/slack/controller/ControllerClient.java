@@ -42,11 +42,6 @@ public class ControllerClient {
     private static ControllerClient controllerClient = new ControllerClient();
 
     public ControllerClient(){
-        try {
-            client=new Client(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 ////////////// management of users ///////////////////
@@ -57,19 +52,19 @@ public class ControllerClient {
 
     public static void login(String email, String password) {
         try {
+            client = new Client(controllerClient);
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNIN.getValue(), new UserCredentials(email,password));
             Message received = client.sendMessage(message);
 
             if( received.hasAttachment() ){
                 currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
-                System.out.println("email login "+currentUser.getEmail());
                 connect=true;
 
-                getAllChannelUser(currentUser);
                 ToolBar.getToolBar().addMyButton();
                 LeftSidePanel.getPanel().addMyButton();
+                getAllChannelUser(currentUser);
             }//todo affiche popup according to error code
-        } catch ( InterruptedException e) {
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -79,17 +74,17 @@ public class ControllerClient {
     public static void createAcc(String pseudo, String email, String password ) {
 
         try {
+            client = new Client(controllerClient);
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNUP.getValue(), new UserCredentialsOptions(email, password, pseudo));
             Message received = client.sendMessage(message);
 
             if( received.hasAttachment() ){
                 currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
-                System.out.println("email "+currentUser.getEmail());
                 connect=true;
                 ToolBar.getToolBar().addMyButton();
                 LeftSidePanel.getPanel().addMyButton();
             }//todo affiche popup according to error code
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -101,11 +96,12 @@ public class ControllerClient {
 
             if(received.hasAttachment() ){
                 channels = (ArrayList<Channel>)( ( (MessageAttachment)received).getAttachment() );
-                System.out.println("all channels "+channels);
                 for(Channel channel : channels){
                     LeftSidePanel.getPanel().addAChat(channel);
                 }
             }
+
+            System.out.println("get allfromchanneluser "+LeftSidePanel.getListeBouton());
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -128,8 +124,10 @@ public class ControllerClient {
             currentChannel=null;
             channels=null;
 
+
             ToolBar.getToolBar().addMyButton();
             LeftSidePanel.getPanel().addMyButton();
+            LeftSidePanel.getPanel().resetList();
 
             Fenetre.getFenetre().backToHome();
         } catch (InterruptedException e) {
@@ -213,13 +211,10 @@ public class ControllerClient {
             Message message = new MessageAttachment<ChannelCredentials>(ClientMessageType.CREATECHANNEL.getValue(), new ChannelCredentials(title,currentUser.getEmail()));
             Message received;
             if(client!=null) {
-                System.out.println("coucou");
                 received = client.sendMessage(message);
-                System.out.println("recevied "+received.getCode());
                 if(received.hasAttachment()){
                     Channel channel= (Channel)( ((MessageAttachment)received).getAttachment() );
-                    sendPost(new User("root@slack.com", "root", "creator"), channel,"Welcome to the '"+channel.getTitle()+"' channel");
-                    System.out.println("channel recup "+channel);
+                    sendPost(channel.getAdmin(), channel,"Welcome to the '"+channel.getTitle()+"' channel");
                     return channel;
                 }
             }
@@ -290,7 +285,6 @@ public class ControllerClient {
     }
 
     public static ArrayList<User> getPostListInChannel(Channel channel){
-
         try {
             Message message = new MessageAttachment<Channel>(ClientMessageType.GETPOSTSCHANNEL.getValue(), channel);
             Message received = client.sendMessage(message);
@@ -382,7 +376,7 @@ public class ControllerClient {
 //////////////////// server error //////////////
 
     public void receiveErrorServer(){
-        int waitingTime = 15;
+        int waitingTime = 5;
         Fenetre.getFenetre().affichePopup(new String[]{"the application will close in "+ waitingTime +" seconds..."}, "serveur error");
         Utils.wait(waitingTime);
         System.exit(1);
@@ -400,12 +394,20 @@ public class ControllerClient {
         return usersTest.get(i);
     }
 
-    public static void test(){
+    public static void test() {
+        System.out.println("starting test");
         User nidhal = new User("isar@gmail.com","@Glitch1","isar");
         connect=true;
         currentUser = nidhal;
         currentUser.setId(1);
-        getAllChannelUser(nidhal);
+        try {
+            client = new Client(controllerClient);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        getAllChannelUser(currentUser);
+        login("isar@gmail.com", "@Glitch1");
+        //createChannel("titre"+Math.random()*500);
 
 
 
@@ -434,7 +436,7 @@ public class ControllerClient {
 
 
     public static void main(String[] args){
-        test();
+        //test();
         Fenetre.getFrame().setVisible(true);
 
     }

@@ -31,6 +31,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
     private static int DIMENSION_Y_BAR = 100;
 
 
+
     private LeftSidePanel(){
         setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y) ) ;
         bar.setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y) ) ;
@@ -47,6 +48,10 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         add(jScrollPane);
     }
 
+    public static ArrayList<JButton> getListeBouton() {
+        return listeBouton;
+    }
+
     public static LeftSidePanel getPanel() {return panel; }
 
     public void addMyButton(){
@@ -55,6 +60,11 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             bar.add(createChat);
         }
     }
+
+    public void resetList() {//todo diminuer taille
+        listeBouton.clear();
+    }
+
     public void initMyButton(){
         createChat.addActionListener(this);
         createChat.setFont( new Font(Font.DIALOG,Font.BOLD,25));
@@ -97,7 +107,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             if(option == JOptionPane.OK_OPTION){
                 Channel channel = ControllerClient.createChannel(titre.getText());
                 //Channel chat = new Channel(titre.getText(), ControllerClient.getUserCourant());
-                ControllerClient.addChannel(channel);
+                ControllerClient.addChannel(channel); //todo mettre dans controllerclient
                 this.addAChat(channel);
             }
         }
@@ -105,7 +115,6 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         for(JButton button : listeBouton){
             if( source == button ){
                 Channel channel = ControllerClient.getChannel( listeBouton.indexOf(button));
-                //System.out.println("chat : "+channel.getName());
                 ControllerClient.setCurrentChannel(channel);
                 Fenetre.getFenetre().setContenu( new UIChannel(channel));
             }

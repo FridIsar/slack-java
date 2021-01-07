@@ -28,7 +28,6 @@ public class Subject {
         MemberService ms = new MemberService();
         Message membersMessage = ms.getAllFromChannel(channel);
 
-        System.out.println("message "+membersMessage.getCode());
 
         ArrayList<User> members = (ArrayList<User>) ((MessageAttachment) membersMessage).getAttachment();
 
@@ -38,7 +37,6 @@ public class Subject {
 
 
         String emailAdmin = channel.getAdmin().getEmail();
-
         for (ClientHandler connectedUser : connectedUsers)    {
             if (concurrentUserAuthenticated.get(connectedUser.getSocket()).equals(emailAdmin))   {
                 connectedMembers.add(connectedUser);
@@ -50,13 +48,13 @@ public class Subject {
                 }
             }
         }
-
-        if (messageToNotify.getCode() == 200)   {
-            Thread threadNotify = new Thread(() -> {
-                Message message = messageToNotify;
-                this.notifyAll(connectedMembers, message);
-            });
-            threadNotify.start();
-        }
+        Thread threadNotify = new Thread(() -> {
+            Message message = messageToNotify;
+            System.out.println("notifying..."+((MessageAttachment) message).getAttachment()+"code "+message.getCode());
+            System.out.println(connectedMembers);
+            this.notifyAll(connectedMembers, message);
+            System.out.println("notified");
+        });
+        threadNotify.start();
     }
 }

@@ -24,11 +24,14 @@ public class JDBCPostDAO implements DAO<Post> {
             statement.setInt(3,object.getAuthor().getId());
             statement.setDate(4,object.getSendingDate());
             statement.setBoolean(5,object instanceof PostImage || object instanceof PostPdf);
-
-            try(ResultSet resultSet=statement.executeQuery()){
-                resultSet.last();
-                object.setId(resultSet.getInt(1));
-                return object;
+            statement.executeUpdate();
+            String querySelect = "select * from posts;";
+            try(PreparedStatement statementSelect = connection.prepareStatement(querySelect)){
+                try(ResultSet resultSetSelect=statementSelect.executeQuery()){
+                    resultSetSelect.last();
+                    object.setId(resultSetSelect.getInt(1));
+                    return object;
+                }
             }
         }
     }
@@ -64,6 +67,7 @@ public class JDBCPostDAO implements DAO<Post> {
     //todo see if we can find a list of posts from a channel's name and words contained in the textMessage
     @Override
     public Post find(String key) throws Exception {
+
         return null;
     }
 

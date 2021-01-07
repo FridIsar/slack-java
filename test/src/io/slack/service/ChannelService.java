@@ -27,8 +27,7 @@ public class ChannelService {
 				return new Message(403);
 			}*/
 			channel = new Channel(name, admin);
-			System.out.println("channel is "+channel.toString());
-			channelDAO.insert(channel);
+			channel = channelDAO.insert(channel);
 			return new MessageAttachment<Channel>(200, channel);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -134,7 +133,6 @@ public class ChannelService {
 		try {
 			JDBCChannelDAO jdbcChannel = new JDBCChannelDAO();
 			List<Channel> channels = jdbcChannel.findFromAdmin(admin.getId());
-			System.out.println(admin.getId()+" "+channels);
 			return channels;
 		} catch (Exception e) {
 			e.printStackTrace();

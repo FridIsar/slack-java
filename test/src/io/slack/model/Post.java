@@ -60,4 +60,16 @@ public class Post implements Serializable {
     public void setModificationDate(Date modificationDate) {
         this.modificationDate = modificationDate;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "message='" + message + '\'' +
+                ", sendingDate=" + sendingDate +
+                ", author=" + author.getEmail() +
+                ", channel=" + channel.getTitle() +
+                ", id=" + id +
+                ", modificationDate=" + modificationDate +
+                '}';
+    }
 }

@@ -19,8 +19,9 @@ public class User implements Comparable<User>, Serializable {
         this.email = email;
         this.password = password;
         this.pseudo = pseudo;
-        this.createdAt = new Date(Instant.now().toEpochMilli());
     }
+
+
 
     public String getEmail() {
         return email;
@@ -50,8 +51,8 @@ public class User implements Comparable<User>, Serializable {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void initCreatedAt() {
+        this.createdAt = new Date(Instant.now().toEpochMilli());
     }
 
     public int getId() {
@@ -60,6 +61,10 @@ public class User implements Comparable<User>, Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

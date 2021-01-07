@@ -94,7 +94,6 @@ public class Client {
         } else {
             if (this.response.hasAttachment())   {
                 response = new MessageAttachment((MessageAttachment) this.response);
-                System.out.println("User"+((MessageAttachment) response).getAttachment());
             }
             else  {
                 response = new Message(this.response);
@@ -102,7 +101,6 @@ public class Client {
         }
         this.response = null;
         this.lock.unlock();
-        System.out.println(response.getCode());
         return response;
     }
 
@@ -113,12 +111,12 @@ public class Client {
         while (true) {
             try {
 
+
                 Message messageReceived = (Message) ois.readObject();
-                System.out.println(messageReceived.getCode());
+                System.out.println(messageReceived.getCode() + "is message received client");
 
                 if (messageReceived.getCode() >= 200 && messageReceived.getCode() <= 500) {
                     // Notify with signalAll that response has been set
-                    System.out.println(messageReceived.getCode());
                     this.lock.lock();
                     System.out.println("readContinuouslyMessages into lock");
                     this.response = messageReceived;
@@ -129,6 +127,7 @@ public class Client {
                     //  - message from server
                     //  - notify ControllerClient of the reception of the messsage using Oberver Pattern
                     //  - (example : call method setChannels to update channels attribut)
+                    handlerMessageSentByServer((MessageAttachment) messageReceived);
 
                     System.out.println("Message coming from server , maybe update channel");
                 }

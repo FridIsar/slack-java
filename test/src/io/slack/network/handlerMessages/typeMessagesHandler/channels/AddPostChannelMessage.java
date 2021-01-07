@@ -1,11 +1,13 @@
 package io.slack.network.handlerMessages.typeMessagesHandler.channels;
 
 import io.slack.model.Channel;
+import io.slack.model.Post;
 import io.slack.model.User;
 import io.slack.network.ClientHandler;
 import io.slack.network.handlerMessages.ClientMessageHandler;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
+import io.slack.network.handlerMessages.ClientMessageType;
 import io.slack.network.handlerMessages.typeMessagesHandler.channels.Subject;
 import io.slack.network.model.PostAndChannelCredentials;
 import io.slack.service.ChannelService;
@@ -40,7 +42,9 @@ public class AddPostChannelMessage extends Subject implements ClientMessageHandl
         Message message = ps.create(user, textMessage, channel);
 
         if (message.getCode() == 200)   {
-            this.notifyChannelMembers(clientHandler, channel, message);
+            Message messageToSend = new MessageAttachment<Post>(ClientMessageType.ADDPOSTCHANNEL.getValue(),
+                    (Post) ((MessageAttachment) message).getAttachment());
+            this.notifyChannelMembers(clientHandler, channel, messageToSend);
         }
 
         return message;

@@ -17,16 +17,14 @@ public class JDBCChannelDAO implements DAO<Channel> {
 
     @Override
     public Channel insert(Channel object) throws Exception {
-        System.out.println("methode isnet");
         String query = "insert into channels (name, admin_id, creation_date ) value ( ?, ?, ? );";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, object.getTitle());
             statement.setInt(2, object.getAdmin().getId());
             statement.setDate(3, object.getCreatedAt());
-            System.out.println("ligne 24");
             statement.executeUpdate();
             Channel channel = this.find(object.getTitle());
-            System.out.println("channel dao is "+channel);
+
             return channel;
 
         } catch (Exception e)   {
@@ -80,7 +78,6 @@ public class JDBCChannelDAO implements DAO<Channel> {
         try(Statement statement = connection.createStatement()) {
             try(ResultSet resultSet = statement.executeQuery("SELECT * FROM channels WHERE admin_id = "+key+";")) {
                 while (resultSet.next()) {
-                    System.out.println(resultSet+ " result");
                     User user = DAOFactory.getUser().find( resultSet.getString(3) );
                     Channel channel = new Channel( resultSet.getString(2) , user);
                     channel.setId(resultSet.getInt(1));

@@ -23,7 +23,7 @@ public class CreateChannelMessage extends Subject implements ClientMessageHandle
         User admin = us.getUser(adminEmail);
         ChannelService cs = new ChannelService();
         Message message = cs.create(title, admin);
-        Channel channel = cs.getChannel(title);
+        Channel channel = cs.getChannel(title);;
         return message;
     }
 }

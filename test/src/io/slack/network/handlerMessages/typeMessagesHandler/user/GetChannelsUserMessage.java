@@ -17,12 +17,10 @@ public class GetChannelsUserMessage implements ClientMessageHandler<User> {
 
         System.out.println("Handling channels user...");
 
-        System.out.println("1 ..."+dataMessage);
 
         MemberService ms = new MemberService();
         Message message = ms.getAllFromUser(dataMessage);
 
-        System.out.println("2 ..."+message.getCode());
         return message;
     }
 }

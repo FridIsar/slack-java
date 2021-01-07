@@ -48,7 +48,6 @@ public class ClientHandler implements Callable, Observer {
                     e.printStackTrace();
                 }
 
-                System.out.println("message received "+messageReceived.getCode());
                 Message messageToSend = ClientMessageMapping.getMapping().get(messageReceived.getCode()).handle(
                         messageReceived.hasAttachment() ? ((MessageAttachment) messageReceived).getAttachment() : null,
                         this);

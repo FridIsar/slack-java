@@ -61,6 +61,7 @@ public class MemberService {
     public Message getAllFromChannel(Channel channel){
         try{
             List<User> users = memberDAO.findAllFromChannel(channel);
+            users.add(channel.getAdmin());
             if(users.isEmpty()){
                 return new Message(404);
             }
@@ -76,7 +77,6 @@ public class MemberService {
             List<Channel> channels = memberDAO.findAllFromUser(user);
             ChannelService cs = new ChannelService();
             channels.addAll(cs.getFromAdmin(user));
-            System.out.println(channels);
             if(channels.isEmpty()){
                 return new Message(404);
             }
