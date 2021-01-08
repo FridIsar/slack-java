@@ -9,15 +9,16 @@ import io.slack.network.model.ChannelCredentials;
 import io.slack.service.ChannelService;
 import io.slack.service.MemberService;
 import io.slack.service.PostService;
+import io.slack.utils.Pair;
 
 import java.util.ArrayList;
 
 public class GetChannelsMessage implements ClientMessageHandler<ChannelCredentials> {
 
     @Override
-    public Message handle(ChannelCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(ChannelCredentials dataMessage, ClientHandler clientHandler) {
         if (! clientHandler.getConcurrentUserAuthenticated().containsKey(clientHandler.getSocket())) {
-            return new Message(403); //?
+            return new Pair(new Message(403), null); //?
         }
         System.out.println("Handling GetChannels");
         String channelTitle = dataMessage.getTitle();
@@ -41,6 +42,7 @@ public class GetChannelsMessage implements ClientMessageHandler<ChannelCredentia
         }
 
 
-        return message;
+        Thread thread = null;
+        return new Pair(message, thread);
     }
 }

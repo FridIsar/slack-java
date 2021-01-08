@@ -7,10 +7,11 @@ import io.slack.network.handlerMessages.ClientMessageHandler;
 import io.slack.network.model.UserAndUserCredentials;
 import io.slack.service.FriendService;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
 public class DeleteFriendshipMessage implements ClientMessageHandler<UserAndUserCredentials> {
     @Override
-    public Message handle(UserAndUserCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(UserAndUserCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling delete friendship");
 
         String firstEmail = dataMessage.getFirstUserEmail();
@@ -19,6 +20,7 @@ public class DeleteFriendshipMessage implements ClientMessageHandler<UserAndUser
         FriendService friendService = new FriendService();
         Message message = friendService.delete(firstEmail, secondEmail);
 
-        return message;
+        Thread thread = null;
+        return new Pair(message, thread);
     }
 }

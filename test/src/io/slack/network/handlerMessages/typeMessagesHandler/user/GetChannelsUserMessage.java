@@ -9,11 +9,12 @@ import io.slack.network.model.UserCredentials;
 import io.slack.service.ChannelService;
 import io.slack.service.MemberService;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
 public class GetChannelsUserMessage implements ClientMessageHandler<User> {
 
     @Override
-    public Message handle(User dataMessage, ClientHandler clientHandler) {
+    public Pair handle(User dataMessage, ClientHandler clientHandler) {
 
         System.out.println("Handling channels user...");
 
@@ -21,6 +22,7 @@ public class GetChannelsUserMessage implements ClientMessageHandler<User> {
         MemberService ms = new MemberService();
         Message message = ms.getAllFromUser(dataMessage);
 
-        return message;
+        Thread thread = null;
+        return new Pair(message, thread);
     }
 }

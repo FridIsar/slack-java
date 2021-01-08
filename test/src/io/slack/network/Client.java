@@ -113,8 +113,8 @@ public class Client {
             try {
 
                 System.out.println("Client waiting to receive...");
-                Utils.wait(3);
-                Message messageReceived = (Message) ois.readObject();
+                //Utils.wait(3);
+                Message messageReceived = (Message) ois.readObject(); //Client MUST read AFTER being notified
                 System.out.println( "is message received client" + messageReceived.getCode());
                 if (messageReceived.hasAttachment())    {
                     System.out.println("client received message "+((MessageAttachment) messageReceived).getAttachment());
