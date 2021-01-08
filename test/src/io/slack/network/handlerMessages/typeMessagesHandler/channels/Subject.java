@@ -9,6 +9,7 @@ import io.slack.service.ChannelService;
 import io.slack.service.MemberService;
 import io.slack.service.PostService;
 import io.slack.service.UserService;
+import io.slack.utils.Utils;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class Subject {
         }
     }
 
-    public void notifyChannelMembers(ClientHandler clientHandler, Channel channel, Message messageToNotify)  {
+    public Thread notifyChannelMembers(ClientHandler clientHandler, Channel channel, Message messageToNotify)  {
 
         MemberService ms = new MemberService();
         Message membersMessage = ms.getAllFromChannel(channel);
@@ -44,11 +45,13 @@ public class Subject {
             }
         }
         Thread threadNotify = new Thread(() -> {
+            //Utils.wait(3);
             Message message = messageToNotify;
-            System.out.println("notifying..."+((MessageAttachment) message).getAttachment()+"code "+message.getCode());
+            //System.out.println("notifying..."+((MessageAttachment) message).getAttachment()+"code "+message.getCode());
             this.notifyAll(connectedMembers, message);
-            System.out.println("notified");
+            //System.out.println("notified");
         });
-        threadNotify.start();
+        //threadNotify.start();
+        return threadNotify;
     }
 }

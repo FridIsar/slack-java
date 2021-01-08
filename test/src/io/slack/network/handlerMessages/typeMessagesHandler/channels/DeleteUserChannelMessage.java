@@ -13,10 +13,11 @@ import io.slack.network.model.UserAndChannelCredentials;
 import io.slack.service.ChannelService;
 import io.slack.service.MemberService;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
 public class DeleteUserChannelMessage extends Subject implements ClientMessageHandler<UserAndChannelCredentials> {
     @Override
-    public Message handle(UserAndChannelCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(UserAndChannelCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling delete user from channel ...");
         String channelTitle = dataMessage.getChannelTitle();
         String userEmail = dataMessage.getUserEmail();
@@ -27,13 +28,14 @@ public class DeleteUserChannelMessage extends Subject implements ClientMessageHa
 
         MemberService ms = new MemberService();
         Message message = ms.delete(channelTitle, userEmail);
+        Thread thread = null;
 
         if (message.getCode() == 200)   {
             Message messageToSend = new MessageAttachment<Member>(ClientMessageType.DELETEUSERCHANNEL.getValue(),
                     (Member) ((MessageAttachment) message).getAttachment());
-            this.notifyChannelMembers(clientHandler, channel, messageToSend);
+            thread = this.notifyChannelMembers(clientHandler, channel, messageToSend);
         }
 
-        return message;
+        return new Pair(message, thread);
     }
 }

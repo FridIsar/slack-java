@@ -10,10 +10,11 @@ import io.slack.network.model.PostAndChannelCredentials;
 import io.slack.service.ChannelService;
 import io.slack.service.MemberService;
 import io.slack.service.PostService;
+import io.slack.utils.Pair;
 
 public class DeletePostChannelMessage extends Subject implements ClientMessageHandler<PostAndChannelCredentials> {
     @Override
-    public Message handle(PostAndChannelCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(PostAndChannelCredentials dataMessage, ClientHandler clientHandler) {
 
         System.out.println("Handling delete post from channel ...");
         String channelTitle = dataMessage.getChannelTitle();
@@ -25,10 +26,11 @@ public class DeletePostChannelMessage extends Subject implements ClientMessageHa
         PostService ps = new PostService();
         Message message = ps.delete(post);
 
+        Thread thread = null;
         if (message.getCode() == 200)   {
-            this.notifyChannelMembers(clientHandler, channel, message);
+            thread = this.notifyChannelMembers(clientHandler, channel, message);
         }
 
-        return message;
+        return new Pair(message, thread);
     }
 }

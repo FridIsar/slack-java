@@ -8,10 +8,11 @@ import io.slack.network.communication.MessageAttachment;
 import io.slack.network.model.UserCredentials;
 import io.slack.network.model.UserCredentialsOptions;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
 public class UpdateUserMessage implements ClientMessageHandler<UserCredentialsOptions> {
     @Override
-    public Message handle(UserCredentialsOptions dataMessage, ClientHandler clientHandler) {
+    public Pair handle(UserCredentialsOptions dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling update user ...");
 
         String email = dataMessage.getEmail();
@@ -28,6 +29,7 @@ public class UpdateUserMessage implements ClientMessageHandler<UserCredentialsOp
             clientHandler.getConcurrentUserAuthenticated().replace(clientHandler.getSocket(), email, newEmail);
         }
 
-        return message;
+        Thread thread = null;
+        return new Pair(message, thread);
     }
 }

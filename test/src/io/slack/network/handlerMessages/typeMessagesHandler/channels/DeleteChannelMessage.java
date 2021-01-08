@@ -8,10 +8,11 @@ import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.network.handlerMessages.ClientMessageType;
 import io.slack.service.ChannelService;
+import io.slack.utils.Pair;
 
 public class DeleteChannelMessage extends Subject implements ClientMessageHandler<Channel> {
     @Override
-    public Message handle(Channel dataMessage, ClientHandler clientHandler) {
+    public Pair handle(Channel dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling delete channel ...");
 
         String title = dataMessage.getTitle();
@@ -20,12 +21,13 @@ public class DeleteChannelMessage extends Subject implements ClientMessageHandle
 
         Message message = cs.delete(title);
 
+        Thread thread = null;
         if (message.getCode() == 200)   {
             Message messageToSend = new MessageAttachment<>(ClientMessageType.DELETECHANNEL.getValue(),
                     null);
-            this.notifyChannelMembers(clientHandler, dataMessage, messageToSend);
+            thread = this.notifyChannelMembers(clientHandler, dataMessage, messageToSend);
         }
 
-        return message;
+        return new Pair(message, thread);
     }
 }

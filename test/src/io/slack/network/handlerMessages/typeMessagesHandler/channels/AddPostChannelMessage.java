@@ -14,6 +14,7 @@ import io.slack.service.ChannelService;
 import io.slack.service.MemberService;
 import io.slack.service.PostService;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
 import java.awt.*;
 import java.net.Socket;
@@ -23,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AddPostChannelMessage extends Subject implements ClientMessageHandler<PostAndChannelCredentials> {
     @Override
-    public Message handle(PostAndChannelCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(PostAndChannelCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling add post to channel ...");
 
         String authorEmail = dataMessage.getAuthorEmail();
@@ -38,14 +39,14 @@ public class AddPostChannelMessage extends Subject implements ClientMessageHandl
 
         PostService ps = new PostService();
         Message message = ps.create(user, textMessage, channel);
+        Thread thread = null;
 
         if (message.getCode() == 200)   {
             Message messageToSend = new MessageAttachment<Post>(ClientMessageType.ADDPOSTCHANNEL.getValue(),
                     (Post) ((MessageAttachment) message).getAttachment());
-            this.notifyChannelMembers(clientHandler, channel, messageToSend);
+            thread = this.notifyChannelMembers(clientHandler, channel, messageToSend);
         }
-
-        return message;
+        return new Pair(message, thread);
     }
 
 
