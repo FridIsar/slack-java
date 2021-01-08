@@ -55,7 +55,7 @@ public class JDBCMemberDAO implements DAO<Member>{
             statement.setInt(2,userService.getID(key2));
             try(ResultSet resultSet=statement.executeQuery()){
                 if(resultSet.next()){
-                    Channel channel = DAOFactory.getChannel().find(resultSet.getString(1));
+                    Channel channel = DAOFactory.getChannel().find(channelService.getName(resultSet.getInt(1)));
                     User user = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
                     return  new Member(channel,user);
                 }
