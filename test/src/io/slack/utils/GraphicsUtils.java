@@ -11,7 +11,7 @@ public class GraphicsUtils {
         button.setFocusPainted(false);
         button.setOpaque(false);
         button.setForeground(Color.white);
-        button.setFont( new Font(Font.DIALOG,Font.BOLD,25));
+        button.setFont( new Font(Font.DIALOG,Font.BOLD,15));
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.CENTER);
     }

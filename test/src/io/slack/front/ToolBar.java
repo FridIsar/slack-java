@@ -1,7 +1,6 @@
 package io.slack.front;
 
 import io.slack.controller.ControllerClient;
-import io.slack.front.ui.UIUser;
 import io.slack.utils.FileUtils;
 
 import javax.swing.ImageIcon;
@@ -109,13 +108,13 @@ public class ToolBar extends JPanel implements ActionListener {
             Object[] message = { "Do you have a login account?"};
 
 
-            int option = JOptionPane.showConfirmDialog(Fenetre.getFenetre(), message, "authentification", JOptionPane.YES_NO_CANCEL_OPTION);
+            int option = JOptionPane.showConfirmDialog(Window.getFenetre(), message, "authentification", JOptionPane.YES_NO_CANCEL_OPTION);
             if(option == JOptionPane.YES_OPTION){
                 JTextField email = new JTextField();
                 JTextField pwd = new JPasswordField();
                 Object[] messageLogin = {"email :",email,"password :",pwd};
 
-                int optionLogin = JOptionPane.showConfirmDialog(Fenetre.getFenetre(), messageLogin, "login", JOptionPane.OK_CANCEL_OPTION);
+                int optionLogin = JOptionPane.showConfirmDialog(Window.getFenetre(), messageLogin, "login", JOptionPane.OK_CANCEL_OPTION);
 
                 if( optionLogin == JOptionPane.OK_OPTION)
                     ControllerClient.login(email.getText(), pwd.getText());
@@ -126,7 +125,7 @@ public class ToolBar extends JPanel implements ActionListener {
                 JTextField pwd = new JPasswordField();
                 Object[] messageSignin = {"pseudo :", pseudo, "email ",email,"password: ",pwd};
 
-                int optionSignin = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), messageSignin, "signin", JOptionPane.OK_CANCEL_OPTION );
+                int optionSignin = JOptionPane.showConfirmDialog( Window.getFenetre(), messageSignin, "signin", JOptionPane.OK_CANCEL_OPTION );
 
                 if( optionSignin == JOptionPane.OK_OPTION )
                     ControllerClient.createAcc(pseudo.getText(), email.getText(), pwd.getText());
@@ -134,7 +133,7 @@ public class ToolBar extends JPanel implements ActionListener {
         }
 
         if( source == logo){
-            Fenetre.getFenetre().backToHome();
+            Window.getFenetre().backToHome();
             ControllerClient.resetCurrentChannel();
         }
 

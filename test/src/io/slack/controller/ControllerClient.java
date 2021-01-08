@@ -1,8 +1,7 @@
 package io.slack.controller;
 
 
-import io.slack.dao.DatabaseConnection;
-import io.slack.front.Fenetre;
+import io.slack.front.Window;
 import io.slack.front.RightSidePanel;
 import io.slack.front.ui.UIUser;
 import io.slack.front.LeftSidePanel;
@@ -19,7 +18,6 @@ import io.slack.utils.EmailUtils;
 import io.slack.utils.FileUtils;
 import io.slack.utils.Utils;
 
-import javax.print.DocFlavor;
 //import javax.rmi.CORBA.Util;
 import java.awt.*;
 import java.io.File;
@@ -107,7 +105,7 @@ public class ControllerClient {
     }
 
    public static void profil() {
-        Fenetre.getFenetre().setContenu( new UIUser(currentUser) );
+        Window.getFenetre().setContenu( new UIUser(currentUser) );
     }
 
     public static void disconnect() {
@@ -127,7 +125,7 @@ public class ControllerClient {
             LeftSidePanel.getPanel().addMyButton();
             LeftSidePanel.getPanel().resetList();
 
-            Fenetre.getFenetre().backToHome();
+            Window.getFenetre().backToHome();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -170,10 +168,10 @@ public class ControllerClient {
                     e.printStackTrace();
                 }
             }else{
-                Fenetre.getFenetre().affichePopup(new String[] {"veuillez taper un mot de passe au bon format  [ minimum 8 caractère : 1 maj | 1 min | 1 chiffre | 1 caractère spécial ]"} );
+                Window.getFenetre().affichePopup(new String[] {"veuillez taper un mot de passe au bon format  [ minimum 8 caractère : 1 maj | 1 min | 1 chiffre | 1 caractère spécial ]"} );
             }
         }else{
-            Fenetre.getFenetre().affichePopup( new String[]{"le mot de passe ne correspond pas"} );
+            Window.getFenetre().affichePopup( new String[]{"le mot de passe ne correspond pas"} );
         }
     }
 
@@ -186,6 +184,7 @@ public class ControllerClient {
     }
     public static void setCurrentChannel(Channel currentChannel) {
         ControllerClient.currentChannel = currentChannel;
+        LeftSidePanel.getPanel().removeNotif( channels.indexOf(currentChannel) );
         getUserListInChannel(currentChannel);
         getPostListInChannel(currentChannel);
         //ArrayList<User> userList = getUserListInChannel(currentChannel);
@@ -310,7 +309,7 @@ public class ControllerClient {
                 if (received.getCode() == 200)  {
                     channels.remove(currentChannel);
                     LeftSidePanel.getPanel().refreshList(channels);
-                    Fenetre.getFenetre().backToHome();
+                    Window.getFenetre().backToHome();
                     resetCurrentChannel();
                 }
             }
@@ -323,7 +322,7 @@ public class ControllerClient {
         channels.remove(channel);
         LeftSidePanel.getPanel().refreshList(channels);
         if (currentChannel.equals(channel))    {
-            Fenetre.getFenetre().backToHome();
+            Window.getFenetre().backToHome();
             resetCurrentChannel();
         }
     }
@@ -373,6 +372,7 @@ public class ControllerClient {
         for(Channel channel : channels){
             if(post.getChannel().equals(channel)){
                 channel.addPost(post);
+                LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
                 break;
             }
         }
@@ -398,7 +398,7 @@ public class ControllerClient {
 
     public void receiveErrorServer(){
         int waitingTime = 5;
-        Fenetre.getFenetre().affichePopup(new String[]{"the application will close in "+ waitingTime +" seconds..."}, "serveur error");
+        Window.getFenetre().affichePopup(new String[]{"the application will close in "+ waitingTime +" seconds..."}, "serveur error");
         Utils.wait(waitingTime);
         System.exit(1);
     }
@@ -456,7 +456,7 @@ public class ControllerClient {
 
     public static void main(String[] args){
         //test();
-        Fenetre.getFrame().setVisible(true);
+        Window.getFrame().setVisible(true);
     }
 
 }

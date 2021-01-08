@@ -3,7 +3,6 @@ package io.slack.front;
 import io.slack.controller.ControllerClient;
 import io.slack.front.ui.UIChannelSettings;
 import io.slack.front.ui.UIUser;
-import io.slack.model.Channel;
 import io.slack.model.User;
 import io.slack.utils.FileUtils;
 import io.slack.utils.GraphicsUtils;
@@ -91,7 +90,7 @@ public class RightSidePanel extends JPanel implements ActionListener {
 
         if( source == settings){
             if(ControllerClient.getCurrentChannel()!=null)
-                Fenetre.getFenetre().setContenu( new UIChannelSettings(ControllerClient.getCurrentChannel()));
+                Window.getFenetre().setContenu( new UIChannelSettings(ControllerClient.getCurrentChannel()));
         }
 
         for(JButton button : listeBouton){
@@ -99,7 +98,7 @@ public class RightSidePanel extends JPanel implements ActionListener {
                 if (source == button) {
                     //User user = ControllerClient.getUserTest(listeBouton.indexOf(button));
                     User user = ControllerClient.getUserInCurrentChannel(listeBouton.indexOf(button));
-                    Fenetre.getFenetre().setContenu(new UIUser(user));
+                    Window.getFenetre().setContenu(new UIUser(user));
 
                 }
             }

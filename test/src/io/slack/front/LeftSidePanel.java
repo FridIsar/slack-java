@@ -23,6 +23,8 @@ public class LeftSidePanel extends JPanel implements ActionListener {
 
     private static ArrayList<JButton> listeBouton = new ArrayList<JButton>();
 
+    private Image imgNotif = FileUtils.getImage("Chat/red.png");
+
     //private int chatCompteur = 0;
 
     private static final int DIMENSION_X = 300;
@@ -61,8 +63,9 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         }
     }
 
-    public void resetList() {//todo diminuer taille
+    public void resetList() {
         listeBouton.clear();
+        bar.setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y_BAR=DIMENSION_Y ));
     }
 
     public void initMyButton(){
@@ -95,6 +98,14 @@ public class LeftSidePanel extends JPanel implements ActionListener {
         listeBouton.add(button);
     }
 
+    public void addNotif(int i){
+        JButton notif = new JButton(new ImageIcon(imgNotif.getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        GraphicsUtils.notification(notif);
+        listeBouton.get(i).add(notif);
+    }
+    public void removeNotif(int i){
+        listeBouton.get(i).removeAll();
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -110,7 +121,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
                 }
             });
 
-            int option = JOptionPane.showConfirmDialog( Fenetre.getFenetre(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
+            int option = JOptionPane.showConfirmDialog( Window.getFenetre(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
             if(option == JOptionPane.OK_OPTION){
                 Channel channel = ControllerClient.createChannel(titre.getText());
                 this.addAChat(channel);
@@ -121,7 +132,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             if( source == button ){
                 Channel channel = ControllerClient.getChannel( listeBouton.indexOf(button));
                 ControllerClient.setCurrentChannel(channel);
-                Fenetre.getFenetre().setContenu( new UIChannel(channel));
+                Window.getFenetre().setContenu( new UIChannel(channel));
             }
         }
     }
