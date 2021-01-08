@@ -24,6 +24,8 @@ public class UIUser extends CentralePage implements ActionListener {
     private JButton deleteAccount = new JButton("delete account");
     private JButton disconnect = new JButton("disconnect");
     private JButton changePP = new JButton("change profil pic");
+    private JButton becomeFriend = new JButton("devenir ami");
+    private JButton removeFriend = new JButton("retirer ami");
     
 
     private User user;
@@ -47,6 +49,8 @@ public class UIUser extends CentralePage implements ActionListener {
         add(deleteAccount);
         add(disconnect);
         add(changePP);
+        add(becomeFriend);
+        add(removeFriend);
 
     }
 
@@ -57,6 +61,8 @@ public class UIUser extends CentralePage implements ActionListener {
         deleteAccount.addActionListener(this);
         disconnect.addActionListener(this);
         changePP.addActionListener(this);
+        becomeFriend.addActionListener(this);
+        removeFriend.addActionListener(this);
     }
 
     public void dessiner() {}
@@ -127,6 +133,15 @@ public class UIUser extends CentralePage implements ActionListener {
             labelNom.setBounds(4 * tc, 0, tc * 10, tc);
             labelNom.setFont(font);
             add(labelNom);
+
+            font = new Font("Arial", 0, 20);
+            becomeFriend.setBounds(3*tc, 7*tc, tc*4, tc*1);
+            becomeFriend.setFont(font);
+
+            if( ControllerClient.isAFriend(user) ){
+                removeFriend.setBounds(8*tc, 7*tc, tc*4, tc*1);
+                removeFriend.setFont(font);
+            }
         }
 
     }
@@ -165,6 +180,14 @@ public class UIUser extends CentralePage implements ActionListener {
             if(option==JOptionPane.OK_OPTION){
                 ControllerClient.updatePassword(user, oldPwd.getText(), newPwd.getText());
             }
+        }
+
+        if( source == becomeFriend){
+            ControllerClient.addAFriend(user);
+        }
+
+        if( source == removeFriend){
+            ControllerClient.deleteAFriend(user);
         }
 
     }

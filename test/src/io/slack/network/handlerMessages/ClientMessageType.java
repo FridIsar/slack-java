@@ -23,8 +23,10 @@ public enum  ClientMessageType {
 
     ADDPOSTCHANNEL(706),
     DELETEPOSTCHANNEL(707),
-    GETPOSTSCHANNEL(708);
+    GETPOSTSCHANNEL(708),
 
+    ADDFRIEND(711),
+    DELETEFRIEND(712);
 
     private int value;
     private ClientMessageType(int value) {

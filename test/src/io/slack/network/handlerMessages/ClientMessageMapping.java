@@ -30,6 +30,9 @@ public class ClientMessageMapping {
             put(ClientMessageType.ADDPOSTCHANNEL.getValue(), new AddPostChannelMessage());
             put(ClientMessageType.DELETEPOSTCHANNEL.getValue(), new DeletePostChannelMessage());
             put(ClientMessageType.GETPOSTSCHANNEL.getValue(), new GetPostsChannelMessage());
+
+            put(ClientMessageType.ADDFRIEND.getValue(), new AddFriendship());
+            put(ClientMessageType.DELETEFRIEND.getValue(), new DeleteFriendship());
         }
     };
 

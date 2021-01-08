@@ -7,6 +7,7 @@ import io.slack.front.ui.UIUser;
 import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
 import io.slack.model.Channel;
+import io.slack.model.Friend;
 import io.slack.model.Post;
 import io.slack.network.model.*;
 import io.slack.model.User;
@@ -33,6 +34,9 @@ public class ControllerClient {
     //channel
     private static Channel currentChannel = null;
     private static ArrayList<Channel> channels = new ArrayList<>();
+
+    //friend
+    private static ArrayList<User> friends = new ArrayList<>();
 
     //post
     private static File attachedFile=null;
@@ -327,7 +331,41 @@ public class ControllerClient {
         }
     }
 
+///////////////// management of friends /////////////////////////
 
+    public static boolean isAFriend(User user){
+        return friends.contains(user);
+    }
+
+    public static void addAFriend(User user){
+        Message message = new MessageAttachment<UserAndUserCredentials>(ClientMessageType.ADDFRIEND.getValue(), new UserAndUserCredentials(currentUser.getEmail(), user.getEmail()));
+        try {
+            Message received = client.sendMessage(message);
+            if( received.hasAttachment() ){
+                Friend friend = (Friend)((MessageAttachment)received).getAttachment();
+                friends.add(friend.getSecUser());
+
+                //todo add the friend in the tool bar
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteAFriend(User user){
+        Message message = new MessageAttachment<UserAndUserCredentials>(ClientMessageType.DELETEFRIEND.getValue(), new UserAndUserCredentials(currentUser.getEmail(), user.getEmail()));
+        try {
+            Message received = client.sendMessage(message);
+            if( received.hasAttachment() ){
+                Friend friend = (Friend)((MessageAttachment)received).getAttachment();
+                friends.remove(friend.getSecUser());
+
+                //todo remove the friend in the tool bar
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -390,9 +428,6 @@ public class ControllerClient {
             }
         }
     }
-
-
-
 
 
 //////////////////// server error //////////////
