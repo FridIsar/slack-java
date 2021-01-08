@@ -1,7 +1,9 @@
 package io.slack.front;
 
 import io.slack.controller.ControllerClient;
+import io.slack.model.User;
 import io.slack.utils.FileUtils;
+import io.slack.utils.GraphicsUtils;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,6 +18,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class ToolBar extends JPanel implements ActionListener {
     private Image imgLogo = FileUtils.getImage("Icons/logo.png");
@@ -25,7 +29,7 @@ public class ToolBar extends JPanel implements ActionListener {
 
     private JButton logo = new JButton(new ImageIcon(imgLogo.getScaledInstance(100,100, Image.SCALE_SMOOTH)));;
     private JTextField recherche = new JTextField("Rechercher");
-    private JComboBox listeAmis = new JComboBox( /*////////////////// */);
+    private JComboBox friendList = new JComboBox();
     private JButton connect = new JButton(new ImageIcon(imgConnect.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
     private JButton profil = new JButton(new ImageIcon(imgProfil.getScaledInstance(100,100, Image.SCALE_SMOOTH)));
     private JButton search = new JButton(new ImageIcon(imgSearch.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
@@ -33,6 +37,8 @@ public class ToolBar extends JPanel implements ActionListener {
 
     private static JToolBar barre = new JToolBar();
     private static ToolBar toolBar= new ToolBar();
+
+    private static Vector<JButton> buttonList = new Vector<>();
 
     private ToolBar() {
         setPreferredSize (new Dimension(2000, 130) ) ;
@@ -50,7 +56,7 @@ public class ToolBar extends JPanel implements ActionListener {
         barre.add( logo );
         barre.addSeparator(new Dimension(250,5));
 
-        barre.add( listeAmis );
+        barre.add(friendList);
         barre.addSeparator(new Dimension(250,5));
         barre.add( recherche );
         barre.addSeparator(new Dimension(50,5));
@@ -72,7 +78,7 @@ public class ToolBar extends JPanel implements ActionListener {
         recherche.setSize(new Dimension(300, 10));
         recherche.setHorizontalAlignment(10);
         recherche.setFont(new Font("Rechercher", 0, 50));
-        listeAmis.setPreferredSize(new Dimension(300,0));
+        friendList.setPreferredSize(new Dimension(300,0));
 
         /*
         logo.setBorderPainted(false);
@@ -93,14 +99,40 @@ public class ToolBar extends JPanel implements ActionListener {
 
     }
 
-    /*
-    public JButton getLogo() { return this.logo; }
-    public JTextField getRecherche() {return this.recherche; }
-    public JComboBox getListeAmis() {return this.listeAmis; }
-    public JButton getConnect() {return this.connect; }
-    public JButton getProfil() {return this.profil;}
-    public JButton getSearch() {return this.search;}
-    */
+    public void setFriendList(ArrayList<User> friends){
+        Image image;
+        for(User user : friends){
+            if(user.getProfilPic()!=null)
+                image=user.getProfilPic();
+            else
+                image = FileUtils.getImage( "Icons/logo.png" );
+
+            JButton button = new JButton(new ImageIcon(image.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
+            button.setText(user.getPseudo());
+            GraphicsUtils.buttonWithText(button);
+            button.addActionListener(this);
+
+            buttonList.add( button);
+        }
+
+        friendList=new JComboBox(buttonList);
+    }
+
+    public void addAFriend(User user){
+        Image image;
+        if(user.getProfilPic()!=null)
+            image=user.getProfilPic();
+        else
+            image = FileUtils.getImage( "Icons/logo.png" );
+
+        JButton button = new JButton(new ImageIcon(image.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
+        button.setText(user.getPseudo());
+        GraphicsUtils.buttonWithText(button);
+        button.addActionListener(this);
+
+        buttonList.add( button);
+        friendList=new JComboBox(buttonList);
+    }
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
