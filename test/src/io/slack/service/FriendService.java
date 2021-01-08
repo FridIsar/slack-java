@@ -67,6 +67,20 @@ public class FriendService {
         }
     }
 
+    public Message getAllFromUser(String email){
+        try {
+            List<User> users = friendDAO.findAllFromUser(email);
+            if(users.isEmpty()){
+                return new Message(404);
+            }
+            return new MessageAttachment<ArrayList>(200,(ArrayList)users);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Message(500);
+        }
+
+    }
+
     public Message getAll(){
         try{
             List<Friend> friends = friendDAO.findAll();

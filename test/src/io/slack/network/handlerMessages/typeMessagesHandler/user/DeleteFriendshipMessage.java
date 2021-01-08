@@ -8,7 +8,7 @@ import io.slack.network.model.UserAndUserCredentials;
 import io.slack.service.FriendService;
 import io.slack.service.UserService;
 
-public class DeleteFriendship implements ClientMessageHandler<UserAndUserCredentials> {
+public class DeleteFriendshipMessage implements ClientMessageHandler<UserAndUserCredentials> {
     @Override
     public Message handle(UserAndUserCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling delete friendship");

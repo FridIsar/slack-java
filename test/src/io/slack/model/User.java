@@ -1,5 +1,6 @@
 package io.slack.model;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.Instant;
@@ -12,6 +13,7 @@ public class User implements Comparable<User>, Serializable {
     private String pseudo;
     private Date createdAt;
     private int id;
+    private Image profilPic;
 
     public User() {}
 
@@ -65,6 +67,14 @@ public class User implements Comparable<User>, Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Image getProfilPic() {
+        return profilPic;
+    }
+
+    public void setProfilPic(Image profilPic) {
+        this.profilPic = profilPic;
     }
 
     @Override
