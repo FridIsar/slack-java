@@ -110,5 +110,6 @@ public class RightSidePanel extends JPanel implements ActionListener {
         for (User user : users)    {
             addAUser(user);
         }
+        this.repaint();
     }
 }
