@@ -134,6 +134,11 @@ public class ToolBar extends JPanel implements ActionListener {
         friendList=new JComboBox(buttonList);
     }
 
+    public void removeAFriend(int i){
+        buttonList.remove(i);
+        friendList=new JComboBox(buttonList);
+    }
+
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if(source == connect){

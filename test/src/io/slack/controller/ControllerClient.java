@@ -275,7 +275,7 @@ public class ControllerClient {
         }
     }
 
-    public void receiveRemoveUserInChannel(User user, Channel channel){//todo keep list of members on right pannel
+    public void receiveRemoveUserInChannel(User user, Channel channel){
         for(Channel c : channels){
             if(c.equals(channel)){
                 c.removeUser(user);
@@ -373,9 +373,10 @@ public class ControllerClient {
             Message received = client.sendMessage(message);
             if( received.hasAttachment() ){
                 Friend friend = (Friend)((MessageAttachment)received).getAttachment();
+                int i = friends.indexOf(friend);
                 friends.remove(friend.getSecUser());
 
-                //todo remove the friend in the tool bar
+                ToolBar.getToolBar().removeAFriend(i);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
