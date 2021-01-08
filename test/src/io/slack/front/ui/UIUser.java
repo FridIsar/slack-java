@@ -2,6 +2,8 @@ package io.slack.front.ui;
 
 import io.slack.controller.ControllerClient;
 import io.slack.front.CentralePage;
+import io.slack.front.Window;
+import io.slack.model.ChannelDirect;
 import io.slack.model.User;
 
 import javax.swing.*;
@@ -166,6 +168,12 @@ public class UIUser extends CentralePage implements ActionListener {
 
         if( source == removeFriend){
             ControllerClient.deleteAFriend(user);
+        }
+
+        if( source == directMessage){
+            ChannelDirect channelDirect = ControllerClient.getChannelDirectFriend(user);
+            ControllerClient.setCurrentChannel(channelDirect);
+            Window.getFenetre().setContenu( new UIChannel(channelDirect) );
         }
 
     }

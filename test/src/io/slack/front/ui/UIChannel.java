@@ -4,6 +4,7 @@ import io.slack.controller.ControllerClient;
 import io.slack.front.ImageFilter;
 import io.slack.front.CentralePage;
 import io.slack.model.Channel;
+import io.slack.model.ChannelDirect;
 import io.slack.model.Post;
 import io.slack.model.PostImage;
 
@@ -105,8 +106,10 @@ public class UIChannel extends CentralePage implements ActionListener {
         Object source = e.getSource();
 
         if( source == send){
-            ControllerClient.sendPost(channel,texteMessage.getText());
-            //System.out.println(" send "+texteMessage.getText());
+            if(channel instanceof ChannelDirect)
+                ControllerClient.sendPostFriend(((ChannelDirect) channel).getFriend(), texteMessage.getText());
+            else
+                ControllerClient.sendPost(channel,texteMessage.getText());
             texteMessage.setText("");
 
         }

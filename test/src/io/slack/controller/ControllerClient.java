@@ -390,7 +390,13 @@ public class ControllerClient {
         }
     }
 
-    public static void sendPostFriend(User user, String textMessage){
+    public static void sendPostFriend(Friend friend, String textMessage){
+        User user;
+        if(currentUser.equals(friend.getFirstUser()))
+            user=friend.getSecUser();
+        else
+            user=friend.getFirstUser();
+
         try {
             PostAndFriendCredentials attachment;
             //Post post;
@@ -420,7 +426,7 @@ public class ControllerClient {
         }
     }
 
-    public ChannelDirect getChannelDirectFriend(User user){
+    public static ChannelDirect getChannelDirectFriend(User user){
         for(Friend friend : friends){
             if( (friend.getFirstUser().equals(currentUser) && friend.getSecUser().equals(user) )  ||  ( (friend.getFirstUser().equals(user) && friend.getSecUser().equals(currentUser) )  )  ){
                 return friend.getChannelDirect();
@@ -429,7 +435,7 @@ public class ControllerClient {
         return null;
     }
 
-    public void receivePostFriend(PostDirect postDirect){
+    public void receivePostFriend(PostDirect postDirect){ //todo call this method after notifying
         for(Friend friend : friends){
             if(friend.equals(postDirect.getFriend())){
                 friend.getChannelDirect().addPost(postDirect);
