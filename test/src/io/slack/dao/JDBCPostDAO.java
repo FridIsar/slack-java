@@ -91,7 +91,7 @@ public class JDBCPostDAO implements DAO<Post> {
     public List<Post> findAll() throws Exception {
         List<Post> posts = new ArrayList<>();
         try(Statement statement = connection.createStatement()){
-            try(ResultSet resultSet = statement.executeQuery("select * from posts")){
+            try(ResultSet resultSet = statement.executeQuery("select * from posts;")){
                 UserService userService = new UserService();
                 while (resultSet.next()){
                     User user =DAOFactory.getUser().find(userService.getEmail( resultSet.getInt(4) ) );

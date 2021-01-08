@@ -35,7 +35,6 @@ public class UIChannel extends CentralePage implements ActionListener {
 
         this.channel=channel;
 
-        //channel.addMessage(new Message(ControllerClient.getUserCourant()," Bienvenue, voici le début de la conversation '"+channel.getName()+"'"));
         initMyButton();
         addMyButton();
 

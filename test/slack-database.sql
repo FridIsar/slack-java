@@ -37,6 +37,18 @@ CREATE TABLE posts (
      FOREIGN KEY(usr_email) REFERENCES users(email)
 );
 
+CREATE TABLE directPosts (
+     id INT AUTO_INCREMENT NOT NULL,
+     message TEXT
+     user1_id INT,
+     user2_id INT,
+     sending_date DATE,
+     modification_date DATE,
+     PRIMARY KEY(id),
+     FOREIGN KEY(user1_id) REFERENCES users(id),
+     FOREIGN KEY(user2_id) REFERENCES users(id)
+);
+
 CREATE TABLE members (
      channel_id INT,
      user_id INT,

@@ -126,17 +126,20 @@ public class ControllerClient {
         Window.getFenetre().setContenu( new UIUser(currentUser) );
     }
 
-    public static void disconnect() {
+    public static void disconnect(boolean send) {
 
         Message message = new MessageAttachment<UserCredentials>(ClientMessageType.DISCONNECT.getValue(), new UserCredentials(currentUser.getEmail(), currentUser.getPassword()));
         try {
-            client.sendMessage(message);
+            if(send)
+                client.sendMessage(message);
             currentUser =null;
             connect=false;
             client=null;
 
             currentChannel=null;
-            channels=null;
+            channels.clear();
+
+            friends.clear();
 
 
             ToolBar.getToolBar().addMyButton();
@@ -155,7 +158,7 @@ public class ControllerClient {
         try {
             client.sendMessage(message);
 
-            disconnect();
+            disconnect(false);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

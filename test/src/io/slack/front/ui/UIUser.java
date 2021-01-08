@@ -4,11 +4,7 @@ import io.slack.controller.ControllerClient;
 import io.slack.front.CentralePage;
 import io.slack.model.User;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -26,6 +22,7 @@ public class UIUser extends CentralePage implements ActionListener {
     private JButton changePP = new JButton("change profil pic");
     private JButton becomeFriend = new JButton("devenir ami");
     private JButton removeFriend = new JButton("retirer ami");
+    private JButton directMessage = new JButton("message directe");
     
 
     private User user;
@@ -51,6 +48,7 @@ public class UIUser extends CentralePage implements ActionListener {
         add(changePP);
         add(becomeFriend);
         add(removeFriend);
+        add(directMessage);
 
     }
 
@@ -63,34 +61,10 @@ public class UIUser extends CentralePage implements ActionListener {
         changePP.addActionListener(this);
         becomeFriend.addActionListener(this);
         removeFriend.addActionListener(this);
+        directMessage.addActionListener(this);
     }
 
     public void dessiner() {}
-
-    ///////////////////////////////////////////
-
-/*
-    public static UIUser getPage() {
-        return page;
-    }
-
-    public User getContenu() { return this.user;}
-
-    public void setContenu(User contenu) {
-        this.user = contenu;
-    }
-
-    public static void afficheProfil(User u){
-        page.contenu = u;
-        Fenetre.getFenetre().setContenu(UIUser.getPage());
-        //Fenetre.setPageActuelle("profil");
-    }
-
- */
-
-
-    ////////////////////////////////////////////////////////////
-
 
     public void paintComponent(Graphics g){
         addMyButton();
@@ -135,12 +109,16 @@ public class UIUser extends CentralePage implements ActionListener {
             add(labelNom);
 
             font = new Font("Arial", 0, 20);
-            becomeFriend.setBounds(3*tc, 7*tc, tc*4, tc*1);
-            becomeFriend.setFont(font);
 
-            if( ControllerClient.isAFriend(user) ){
-                removeFriend.setBounds(8*tc, 7*tc, tc*4, tc*1);
+            if(! ControllerClient.isAFriend(user)) {
+                becomeFriend.setBounds(6 * tc, 7 * tc, tc * 4, tc * 1);
+                becomeFriend.setFont(font);
+            }else{
+                removeFriend.setBounds(6*tc, 7*tc, tc*4, tc*1);
                 removeFriend.setFont(font);
+
+                directMessage.setBounds(14 * tc, 0 * tc, tc * 4, tc);
+                directMessage.setFont(font);
             }
         }
 
@@ -152,7 +130,7 @@ public class UIUser extends CentralePage implements ActionListener {
         Object source = e.getSource();
 
         if( source == disconnect){
-            ControllerClient.disconnect();
+            ControllerClient.disconnect(true);
         }
 
         if( source == deleteAccount){
