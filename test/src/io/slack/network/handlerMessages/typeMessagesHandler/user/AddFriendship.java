@@ -7,10 +7,11 @@ import io.slack.network.handlerMessages.ClientMessageHandler;
 import io.slack.network.model.UserAndUserCredentials;
 import io.slack.service.FriendService;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
-public class AddFriendshipMessage implements ClientMessageHandler<UserAndUserCredentials> {
+public class AddFriendship implements ClientMessageHandler<UserAndUserCredentials> {
     @Override
-    public Message handle(UserAndUserCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(UserAndUserCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling add friendship");
 
         String firstEmail = dataMessage.getFirstUserEmail();
@@ -24,6 +25,7 @@ public class AddFriendshipMessage implements ClientMessageHandler<UserAndUserCre
         FriendService friendService = new FriendService();
         Message message = friendService.create(firstUser, secondUser);
 
-        return message;
+        Thread thread = null;
+        return new Pair(message, thread);
     }
 }

@@ -10,10 +10,11 @@ import io.slack.network.model.ChannelCredentials;
 import io.slack.network.model.UserCredentials;
 import io.slack.service.ChannelService;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
 public class CreateChannelMessage extends Subject implements ClientMessageHandler<ChannelCredentials> {
     @Override
-    public Message handle(ChannelCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(ChannelCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling create channel ...");
 
         String title = dataMessage.getTitle();
@@ -24,6 +25,7 @@ public class CreateChannelMessage extends Subject implements ClientMessageHandle
         ChannelService cs = new ChannelService();
         Message message = cs.create(title, admin);
         Channel channel = cs.getChannel(title);;
-        return message;
+        Thread thread = null;
+        return new Pair(message, thread);
     }
 }

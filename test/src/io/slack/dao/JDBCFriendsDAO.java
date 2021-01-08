@@ -61,29 +61,6 @@ public class JDBCFriendsDAO implements DAO<Friend> {
         return null;
     }
 
-    public List<User> findAllFromUser(String key) throws Exception {
-        List<User> friends = new ArrayList<>();
-        String query = "select * from friends where usr1_id = ? OR usr2_id = ?; ";
-        try(PreparedStatement statement = connection.prepareStatement(query)){
-            UserService userService = new UserService();
-            User user = userService.getUser(key);
-            int id = userService.getID(key);
-            statement.setInt(1, id);
-            statement.setInt(2, id);
-            try(ResultSet resultSet = statement.executeQuery()){
-                while(resultSet.next()){
-                    User user1 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(1)) );
-                    User user2 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
-                    if(! user1.equals(user))
-                        friends.add( user1 );
-                    if(! user2.equals(user))
-                        friends.add( user2 );
-                }
-            }
-        }
-        return friends;
-    }
-
     @Override
     public List<Friend> findAll() throws Exception {
         List<Friend> friends = new ArrayList<>();

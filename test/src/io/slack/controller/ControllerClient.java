@@ -66,7 +66,6 @@ public class ControllerClient {
                 ToolBar.getToolBar().addMyButton();
                 LeftSidePanel.getPanel().addMyButton();
                 getAllChannelUser(currentUser);
-                getAllFriendUser(currentUser);
             }//todo affiche popup according to error code
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
@@ -104,19 +103,6 @@ public class ControllerClient {
                 }
             }
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void getAllFriendUser(User user){
-        Message message = new MessageAttachment<UserCredentials>(ClientMessageType.GETFRIENDS.getValue(), new UserCredentials(user.getEmail(), user.getPassword()));
-        try {
-            Message received = client.sendMessage(message);
-            if(received.hasAttachment() ){
-                friends = (ArrayList<User>)( (MessageAttachment)received).getAttachment();
-                ToolBar.getToolBar().setFriendList(friends);
-            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -275,7 +261,7 @@ public class ControllerClient {
         }
     }
 
-    public void receiveRemoveUserInChannel(User user, Channel channel){
+    public void receiveRemoveUserInChannel(User user, Channel channel){//todo keep list of members on right pannel
         for(Channel c : channels){
             if(c.equals(channel)){
                 c.removeUser(user);
@@ -347,7 +333,6 @@ public class ControllerClient {
 
 ///////////////// management of friends /////////////////////////
 
-
     public static boolean isAFriend(User user){
         return friends.contains(user);
     }
@@ -360,7 +345,7 @@ public class ControllerClient {
                 Friend friend = (Friend)((MessageAttachment)received).getAttachment();
                 friends.add(friend.getSecUser());
 
-                ToolBar.getToolBar().addAFriend(friend.getSecUser());
+                //todo add the friend in the tool bar
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -373,10 +358,9 @@ public class ControllerClient {
             Message received = client.sendMessage(message);
             if( received.hasAttachment() ){
                 Friend friend = (Friend)((MessageAttachment)received).getAttachment();
-                int i = friends.indexOf(friend);
                 friends.remove(friend.getSecUser());
 
-                ToolBar.getToolBar().removeAFriend(i);
+                //todo remove the friend in the tool bar
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
