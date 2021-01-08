@@ -331,12 +331,12 @@ public class ControllerClient {
             Message received;
             if(client!=null) {
                 received = client.sendMessage(message);
-                if (received.getCode() == 200)  {
+                /*if (received.getCode() == 200)  {
                     channels.remove(currentChannel);
                     LeftSidePanel.getPanel().refreshList(channels);
                     Window.getFenetre().backToHome();
                     resetCurrentChannel();
-                }
+                }*/
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
