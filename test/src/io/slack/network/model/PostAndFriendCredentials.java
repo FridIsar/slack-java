@@ -7,15 +7,15 @@ public class PostAndFriendCredentials implements Serializable {
     private String authorEmail;
     private String textMessage;
     private Image attached;
-    private String userEmail;
+    private String otherUserEmail;
 
     public PostAndFriendCredentials() { }
 
-    public PostAndFriendCredentials(String authorEmail, String textMessage, Image attached, String userEmail) {
+    public PostAndFriendCredentials(String authorEmail, String textMessage, Image attached, String otherUserEmail) {
         this.authorEmail = authorEmail;
         this.textMessage = textMessage;
         this.attached = attached;
-        this.userEmail = userEmail;
+        this.otherUserEmail = otherUserEmail;
     }
 
     public String getAuthorEmail() {
@@ -30,7 +30,7 @@ public class PostAndFriendCredentials implements Serializable {
         return attached;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getOtherUserEmail() {
+        return otherUserEmail;
     }
 }

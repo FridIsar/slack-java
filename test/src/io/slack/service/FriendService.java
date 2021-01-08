@@ -67,6 +67,19 @@ public class FriendService {
         }
     }
 
+    public Friend getFriend(String email1, String email2){
+        try{
+            Friend friend = friendDAO.find(email1,email2);
+            if(friend != null)
+                return friend;
+            else
+                return friendDAO.find(email2,email1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public Message getAllFromUser(String email){
         try {
             List<User> users = friendDAO.findAllFromUser(email);
