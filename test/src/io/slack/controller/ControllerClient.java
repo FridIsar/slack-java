@@ -372,7 +372,8 @@ public class ControllerClient {
         for(Channel channel : channels){
             if(post.getChannel().equals(channel)){
                 channel.addPost(post);
-                LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
+                if(! channel.equals(currentChannel))
+                    LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
                 break;
             }
         }
