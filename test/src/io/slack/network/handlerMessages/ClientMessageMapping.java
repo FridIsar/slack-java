@@ -34,6 +34,10 @@ public class ClientMessageMapping {
             put(ClientMessageType.ADDFRIEND.getValue(), new AddFriendshipMessage());
             put(ClientMessageType.DELETEFRIEND.getValue(), new DeleteFriendshipMessage());
             put(ClientMessageType.GETFRIENDS.getValue(), new GetFriendsMessage());
+
+            put(ClientMessageType.ADDPOSTFRIEND.getValue(), new AddPostFriendMessage());
+            put(ClientMessageType.GETPOSTSFRIEND.getValue(), new GetPostsFriendMessage());
+
         }
     };
 
