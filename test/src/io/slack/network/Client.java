@@ -6,6 +6,7 @@ import io.slack.model.Member;
 import io.slack.model.Post;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
+import io.slack.utils.Utils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -112,9 +113,12 @@ public class Client {
             try {
 
                 System.out.println("Client waiting to receive...");
+                Utils.wait(3);
                 Message messageReceived = (Message) ois.readObject();
                 System.out.println( "is message received client" + messageReceived.getCode());
-
+                if (messageReceived.hasAttachment())    {
+                    System.out.println("client received message "+((MessageAttachment) messageReceived).getAttachment());
+                }
                 if (messageReceived.getCode() >= 200 && messageReceived.getCode() <= 500) {
                     // Notify with signalAll that response has been set
                     this.lock.lock();

@@ -261,7 +261,7 @@ public class ControllerClient {
         }
     }
 
-    public void receiveRemoveUserInChannel(User user, Channel channel){
+    public void receiveRemoveUserInChannel(User user, Channel channel){//todo keep list of members on right pannel
         for(Channel c : channels){
             if(c.equals(channel)){
                 c.removeUser(user);
