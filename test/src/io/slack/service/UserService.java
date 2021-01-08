@@ -28,9 +28,9 @@ public class UserService {
 			if (!EmailUtils.isEmail(email) || !EmailUtils.isPassword(password)) {	// Invalid email or password
 				return new Message(403);
 			}
-			user = new User(email, password, pseudo);
+			user = new User(email, password, pseudo); //todo pk on fait ça ?
 			user.initCreatedAt();
-			userDAO.insert(user);
+			user = userDAO.insert(user);
 			return new MessageAttachment<>(200, user);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -17,7 +17,7 @@ public class PostService {
     public Message create(User user, String textMessage, Channel channel){
         try{
             Post post = new Post(user, textMessage, channel);
-            postDAO.insert(post);
+            post = postDAO.insert(post);
 
             return new MessageAttachment<Post>(200, post);
         } catch (Exception e) {
