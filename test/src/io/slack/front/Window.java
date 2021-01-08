@@ -78,5 +78,10 @@ public class Window extends JFrame {
     }
     public void refreshPage(){
         center.repaint();
+        try {
+            center.dessiner();
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
     }
 }

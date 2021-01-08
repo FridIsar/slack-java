@@ -1,7 +1,12 @@
 package io.slack.dao;
 
 import io.slack.model.Friend;
+import io.slack.model.Post;
+import io.slack.model.PostDirect;
 import io.slack.model.User;
+import io.slack.network.communication.Message;
+import io.slack.network.communication.MessageAttachment;
+import io.slack.service.PostDirectService;
 import io.slack.service.UserService;
 
 
@@ -61,8 +66,8 @@ public class JDBCFriendsDAO implements DAO<Friend> {
         return null;
     }
 
-    public List<User> findAllFromUser(String key) throws Exception {
-        List<User> friends = new ArrayList<>();
+    public List<Friend> findAllFromUser(String key) throws Exception {
+        List<Friend> friends = new ArrayList<>();
         String query = "select * from friends where usr1_id = ? OR usr2_id = ?; ";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             UserService userService = new UserService();
@@ -71,13 +76,21 @@ public class JDBCFriendsDAO implements DAO<Friend> {
             statement.setInt(1, id);
             statement.setInt(2, id);
             try(ResultSet resultSet = statement.executeQuery()){
+                PostDirectService postDirectService = new PostDirectService();
                 while(resultSet.next()){
                     User user1 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(1)) );
                     User user2 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
+                    Friend friend;
                     if(! user1.equals(user))
-                        friends.add( user1 );
-                    if(! user2.equals(user))
-                        friends.add( user2 );
+                        friend = new Friend(user2, user1 );
+                    else
+                        friend = new Friend(user1, user2);
+
+                    Message message = postDirectService.getAllFromFriend(friend);
+                    if(message.hasAttachment()){
+                        friend.getChannelDirect().setPosts( (List<Post>) ((MessageAttachment)message).getAttachment());
+                    }
+                    friends.add(friend);
                 }
             }
         }
@@ -90,10 +103,17 @@ public class JDBCFriendsDAO implements DAO<Friend> {
         try(Statement statement = connection.createStatement()){
             try(ResultSet resultSet = statement.executeQuery("select * from friends")){
                 UserService userService = new UserService();
+                PostDirectService postDirectService = new PostDirectService();
                 while(resultSet.next()){
                     User user1 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(1)) );
                     User user2 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
-                    friends.add( new Friend(user1,user2) );
+                    Friend friend = new Friend(user1,user2);
+
+                    Message message = postDirectService.getAllFromFriend(friend);
+                    if(message.hasAttachment()){
+                        friend.getChannelDirect().setPosts( (List<Post>) ((MessageAttachment)message).getAttachment());
+                    }
+                    friends.add(friend);
                 }
             }
         }

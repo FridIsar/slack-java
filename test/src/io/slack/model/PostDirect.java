@@ -1,17 +1,20 @@
 package io.slack.model;
 
-
-//todo :
-// /creer une table de post direct contenant un id / un message / deux users_id / une sending_date / une modification_date / un boolean with attachment
-// /classe Service : PostDirectService  /
-
-//
-
 public class PostDirect extends Post {
+    private Friend friend;
 
     public PostDirect(){}
 
-    public PostDirect(User author, String message, ChannelDirect channelDirect) {
-        super(author, message, channelDirect);
+    public PostDirect(User author, String message, Friend friend) {
+        super(author, message, friend.getChannelDirect());
+        this.friend=friend;
+    }
+
+    public Friend getFriend() {
+        return friend;
+    }
+
+    public void setFriend(Friend friend) {
+        this.friend = friend;
     }
 }

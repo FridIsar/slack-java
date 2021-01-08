@@ -17,7 +17,9 @@ public class PostDirectService {
 
     public Message create(User author, String textMessage, User user){
         try {
-            PostDirect postDirect = new PostDirect(author, textMessage, new ChannelDirect(new Friend(author, user)));
+            Friend friend = new Friend(author, user);
+            ChannelDirect channelDirect = new ChannelDirect(friend);
+            PostDirect postDirect = new PostDirect(author, textMessage, friend);
             postDirect = postDirectDAO.insert(postDirect);
 
             return new MessageAttachment<PostDirect>(200, postDirect);

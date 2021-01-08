@@ -56,11 +56,8 @@ public class JDBCPostDirectDAO implements DAO<PostDirect> {
             try(ResultSet resultSet = statement.executeQuery()){
                 UserService userService = new UserService();
                 while (resultSet.next()){
-                    User author =DAOFactory.getUser().find(userService.getEmail( resultSet.getInt(3) ) );
-                    User user =DAOFactory.getUser().find(userService.getEmail( resultSet.getInt(4) ) );
-                    ChannelDirect channelDirect = new ChannelDirect( new Friend(author,user) );
                     String message = resultSet.getString(2);
-                    PostDirect postDirect = new PostDirect(author , message, channelDirect );
+                    PostDirect postDirect = new PostDirect(friend.getFirstUser() , message, friend );
                     postDirect.setId( resultSet.getInt(1) );
                     postDirect.setSendingDate( resultSet.getDate(5) );
                     posts.add(postDirect);
@@ -81,9 +78,9 @@ public class JDBCPostDirectDAO implements DAO<PostDirect> {
                 while (resultSet.next()){
                     User author =DAOFactory.getUser().find(userService.getEmail( resultSet.getInt(3) ) );
                     User user =DAOFactory.getUser().find(userService.getEmail( resultSet.getInt(4) ) );
-                    ChannelDirect channelDirect = new ChannelDirect( new Friend(author,user) );
+                    Friend friend = new Friend(author, user);
                     String message = resultSet.getString(2);
-                    PostDirect postDirect = new PostDirect(author , message, channelDirect );
+                    PostDirect postDirect = new PostDirect(author , message, friend );
                     postDirect.setId( resultSet.getInt(1) );
                     postDirect.setSendingDate( resultSet.getDate(5) );
                     posts.add(postDirect);

@@ -1,6 +1,7 @@
 package io.slack.front;
 
 import io.slack.controller.ControllerClient;
+import io.slack.model.Friend;
 import io.slack.model.User;
 import io.slack.utils.FileUtils;
 import io.slack.utils.GraphicsUtils;
@@ -13,9 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -99,9 +98,14 @@ public class ToolBar extends JPanel implements ActionListener {
 
     }
 
-    public void setFriendList(ArrayList<User> friends){
+    public void setFriendList(ArrayList<Friend> friends){
         Image image;
-        for(User user : friends){
+        User user;
+        for(Friend friend : friends){
+            if(ControllerClient.getCurrentUser().equals( friend.getFirstUser() ) )
+                user=friend.getSecUser();
+            else
+                user=friend.getFirstUser();
             if(user.getProfilPic()!=null)
                 image=user.getProfilPic();
             else

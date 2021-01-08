@@ -6,11 +6,8 @@ import io.slack.front.RightSidePanel;
 import io.slack.front.ui.UIUser;
 import io.slack.front.LeftSidePanel;
 import io.slack.front.ToolBar;
-import io.slack.model.Channel;
-import io.slack.model.Friend;
-import io.slack.model.Post;
+import io.slack.model.*;
 import io.slack.network.model.*;
-import io.slack.model.User;
 import io.slack.network.Client;
 import io.slack.network.handlerMessages.ClientMessageType;
 import io.slack.network.communication.Message;
@@ -24,6 +21,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ControllerClient {
     //user
@@ -36,7 +34,7 @@ public class ControllerClient {
     private static ArrayList<Channel> channels = new ArrayList<>();
 
     //friend
-    private static ArrayList<User> friends = new ArrayList<>();
+    private static ArrayList<Friend> friends = new ArrayList<>();
 
     //post
     private static File attachedFile=null;
@@ -114,7 +112,7 @@ public class ControllerClient {
         try {
             Message received = client.sendMessage(message);
             if(received.hasAttachment() ){
-                friends = (ArrayList<User>)( (MessageAttachment)received).getAttachment();
+                friends = (ArrayList<Friend>)( (MessageAttachment)received).getAttachment();
                 ToolBar.getToolBar().setFriendList(friends);
             }
         } catch (InterruptedException e) {
@@ -361,7 +359,7 @@ public class ControllerClient {
             Message received = client.sendMessage(message);
             if( received.hasAttachment() ){
                 Friend friend = (Friend)((MessageAttachment)received).getAttachment();
-                friends.add(friend.getSecUser());
+                friends.add(friend);
 
                 ToolBar.getToolBar().addAFriend(friend.getSecUser());
             }
@@ -386,6 +384,55 @@ public class ControllerClient {
         }
     }
 
+    public static void sendPostFriend(User user, String textMessage){
+        try {
+            PostAndFriendCredentials attachment;
+            //Post post;
+            if( isFileAttached ) {
+                attachment = new PostAndFriendCredentials(currentUser.getEmail(),textMessage, FileUtils.getImage(attachedFile) , user.getEmail() );
+                resetAttachedFile();
+            }else {
+                attachment = new PostAndFriendCredentials(currentUser.getEmail(),textMessage, null , user.getEmail());
+            }
+            Message message = new MessageAttachment<PostAndFriendCredentials>(ClientMessageType.ADDPOSTCHANNEL.getValue(), attachment);
+            Message received = client.sendMessage(message);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*public static void getPostListInFriend(Friend friend){
+        try {
+            Message message = new MessageAttachment<UserAndUserCredentials>(ClientMessageType.GETPOSTSFRIEND.getValue(), new UserAndUserCredentials(friend.getFirstUser().getEmail(), friend.getSecUser().getEmail()) );
+            Message received = client.sendMessage(message);
+            if(received.hasAttachment()){
+
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+    public ChannelDirect getChannelDirectFriend(User user){
+        for(Friend friend : friends){
+            if( (friend.getFirstUser().equals(currentUser) && friend.getSecUser().equals(user) )  ||  ( (friend.getFirstUser().equals(user) && friend.getSecUser().equals(currentUser) )  )  ){
+                return friend.getChannelDirect();
+            }
+        }
+        return null;
+    }
+
+    public void receivePostFriend(PostDirect postDirect){
+        for(Friend friend : friends){
+            if(friend.equals(postDirect.getFriend())){
+                friend.getChannelDirect().addPost(postDirect);
+                if(currentUser.equals( friend.getChannelDirect() ))
+                    Window.getFenetre().refreshPage();
+                break;
+            }
+        }
+    }
 
 
 ///////////////// management of the posts ////////////////
@@ -431,6 +478,8 @@ public class ControllerClient {
                 channel.addPost(post);
                 if(! channel.equals(currentChannel))
                     LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
+                else
+                    Window.getFenetre().refreshPage();
                 break;
             }
         }
