@@ -30,7 +30,7 @@ public class AddPostFriendMessage implements ClientMessageHandler<PostAndFriendC
         if(message.getCode() == 200){
             Message messageToSend = new MessageAttachment<PostDirect>(ClientMessageType.ADDPOSTFRIEND.getValue(),
                     (PostDirect) ((MessageAttachment)message).getAttachment() );
-            //todo notifier seulement l'autre user
+            //todo les deux user du friend
         }
 
         return message;

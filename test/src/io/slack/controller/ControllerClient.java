@@ -203,17 +203,23 @@ public class ControllerClient {
     }
     public static void setCurrentChannel(Channel currentChannel) {
         ControllerClient.currentChannel = currentChannel;
-        LeftSidePanel.getPanel().removeNotif( channels.indexOf(currentChannel) );
-        getUserListInChannel(currentChannel);
-        getPostListInChannel(currentChannel);
-        //ArrayList<User> userList = getUserListInChannel(currentChannel);
-        RightSidePanel.getPanel().removeAllUsers();
-        for(User user : currentChannel.getUsers()){
-            RightSidePanel.getPanel().addAUser(user);
+        if(ControllerClient.currentChannel instanceof ChannelDirect){
+            Friend friend= ((ChannelDirect) ControllerClient.currentChannel).getFriend();
+            getPostListInFriend(friend);
+            RightSidePanel.getPanel().removeAllUsers();
+            RightSidePanel.getPanel().addAUser( friend.getFirstUser() );
+            RightSidePanel.getPanel().addAUser( friend.getSecUser() );
+        }else{
+            LeftSidePanel.getPanel().removeNotif(channels.indexOf(currentChannel));
+            getUserListInChannel(currentChannel);
+            getPostListInChannel(currentChannel);
+            RightSidePanel.getPanel().removeAllUsers();
+            for (User user : currentChannel.getUsers()) {
+                RightSidePanel.getPanel().addAUser(user);
+            }
         }
-
-
     }
+
     public static void resetCurrentChannel(){
         ControllerClient.currentChannel=null;
         RightSidePanel.getPanel().removeAllUsers();
@@ -394,25 +400,25 @@ public class ControllerClient {
             }else {
                 attachment = new PostAndFriendCredentials(currentUser.getEmail(),textMessage, null , user.getEmail());
             }
-            Message message = new MessageAttachment<PostAndFriendCredentials>(ClientMessageType.ADDPOSTCHANNEL.getValue(), attachment);
+            Message message = new MessageAttachment<PostAndFriendCredentials>(ClientMessageType.ADDPOSTFRIEND.getValue(), attachment);
             Message received = client.sendMessage(message);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    /*public static void getPostListInFriend(Friend friend){
+    public static void getPostListInFriend(Friend friend){
         try {
             Message message = new MessageAttachment<UserAndUserCredentials>(ClientMessageType.GETPOSTSFRIEND.getValue(), new UserAndUserCredentials(friend.getFirstUser().getEmail(), friend.getSecUser().getEmail()) );
             Message received = client.sendMessage(message);
             if(received.hasAttachment()){
-
+                friend.getChannelDirect().setPosts((ArrayList<Post>)((MessageAttachment)received ).getAttachment() );
             }
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
     public ChannelDirect getChannelDirectFriend(User user){
         for(Friend friend : friends){
