@@ -248,6 +248,10 @@ public class ControllerClient {
         return null;
     }
 
+    public static void receiveCreateChannel(Channel channel)   {
+        LeftSidePanel.getPanel().refreshList(channels);
+    }
+
     public static void changeChannelIcon(Image image, Channel channel){
 
     }
@@ -488,8 +492,9 @@ public class ControllerClient {
         for(Channel channel : channels){
             if(post.getChannel().equals(channel)){
                 channel.addPost(post);
-                if(! channel.equals(currentChannel))
+                if(! channel.equals(currentChannel))    {
                     LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
+                }
                 else
                     Window.getFenetre().refreshPage();
                 break;

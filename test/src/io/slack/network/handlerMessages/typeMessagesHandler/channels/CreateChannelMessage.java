@@ -6,6 +6,7 @@ import io.slack.network.ClientHandler;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.network.handlerMessages.ClientMessageHandler;
+import io.slack.network.handlerMessages.ClientMessageType;
 import io.slack.network.model.ChannelCredentials;
 import io.slack.network.model.UserCredentials;
 import io.slack.service.ChannelService;
@@ -26,6 +27,12 @@ public class CreateChannelMessage extends Subject implements ClientMessageHandle
         Message message = cs.create(title, admin);
         Channel channel = cs.getChannel(title);;
         Thread thread = null;
+        if (message.getCode() == 200)   {
+            Message messageToSend = new MessageAttachment<>(ClientMessageType.CREATECHANNEL.getValue(),
+                    channel);
+            thread = this.notifyChannelMembers(clientHandler, channel, messageToSend);
+        }
+
         return new Pair(message, thread);
     }
 }

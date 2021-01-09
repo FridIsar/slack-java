@@ -9,10 +9,11 @@ import io.slack.network.model.UserAndUserCredentials;
 import io.slack.service.FriendService;
 import io.slack.service.PostDirectService;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
 public class GetPostsFriendMessage implements ClientMessageHandler<UserAndUserCredentials> {
     @Override
-    public Message handle(UserAndUserCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(UserAndUserCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling get post friendship...");
 
         String firstEmail = dataMessage.getFirstUserEmail();
@@ -24,6 +25,7 @@ public class GetPostsFriendMessage implements ClientMessageHandler<UserAndUserCr
         PostDirectService postDirectService = new PostDirectService();
         Message message = postDirectService.getAllFromFriend(friend);
 
-        return message;
+        Thread thread = null;
+        return new Pair(message, thread);
     }
 }

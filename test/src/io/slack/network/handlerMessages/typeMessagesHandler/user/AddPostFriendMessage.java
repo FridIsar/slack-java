@@ -10,10 +10,11 @@ import io.slack.network.handlerMessages.ClientMessageType;
 import io.slack.network.model.PostAndFriendCredentials;
 import io.slack.service.PostDirectService;
 import io.slack.service.UserService;
+import io.slack.utils.Pair;
 
 public class AddPostFriendMessage implements ClientMessageHandler<PostAndFriendCredentials> {
     @Override
-    public Message handle(PostAndFriendCredentials dataMessage, ClientHandler clientHandler) {
+    public Pair handle(PostAndFriendCredentials dataMessage, ClientHandler clientHandler) {
         System.out.println("Handling direct post ...");
 
         String authorEmail = dataMessage.getAuthorEmail();
@@ -33,6 +34,7 @@ public class AddPostFriendMessage implements ClientMessageHandler<PostAndFriendC
             //todo les deux user du friend
         }
 
-        return message;
+        Thread thread = null;
+        return new Pair(message, thread);
     }
 }
