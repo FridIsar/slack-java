@@ -112,11 +112,11 @@ public class Channel implements Serializable, Comparable<Channel> {
 		return Objects.hash(title);
 	}
 
-	@Override
+/*	@Override
 	public String toString() {
 		return "Channel{" +
 				"title='" + title +" admin "+admin+ '}';
-	}
+	}*/
 
 	@Override
 	public int compareTo(Channel o) {

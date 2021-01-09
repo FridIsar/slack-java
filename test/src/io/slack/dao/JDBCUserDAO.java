@@ -47,10 +47,8 @@ public class JDBCUserDAO implements DAO<User> {
 			statement.setString(2,object.getPassword());
 			statement.setString(3,object.getPseudo());
 			statement.setInt(4,object.getId());
-
-			try(ResultSet resultSet = statement.executeQuery()){
-				return object;
-			}
+			statement.executeUpdate();
+			return object;
 		}
 	}
 

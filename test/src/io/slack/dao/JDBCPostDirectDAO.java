@@ -13,7 +13,7 @@ public class JDBCPostDirectDAO implements DAO<PostDirect> {
 
     @Override
     public PostDirect insert(PostDirect object) throws Exception {
-        String query = "insert into directPosts (message, user1_id, user2_id, sending_date) values ( ?, ?, ?, ?, ?);";
+        String query = "insert into directPosts (message, user1_id, user2_id, sending_date) values ( ?, ?, ?, ?);";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1,object.getMessage());
             statement.setInt(2, object.getAuthor().getId());

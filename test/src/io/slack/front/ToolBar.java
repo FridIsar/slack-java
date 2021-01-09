@@ -101,6 +101,11 @@ public class ToolBar extends JPanel implements ActionListener {
         }
     }
 
+    public void resetFriendList()   {
+        friendList.removeAllItems();
+        userList.clear();
+    }
+
     public void addAFriend(User user){
         userList.add( user);
         friendList.addItem(user.getPseudo());

@@ -1,9 +1,6 @@
 package io.slack.dao;
 
-import io.slack.model.Friend;
-import io.slack.model.Post;
-import io.slack.model.PostDirect;
-import io.slack.model.User;
+import io.slack.model.*;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.service.PostDirectService;
@@ -59,7 +56,14 @@ public class JDBCFriendsDAO implements DAO<Friend> {
                 if(resultSet.next()){
                     User user1 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(1)) );
                     User user2 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
-                    return  new Friend(user1,user2);
+                    Friend friend = new Friend(user1,user2);
+                    friend.setChannelDirect(new ChannelDirect(friend));
+                    PostDirectService postDirectService = new PostDirectService();
+                    Message message = postDirectService.getAllFromFriend(friend);
+                    if(message.hasAttachment()){
+                        friend.getChannelDirect().setPosts( (List<Post>) ((MessageAttachment)message).getAttachment());
+                    }
+                    return  friend;
                 }
             }
         }
@@ -85,7 +89,7 @@ public class JDBCFriendsDAO implements DAO<Friend> {
                         friend = new Friend(user2, user1 );
                     else
                         friend = new Friend(user1, user2);
-
+                    friend.setChannelDirect(new ChannelDirect(friend));
                     Message message = postDirectService.getAllFromFriend(friend);
                     if(message.hasAttachment()){
                         friend.getChannelDirect().setPosts( (List<Post>) ((MessageAttachment)message).getAttachment());
@@ -108,7 +112,7 @@ public class JDBCFriendsDAO implements DAO<Friend> {
                     User user1 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(1)) );
                     User user2 = DAOFactory.getUser().find( userService.getEmail(resultSet.getInt(2)) );
                     Friend friend = new Friend(user1,user2);
-
+                    friend.setChannelDirect(new ChannelDirect(friend));
                     Message message = postDirectService.getAllFromFriend(friend);
                     if(message.hasAttachment()){
                         friend.getChannelDirect().setPosts( (List<Post>) ((MessageAttachment)message).getAttachment());

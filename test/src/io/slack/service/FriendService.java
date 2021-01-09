@@ -3,6 +3,7 @@ package io.slack.service;
 import io.slack.dao.DAO;
 import io.slack.dao.JDBCFriendsDAO;
 import io.slack.dao.MemoryChannelDAO;
+import io.slack.model.ChannelDirect;
 import io.slack.model.Friend;
 import io.slack.model.User;
 import io.slack.network.communication.Message;
@@ -23,6 +24,7 @@ public class FriendService {
                 return new Message(403);
             }
             friend = new Friend(user1,user2);
+            friend.setChannelDirect(new ChannelDirect(friend));
             friendDAO.insert(friend);
             return new MessageAttachment<Friend>(200, friend);
 

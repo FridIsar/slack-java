@@ -1,6 +1,7 @@
 package io.slack.network.handlerMessages.typeMessagesHandler.channels;
 
 import io.slack.model.Channel;
+import io.slack.model.Friend;
 import io.slack.model.User;
 import io.slack.network.ClientHandler;
 import io.slack.network.communication.Message;
@@ -22,6 +23,32 @@ public class Subject {
         for (ClientHandler clientHandler : clientsToNotify) {
             clientHandler.notify(messageNotify);
         }
+    }
+
+    public Thread notifyFriends(ClientHandler clientHandler, Friend friends, Message messageToNotify)   {
+
+        CopyOnWriteArrayList<ClientHandler> connectedUsers = clientHandler.getActivatedClient();
+        ConcurrentHashMap<Socket, String> concurrentUserAuthenticated = clientHandler.getConcurrentUserAuthenticated();
+        CopyOnWriteArrayList<ClientHandler> connectedMembers = new CopyOnWriteArrayList<ClientHandler>();
+
+        User user1 = friends.getFirstUser();
+        User user2 = friends.getSecUser();
+
+        for (ClientHandler connectedUser : connectedUsers)    {
+            String userEmail = concurrentUserAuthenticated.get(connectedUser.getSocket());
+            if (userEmail != null && userEmail.equals(user1.getEmail()))    {
+                    connectedMembers.add(connectedUser);
+            }
+            if (userEmail != null && userEmail.equals(user2.getEmail()))    {
+                connectedMembers.add(connectedUser);
+            }
+        }
+        Thread threadNotify = new Thread(() -> {
+            Message message = messageToNotify;
+            this.notifyAll(connectedMembers, message);
+        });
+        //threadNotify.start();
+        return threadNotify;
     }
 
     public Thread notifyChannelMembers(ClientHandler clientHandler, Channel channel, Message messageToNotify)  {

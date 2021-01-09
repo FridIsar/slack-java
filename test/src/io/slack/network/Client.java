@@ -4,6 +4,7 @@ import io.slack.controller.ControllerClient;
 import io.slack.model.Channel;
 import io.slack.model.Member;
 import io.slack.model.Post;
+import io.slack.model.PostDirect;
 import io.slack.network.communication.Message;
 import io.slack.network.communication.MessageAttachment;
 import io.slack.utils.Utils;
@@ -34,11 +35,11 @@ public class Client {
 
     public Client() throws IOException {
         // test localhost :
-        this.ip = InetAddress.getByName("127.0.0.1");
+        //this.ip = InetAddress.getByName("127.0.0.1");
 
         // adresse Serveur Ubuntu :
 
-        //this.ip = InetAddress.getByName("20.39.243.239");
+        this.ip = InetAddress.getByName("20.39.243.239");
         this.socket = new Socket(ip, serverPort);
         this.runClient();
     }
@@ -47,11 +48,11 @@ public class Client {
         this.controllerClient = controllerClient;
 
         // test localhost :
-        this.ip = InetAddress.getByName("127.0.0.1");
+        //this.ip = InetAddress.getByName("127.0.0.1");
 
         // adresse Serveur Ubuntu :
 
-        //this.ip = InetAddress.getByName("20.39.243.239");
+        this.ip = InetAddress.getByName("20.39.243.239");
         this.socket = new Socket(ip, serverPort);
         this.runClient();
     }
@@ -147,20 +148,22 @@ public class Client {
     }
 
     private void handlerMessageSentByServer(MessageAttachment messageReceived) {
-        // TODO :
-        //  /!\ remplacer le new par this.controllerClient
 
         switch (messageReceived.getCode()) {
-            case  706:
-                // ADDPOSTCHANNEL -> un User a enovyé un Post dans un Channel dont fait partie Client
-                // désencapsuler le MessageAttachement et envoyer la donnée Post
-                this.controllerClient.receivePost( (Post) messageReceived.getAttachment());
-                break;
-
             case 707 :
                 // DELETEPOSTCHANNEL -> un User a supprimé un Post dans un Channel dont fait partie Client
                 // désencapsuler le MessageAttachement et envoyer la donnée Post
                 this.controllerClient.receiveDeletePost( (Post) messageReceived.getAttachment());
+                break;
+
+            case  714:
+                this.controllerClient.receivePostFriend( (PostDirect) messageReceived.getAttachment());
+                break;
+
+            case 706:
+                // ADDPOSTCHANNEL -> un User a enovyé un Post dans un Channel dont fait partie Client
+                // désencapsuler le MessageAttachement et envoyer la donnée Post
+                this.controllerClient.receivePost( (Post) messageReceived.getAttachment());
                 break;
 
             case 703 :

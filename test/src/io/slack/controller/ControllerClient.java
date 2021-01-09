@@ -144,9 +144,9 @@ public class ControllerClient {
             currentChannel=null;
             channels.clear();
 
-            //friends.clear();
-
-
+            friends.clear();
+            userFriends.clear();
+            ToolBar.getToolBar().resetFriendList();
             ToolBar.getToolBar().addMyButton();
             LeftSidePanel.getPanel().addMyButton();
             LeftSidePanel.getPanel().resetList();
@@ -172,12 +172,17 @@ public class ControllerClient {
 
 
     public static void updateUser(User user, String email, String pseudo) {
-        user.setEmail(email);
-        user.setPseudo(pseudo);
-        Message message = new MessageAttachment<UserCredentialsOptions>(ClientMessageType.UPDATEUSER.getValue(), new UserCredentialsOptions(email, user.getPassword(), pseudo ));
+        UserCredentialsOptions uco = new UserCredentialsOptions(email, user.getPassword(), pseudo );
+        uco.setId(user.getId());
+        Message message = new MessageAttachment<UserCredentialsOptions>(ClientMessageType.UPDATEUSER.getValue(), uco);
 
         try {
-            client.sendMessage(message);
+            Message messageReceived = client.sendMessage(message);
+            if (messageReceived.hasAttachment())     {
+                User user1 = (User) ((MessageAttachment) messageReceived).getAttachment();
+                currentUser.setPseudo(user1.getPseudo());
+                currentUser.setEmail(user1.getEmail());
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -186,10 +191,14 @@ public class ControllerClient {
     public static void updatePassword(User user, String oldPassword, String newPassword) {
         if(user.getPassword().equals(oldPassword)){
             if(EmailUtils.isPassword(newPassword)) {
-                user.setPassword(newPassword);
-                Message message = new MessageAttachment<UserCredentialsOptions>(ClientMessageType.UPDATEUSER.getValue(), new UserCredentialsOptions(user.getEmail(), newPassword, user.getPseudo()));
+                UserCredentialsOptions uco = new UserCredentialsOptions(user.getEmail(), newPassword, user.getPseudo());
+                uco.setId(user.getId());
+                Message message = new MessageAttachment<UserCredentialsOptions>(ClientMessageType.UPDATEUSER.getValue(), uco);
                 try {
-                    client.sendMessage(message);
+                    Message messageReceived = client.sendMessage(message);
+                    if (messageReceived.hasAttachment())     {
+                        currentUser.setPassword(newPassword);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -476,7 +485,7 @@ public class ControllerClient {
         for(Friend friend : friends){
             if(friend.equals(postDirect.getFriend())){
                 friend.getChannelDirect().addPost(postDirect);
-                if(currentUser.equals( friend.getChannelDirect() ))
+                if(currentChannel.equals( friend.getChannelDirect() ))
                     Window.getFenetre().refreshPage();
                 break;
             }

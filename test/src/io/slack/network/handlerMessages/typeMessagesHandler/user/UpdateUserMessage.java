@@ -20,7 +20,7 @@ public class UpdateUserMessage implements ClientMessageHandler<UserCredentialsOp
         String pseudo = dataMessage.getPseudo();
 
         UserService userService = new UserService();
-        int id = userService.getID(email);
+        int id = dataMessage.getId();
         Message message = userService.update(id, email, newPassword, pseudo);
 
         if (message.getCode() == 200)   {
