@@ -21,10 +21,13 @@ public class DeleteChannelMessage extends Subject implements ClientMessageHandle
 
         Message message = cs.delete(title);
 
+
+
         Thread thread = null;
         if (message.getCode() == 200)   {
+            Channel channel = (Channel) ((MessageAttachment) message).getAttachment();
             Message messageToSend = new MessageAttachment<>(ClientMessageType.DELETECHANNEL.getValue(),
-                    null);
+                    channel);
             thread = this.notifyChannelMembers(clientHandler, dataMessage, messageToSend);
         }
 

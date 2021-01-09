@@ -105,7 +105,7 @@ public class RightSidePanel extends JPanel implements ActionListener {
         }
     }
 
-    public void refreshList(ArrayList<User> users)    {
+    public void refreshList(ArrayList<User> users)    {//TODO arranger taille
         removeAllUsers();
         for (User user : users)    {
             addAUser(user);

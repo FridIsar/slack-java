@@ -64,8 +64,10 @@ public class LeftSidePanel extends JPanel implements ActionListener {
     }
 
     public void resetList() {
+        bar.removeAll();
         listeBouton.clear();
         bar.setPreferredSize(new Dimension(DIMENSION_X, DIMENSION_Y_BAR=DIMENSION_Y ));
+        bar.add(createChat);
     }
 
     public void initMyButton(){
@@ -123,8 +125,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
 
             int option = JOptionPane.showConfirmDialog( Window.getFenetre(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
             if(option == JOptionPane.OK_OPTION){
-                Channel channel = ControllerClient.createChannel(titre.getText());
-                this.addAChat(channel);
+                ControllerClient.createChannel(titre.getText());
             }
         }
 

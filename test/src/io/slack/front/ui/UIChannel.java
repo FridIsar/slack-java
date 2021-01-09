@@ -98,7 +98,7 @@ public class UIChannel extends CentralePage implements ActionListener {
         texteMessage.setFont(font);
         send.setBounds(tc*15,800, tc * 2, tc);
         joindre.setBounds(tc*17, 800, tc*2, tc);
-
+        System.out.println(doc);
     }
 
     @Override

@@ -237,8 +237,8 @@ public class ControllerClient {
                 received = client.sendMessage(message);
                 if(received.hasAttachment()){
                     Channel channel= (Channel)( ((MessageAttachment)received).getAttachment() );
-                    sendPost(channel.getAdmin(), channel,"Welcome to the '"+channel.getTitle()+"' channel");
                     addChannel(channel);
+                    sendPost(channel.getAdmin(), channel,"Welcome to the '"+channel.getTitle()+"' channel");
                     return channel;
                 }
             }
@@ -249,6 +249,7 @@ public class ControllerClient {
     }
 
     public static void receiveCreateChannel(Channel channel)   {
+        LeftSidePanel.getPanel().addAChat(channel);
         LeftSidePanel.getPanel().refreshList(channels);
     }
 
@@ -290,7 +291,9 @@ public class ControllerClient {
         for(Channel c : channels){
             if(c.equals(channel)){
                 c.removeUser(user);
-                RightSidePanel.getPanel().refreshList((ArrayList<User>) channel.getUsers());
+                ArrayList<User> users = (ArrayList<User>) (channel.getUsers());
+                users.add(channel.getAdmin());
+                RightSidePanel.getPanel().refreshList(users);
             }
         }
     }
@@ -348,7 +351,14 @@ public class ControllerClient {
     }
 
     public void receiveDeleteChannel(Channel channel){
-        channels.remove(channel);
+        Channel channel1 = null;
+        for (Channel chan : channels)   {
+            if (chan.equals(channel))   {
+                channel1 = chan;
+            }
+        }
+        if (channel1 != null)
+            channels.remove(channel1);
         LeftSidePanel.getPanel().refreshList(channels);
         if (currentChannel.equals(channel))    {
             Window.getFenetre().backToHome();
