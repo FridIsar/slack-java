@@ -173,7 +173,7 @@ public class UIUser extends CentralePage implements ActionListener {
         if( source == directMessage){
             ChannelDirect channelDirect = ControllerClient.getChannelDirectFriend(user);
             ControllerClient.setCurrentChannel(channelDirect);
-            Window.getFenetre().setContenu( new UIChannel(channelDirect) );
+            Window.getWindow().setContenu( new UIChannel(channelDirect) );
         }
 
     }

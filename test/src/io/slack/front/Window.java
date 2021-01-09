@@ -36,7 +36,7 @@ public class Window extends JFrame {
 
     }
 
-    public static Window getFenetre() {
+    public static Window getWindow() {
         return window;
     }
 
@@ -77,7 +77,7 @@ public class Window extends JFrame {
         return JOptionPane.showConfirmDialog(center, message, titre, JOptionPane.OK_CANCEL_OPTION);
     }
     public void refreshPage(){
-        center.repaint();
+        //center.repaint();
         try {
             center.dessiner();
         } catch (BadLocationException e) {

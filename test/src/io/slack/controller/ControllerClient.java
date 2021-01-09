@@ -21,7 +21,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ControllerClient {
     //user
@@ -128,7 +127,7 @@ public class ControllerClient {
     }
 
    public static void profil() {
-        Window.getFenetre().setContenu( new UIUser(currentUser) );
+        Window.getWindow().setContenu( new UIUser(currentUser) );
     }
 
     public static void disconnect(boolean send) {
@@ -151,7 +150,7 @@ public class ControllerClient {
             LeftSidePanel.getPanel().addMyButton();
             LeftSidePanel.getPanel().resetList();
 
-            Window.getFenetre().backToHome();
+            Window.getWindow().backToHome();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -203,10 +202,10 @@ public class ControllerClient {
                     e.printStackTrace();
                 }
             }else{
-                Window.getFenetre().affichePopup(new String[] {"veuillez taper un mot de passe au bon format  [ minimum 8 caractère : 1 maj | 1 min | 1 chiffre | 1 caractère spécial ]"} );
+                Window.getWindow().affichePopup(new String[] {"veuillez taper un mot de passe au bon format  [ minimum 8 caractère : 1 maj | 1 min | 1 chiffre | 1 caractère spécial ]"} );
             }
         }else{
-            Window.getFenetre().affichePopup( new String[]{"le mot de passe ne correspond pas"} );
+            Window.getWindow().affichePopup( new String[]{"le mot de passe ne correspond pas"} );
         }
     }
 
@@ -380,7 +379,7 @@ public class ControllerClient {
             channels.remove(channel1);
         LeftSidePanel.getPanel().refreshList(channels);
         if (currentChannel.equals(channel))    {
-            Window.getFenetre().backToHome();
+            Window.getWindow().backToHome();
             resetCurrentChannel();
         }
     }
@@ -486,7 +485,7 @@ public class ControllerClient {
             if(friend.equals(postDirect.getFriend())){
                 friend.getChannelDirect().addPost(postDirect);
                 if(currentChannel.equals( friend.getChannelDirect() ))
-                    Window.getFenetre().refreshPage();
+                    Window.getWindow().refreshPage();
                 break;
             }
         }
@@ -535,11 +534,12 @@ public class ControllerClient {
             if(post.getChannel().equals(channel)){
                 channel.addPost(post);
                 if(! channel.equals(currentChannel))    {
-                    //LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
+                    //TODO LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
                     System.out.println("todo notif");
                 }
-                else
-                    Window.getFenetre().refreshPage();
+                else    {
+                    Window.getWindow().refreshPage();
+                }
                 break;
             }
         }
@@ -562,7 +562,7 @@ public class ControllerClient {
 
     public void receiveErrorServer(){
         int waitingTime = 5;
-        Window.getFenetre().affichePopup(new String[]{"the application will close in "+ waitingTime +" seconds..."}, "serveur error");
+        Window.getWindow().affichePopup(new String[]{"the application will close in "+ waitingTime +" seconds..."}, "serveur error");
         Utils.wait(waitingTime);
         System.exit(1);
     }

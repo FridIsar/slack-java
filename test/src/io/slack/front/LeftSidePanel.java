@@ -123,7 +123,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
                 }
             });
 
-            int option = JOptionPane.showConfirmDialog( Window.getFenetre(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
+            int option = JOptionPane.showConfirmDialog( Window.getWindow(), titre, "créer votre chat", JOptionPane.OK_CANCEL_OPTION );
             if(option == JOptionPane.OK_OPTION){
                 ControllerClient.createChannel(titre.getText());
             }
@@ -133,7 +133,7 @@ public class LeftSidePanel extends JPanel implements ActionListener {
             if( source == button ){
                 Channel channel = ControllerClient.getChannel( listeBouton.indexOf(button));
                 ControllerClient.setCurrentChannel(channel);
-                Window.getFenetre().setContenu( new UIChannel(channel));
+                Window.getWindow().setContenu( new UIChannel(channel));
             }
         }
     }

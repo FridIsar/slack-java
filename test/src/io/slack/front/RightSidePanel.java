@@ -90,7 +90,7 @@ public class RightSidePanel extends JPanel implements ActionListener {
 
         if( source == settings){
             if(ControllerClient.getCurrentChannel()!=null)
-                Window.getFenetre().setContenu( new UIChannelSettings(ControllerClient.getCurrentChannel()));
+                Window.getWindow().setContenu( new UIChannelSettings(ControllerClient.getCurrentChannel()));
         }
 
         for(JButton button : listeBouton){
@@ -98,7 +98,7 @@ public class RightSidePanel extends JPanel implements ActionListener {
                 if (source == button) {
                     //User user = ControllerClient.getUserTest(listeBouton.indexOf(button));
                     User user = ControllerClient.getUserInCurrentChannel(listeBouton.indexOf(button));
-                    Window.getFenetre().setContenu(new UIUser(user));
+                    Window.getWindow().setContenu(new UIUser(user));
 
                 }
             }

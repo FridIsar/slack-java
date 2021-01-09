@@ -50,6 +50,8 @@ public class UIChannel extends CentralePage implements ActionListener {
         textPane.setEditable(false);
         //textPane.setBackground(new Color(108, 132, 203, 121));
     }
+
+
     public void addMyButton(){
         add(send);
         add(texteMessage);
@@ -74,6 +76,7 @@ public class UIChannel extends CentralePage implements ActionListener {
         //add UIMessage to the pane
         for(int i=0; i<channel.getMessages().size(); i++){
             Post post = channel.getMessages().get(i);
+
             JTextPane messageUI;
             if(post instanceof PostImage){
                 messageUI = new UIMessageImage((PostImage) post).dessiner();
@@ -86,7 +89,8 @@ public class UIChannel extends CentralePage implements ActionListener {
             StyleConstants.setFontSize(style, 20);
             try {
                 doc.insertString(doc.getLength(), "\n\n", style );
-            } catch (BadLocationException e) {
+                System.out.println("inserting");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -98,7 +102,7 @@ public class UIChannel extends CentralePage implements ActionListener {
         texteMessage.setFont(font);
         send.setBounds(tc*15,800, tc * 2, tc);
         joindre.setBounds(tc*17, 800, tc*2, tc);
-        System.out.println(doc);
+        //System.out.println(doc);
     }
 
     @Override
@@ -110,6 +114,11 @@ public class UIChannel extends CentralePage implements ActionListener {
                 ControllerClient.sendPostFriend(((ChannelDirect) channel).getFriend(), texteMessage.getText());
             else
                 ControllerClient.sendPost(channel,texteMessage.getText());
+            try {
+                dessiner();
+            } catch (BadLocationException badLocationException) {
+                badLocationException.printStackTrace();
+            }
             texteMessage.setText("");
 
         }
