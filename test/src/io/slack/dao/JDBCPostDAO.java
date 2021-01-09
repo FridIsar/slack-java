@@ -62,7 +62,7 @@ public class JDBCPostDAO implements DAO<Post> {
         }
     }
 
-    //todo see if we can find a list of posts from a channel's name and words contained in the textMessage
+
     @Override
     public Post find(String key) throws Exception {
 

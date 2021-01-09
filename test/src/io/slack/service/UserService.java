@@ -28,7 +28,7 @@ public class UserService {
 			if (user != null) {			// User already exists
 				return new Message(403);
 			}
-			user = new User(email, password, pseudo); //todo pk on fait ça ?
+			user = new User(email, password, pseudo);
 			user.initCreatedAt();
 			user = userDAO.insert(user);
 			return new MessageAttachment<>(200, user);

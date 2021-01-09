@@ -35,11 +35,11 @@ public class Client {
 
     public Client() throws IOException {
         // test localhost :
-        //this.ip = InetAddress.getByName("127.0.0.1");
+        this.ip = InetAddress.getByName("127.0.0.1");
 
         // adresse Serveur Ubuntu :
 
-        this.ip = InetAddress.getByName("20.39.243.239");
+        //this.ip = InetAddress.getByName("20.39.243.239");
         this.socket = new Socket(ip, serverPort);
         this.runClient();
     }
@@ -48,11 +48,11 @@ public class Client {
         this.controllerClient = controllerClient;
 
         // test localhost :
-        //this.ip = InetAddress.getByName("127.0.0.1");
+        this.ip = InetAddress.getByName("127.0.0.1");
 
         // adresse Serveur Ubuntu :
 
-        this.ip = InetAddress.getByName("20.39.243.239");
+        //this.ip = InetAddress.getByName("20.39.243.239");
         this.socket = new Socket(ip, serverPort);
         this.runClient();
     }

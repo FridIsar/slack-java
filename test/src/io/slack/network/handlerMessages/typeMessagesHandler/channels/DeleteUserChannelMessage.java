@@ -15,6 +15,8 @@ import io.slack.service.MemberService;
 import io.slack.service.UserService;
 import io.slack.utils.Pair;
 
+import java.util.ArrayList;
+
 public class DeleteUserChannelMessage extends Subject implements ClientMessageHandler<UserAndChannelCredentials> {
     @Override
     public Pair handle(UserAndChannelCredentials dataMessage, ClientHandler clientHandler) {
@@ -29,6 +31,11 @@ public class DeleteUserChannelMessage extends Subject implements ClientMessageHa
         MemberService ms = new MemberService();
         Message message = ms.delete(channelTitle, userEmail);
         Thread thread = null;
+
+/*        Message usersMessage = ms.getAllFromChannel(channel);
+        if (usersMessage.hasAttachment())   {
+            channel.getUsers().addAll((ArrayList<User>) ((MessageAttachment) usersMessage).getAttachment());
+        }*/
 
         if (message.getCode() == 200)   {
             Message messageToSend = new MessageAttachment<Member>(ClientMessageType.DELETEUSERCHANNEL.getValue(),

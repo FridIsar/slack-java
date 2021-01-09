@@ -309,8 +309,8 @@ public class ControllerClient {
         for(Channel c : channels){
             if(c.equals(channel)){
                 c.removeUser(user);
-                ArrayList<User> users = (ArrayList<User>) (channel.getUsers());
-                users.add(channel.getAdmin());
+                //ArrayList<User> users = (ArrayList<User>) (channel.getUsers());
+                ArrayList<User> users = (ArrayList<User>) c.getUsers();
                 RightSidePanel.getPanel().refreshList(users);
             }
         }
@@ -480,7 +480,7 @@ public class ControllerClient {
         return null;
     }
 
-    public void receivePostFriend(PostDirect postDirect){ //todo call this method after notifying
+    public void receivePostFriend(PostDirect postDirect){
         for(Friend friend : friends){
             if(friend.equals(postDirect.getFriend())){
                 friend.getChannelDirect().addPost(postDirect);
@@ -545,7 +545,7 @@ public class ControllerClient {
         }
     }
 
-    public static void deletePost(){ //todo
+    public static void deletePost(){
 
     }
 
@@ -581,7 +581,7 @@ public class ControllerClient {
 
     public static void test() {
         System.out.println("starting test");
-        try {
+        /*try {
             client = new Client(controllerClient);
         } catch (IOException e) {
             e.printStackTrace();
@@ -590,8 +590,19 @@ public class ControllerClient {
         getAllChannelUser(currentUser);
         Channel channel = createChannel("titre"+Math.random()*500);
         addUserInChannel("nidhal@gmail.com", channel);
+*/
 
+        for (int i = 100; i < 120; i++)    {
+            createAcc("testuser"+i, "testuser"+i+"@gmail.com", "@Glitch1");
+            Utils.wait(4);
 
+        }
+
+        login("isar@gmail.com", "@Glitch1");
+        Channel channel = createChannel("titre1");
+        for (int i = 100; i < 120; i++) {
+            addUserInChannel("testuser"+i+"@gmail.com", channel);
+        }
 
 
         /*//left pannel

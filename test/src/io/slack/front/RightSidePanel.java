@@ -59,7 +59,7 @@ public class RightSidePanel extends JPanel implements ActionListener {
 
     public void addAUser(User user){
         Image image=null;
-        //Image image = user; TODO add a profil picture to the model.User
+        //Image image = user;
 
         JButton button;
         if(image == null)
