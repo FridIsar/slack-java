@@ -65,10 +65,26 @@ public class JDBCUserDAO implements DAO<User> {
 
 	@Override
 	public User find(String key) throws SQLException {
-		String query = "SELECT * FROM users WHERE email = ? UNION SELECT * FROM users WHERE  id = ?;";
+		String query = "SELECT * FROM users WHERE email = ?";
 		try(PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, key);
-			statement.setString(2, key);
+			try(ResultSet resultSet = statement.executeQuery()) {
+				if (resultSet.next()) {
+					User user= new User(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));
+					user.setCreatedAt(resultSet.getDate(5));
+					user.setId(resultSet.getInt(1));
+					return user;
+				}
+			}
+		}
+		return null;
+	}
+
+
+	public User findById(int key) throws SQLException {
+		String query = "SELECT * FROM users WHERE id = ?";
+		try(PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, key);
 			try(ResultSet resultSet = statement.executeQuery()) {
 				if (resultSet.next()) {
 					User user= new User(resultSet.getString(2), resultSet.getString(3), resultSet.getString(4));

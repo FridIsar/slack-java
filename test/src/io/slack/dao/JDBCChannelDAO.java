@@ -60,7 +60,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
             statement.setString(1, key);
             try(ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    User user = DAOFactory.getUser().find( resultSet.getString(3) );
+                    User user = ((JDBCUserDAO) DAOFactory.getUser()).findById( resultSet.getInt(3) );
                     Channel channel = new Channel(resultSet.getString(2), user );
                     channel.setId(resultSet.getInt(1));
                     return channel;
@@ -76,7 +76,7 @@ public class JDBCChannelDAO implements DAO<Channel> {
         try(Statement statement = connection.createStatement()) {
             try(ResultSet resultSet = statement.executeQuery("SELECT * FROM channels WHERE admin_id = "+key+";")) {
                 while (resultSet.next()) {
-                    User user = DAOFactory.getUser().find( resultSet.getString(3) );
+                    User user = ((JDBCUserDAO) DAOFactory.getUser()).findById( resultSet.getInt(3) );
                     Channel channel = new Channel( resultSet.getString(2) , user);
                     channel.setId(resultSet.getInt(1));
                     channels.add(channel);

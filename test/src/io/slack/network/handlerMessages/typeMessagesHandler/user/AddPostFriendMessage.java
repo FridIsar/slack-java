@@ -28,13 +28,14 @@ public class AddPostFriendMessage implements ClientMessageHandler<PostAndFriendC
         PostDirectService postDirectService = new PostDirectService();
         Message message = postDirectService.create(author,textMessage,otherUser);
 
+        Thread thread = null;
         if(message.getCode() == 200){
             Message messageToSend = new MessageAttachment<PostDirect>(ClientMessageType.ADDPOSTFRIEND.getValue(),
                     (PostDirect) ((MessageAttachment)message).getAttachment() );
+            //thread = this.notifyChannelMembers(clientHandler, channel, messageToSend);
             //todo les deux user du friend
         }
 
-        Thread thread = null;
         return new Pair(message, thread);
     }
 }

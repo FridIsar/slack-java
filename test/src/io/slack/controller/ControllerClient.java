@@ -35,6 +35,7 @@ public class ControllerClient {
 
     //friend
     private static ArrayList<Friend> friends = new ArrayList<>();
+    private static ArrayList<User> userFriends = new ArrayList<>();
 
     //post
     private static File attachedFile=null;
@@ -113,7 +114,13 @@ public class ControllerClient {
             Message received = client.sendMessage(message);
             if(received.hasAttachment() ){
                 friends = (ArrayList<Friend>)( (MessageAttachment)received).getAttachment();
-                ToolBar.getToolBar().setFriendList(friends);
+                for(Friend friend : friends){
+                    if(currentUser.equals( friend.getFirstUser() ) )
+                        userFriends.add(friend.getSecUser());
+                    else
+                        userFriends.add(friend.getFirstUser());
+                }
+                ToolBar.getToolBar().setFriendList(userFriends);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -137,7 +144,7 @@ public class ControllerClient {
             currentChannel=null;
             channels.clear();
 
-            friends.clear();
+            //friends.clear();
 
 
             ToolBar.getToolBar().addMyButton();
@@ -238,6 +245,9 @@ public class ControllerClient {
                 if(received.hasAttachment()){
                     Channel channel= (Channel)( ((MessageAttachment)received).getAttachment() );
                     addChannel(channel);
+                    LeftSidePanel.getPanel().addAChat(channel);
+                    LeftSidePanel.getPanel().refreshList(channels);
+                    System.out.println("channel is "+channel);
                     sendPost(channel.getAdmin(), channel,"Welcome to the '"+channel.getTitle()+"' channel");
                     return channel;
                 }
@@ -370,7 +380,8 @@ public class ControllerClient {
 
 
     public static boolean isAFriend(User user){
-        return friends.contains(user);
+        boolean isFriend = userFriends.contains(user);
+        return isFriend;
     }
 
     public static void addAFriend(User user){
@@ -380,7 +391,10 @@ public class ControllerClient {
             if( received.hasAttachment() ){
                 Friend friend = (Friend)((MessageAttachment)received).getAttachment();
                 friends.add(friend);
-
+                if(currentUser.equals( friend.getFirstUser() ) )
+                    userFriends.add(friend.getSecUser());
+                else
+                    userFriends.add(friend.getFirstUser());
                 ToolBar.getToolBar().addAFriend(friend.getSecUser());
             }
         } catch (InterruptedException e) {
@@ -394,10 +408,19 @@ public class ControllerClient {
             Message received = client.sendMessage(message);
             if( received.hasAttachment() ){
                 Friend friend = (Friend)((MessageAttachment)received).getAttachment();
-                int i = friends.indexOf(friend);
-                friends.remove(friend.getSecUser());
 
-                ToolBar.getToolBar().removeAFriend(i);
+                Friend aFriend;
+                User aUser;
+                for (int i = 0; i < friends.size(); i++)  {
+                    aFriend = friends.get(i);
+                    aUser = userFriends.get(i);
+                    if (aFriend.getFirstUser().equals(user) || aFriend.getSecUser().equals(user)) {
+                        friends.remove(aFriend);
+                        userFriends.remove(aUser);
+                        ToolBar.getToolBar().removeAFriend(i);
+                        break;
+                    }
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -503,7 +526,8 @@ public class ControllerClient {
             if(post.getChannel().equals(channel)){
                 channel.addPost(post);
                 if(! channel.equals(currentChannel))    {
-                    LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
+                    //LeftSidePanel.getPanel().addNotif(channels.indexOf(channel));
+                    System.out.println("todo notif");
                 }
                 else
                     Window.getFenetre().refreshPage();

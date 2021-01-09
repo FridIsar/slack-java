@@ -175,12 +175,6 @@ public class Client {
                 this.controllerClient.receiveDeleteChannel(channel);
                 break;
 
-            case 700 :
-                System.out.println("case 700");
-                Channel chan =  (Channel) ((MessageAttachment) messageReceived).getAttachment();
-                this.controllerClient.receiveCreateChannel(chan);
-                break;
-
             case 705 :
                 // DELETEUSERCHANNEL -> un User admin d'un Channel a retiré un membre User du channel dont fait partie Client
                 // TODO :

@@ -25,14 +25,8 @@ public class CreateChannelMessage extends Subject implements ClientMessageHandle
         User admin = us.getUser(adminEmail);
         ChannelService cs = new ChannelService();
         Message message = cs.create(title, admin);
-        Channel channel = cs.getChannel(title);;
-        Thread thread = null;
-        if (message.getCode() == 200)   {
-            Message messageToSend = new MessageAttachment<>(ClientMessageType.CREATECHANNEL.getValue(),
-                    channel);
-            thread = this.notifyChannelMembers(clientHandler, channel, messageToSend);
-        }
 
+        Thread thread = null;
         return new Pair(message, thread);
     }
 }

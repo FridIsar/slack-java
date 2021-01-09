@@ -66,7 +66,9 @@ public class ClientHandler implements Callable, Observer {
                 System.out.println("(method call) Server writing ended");
 
                 if (notifyThread != null)   {
+                    notifyThread.setDaemon(true);
                     notifyThread.start();
+                    //todo stop notifythread
                 }
 
                 //System.out.println("(method call) is unlocking...");

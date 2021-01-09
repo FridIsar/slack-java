@@ -21,11 +21,11 @@ public class UserService {
 	// User creation
 	public Message create(String email, String password, String pseudo) {
 		try {
-			User user = userDAO.find(email);
-			if (user != null) {			// User already exists
+			if (!EmailUtils.isEmail(email) || !EmailUtils.isPassword(password)) {	// Invalid email or password
 				return new Message(403);
 			}
-			if (!EmailUtils.isEmail(email) || !EmailUtils.isPassword(password)) {	// Invalid email or password
+			User user = userDAO.find(email);
+			if (user != null) {			// User already exists
 				return new Message(403);
 			}
 			user = new User(email, password, pseudo); //todo pk on fait ça ?
@@ -59,7 +59,8 @@ public class UserService {
 	// User update
 	public Message update(int id, String email, String password, String username) {
 		try {
-			User user = userDAO.find(String.valueOf(id));
+			JDBCUserDAO jdbcUserDao = new JDBCUserDAO();
+			User user = jdbcUserDao.findById(id);
 			if (user == null) {			// User not found
 				return new Message(404);
 			}
@@ -80,12 +81,12 @@ public class UserService {
 	// Finds User
 	public Message get(String email) {
 		try {
+			if (!EmailUtils.isEmail(email)) {	// Invalid email
+				return new Message(403);
+			}
 			User user = userDAO.find(email);
 			if (user == null) {			// User not found
 				return new Message(404);
-			}
-			if (!EmailUtils.isEmail(email)) {	// Invalid email
-				return new Message(403);
 			}
 			return new MessageAttachment<>(200, user);
 		} catch (Exception e) {

@@ -19,7 +19,7 @@ public class SignInMessage implements ClientMessageHandler<UserCredentials> {
 
 
         UserService userService = new UserService();
-        Message message = (MessageAttachment) userService.authenticate(email, password);
+        Message message = userService.authenticate(email, password);
 
         if (message.getCode() == 200) {
             clientHandler.getConcurrentUserAuthenticated().put(clientHandler.getSocket(), email);

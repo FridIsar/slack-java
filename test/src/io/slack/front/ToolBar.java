@@ -1,6 +1,7 @@
 package io.slack.front;
 
 import io.slack.controller.ControllerClient;
+import io.slack.front.ui.UIUser;
 import io.slack.model.Friend;
 import io.slack.model.User;
 import io.slack.utils.FileUtils;
@@ -26,8 +27,7 @@ public class ToolBar extends JPanel implements ActionListener {
     private Image imgProfil = FileUtils.getImage("Icons/profil.png");
     private Image imgSearch = FileUtils.getImage("Icons/search.jpg");
 
-    private JButton logo = new JButton(new ImageIcon(imgLogo.getScaledInstance(100,100, Image.SCALE_SMOOTH)));;
-    private JTextField recherche = new JTextField("Rechercher");
+    private JButton logo = new JButton(new ImageIcon(imgLogo.getScaledInstance(100,100, Image.SCALE_SMOOTH)));
     private JComboBox friendList = new JComboBox();
     private JButton connect = new JButton(new ImageIcon(imgConnect.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
     private JButton profil = new JButton(new ImageIcon(imgProfil.getScaledInstance(100,100, Image.SCALE_SMOOTH)));
@@ -37,7 +37,7 @@ public class ToolBar extends JPanel implements ActionListener {
     private static JToolBar barre = new JToolBar();
     private static ToolBar toolBar= new ToolBar();
 
-    private static Vector<JButton> buttonList = new Vector<>();
+    private static ArrayList<User> userList = new ArrayList<>();
 
     private ToolBar() {
         setPreferredSize (new Dimension(2000, 130) ) ;
@@ -57,7 +57,6 @@ public class ToolBar extends JPanel implements ActionListener {
 
         barre.add(friendList);
         barre.addSeparator(new Dimension(250,5));
-        barre.add( recherche );
         barre.addSeparator(new Dimension(50,5));
         barre.add( search );
         barre.addSeparator(new Dimension(250,5));
@@ -74,9 +73,6 @@ public class ToolBar extends JPanel implements ActionListener {
     public static JToolBar getBarre() { return barre; }
 
     public void initMyButton(){
-        recherche.setSize(new Dimension(300, 10));
-        recherche.setHorizontalAlignment(10);
-        recherche.setFont(new Font("Rechercher", 0, 50));
         friendList.setPreferredSize(new Dimension(300,0));
 
         /*
@@ -98,49 +94,23 @@ public class ToolBar extends JPanel implements ActionListener {
 
     }
 
-    public void setFriendList(ArrayList<Friend> friends){
-        Image image;
-        User user;
-        for(Friend friend : friends){
-            if(ControllerClient.getCurrentUser().equals( friend.getFirstUser() ) )
-                user=friend.getSecUser();
-            else
-                user=friend.getFirstUser();
-            if(user.getProfilPic()!=null)
-                image=user.getProfilPic();
-            else
-                image = FileUtils.getImage( "Icons/logo.png" );
-
-            JButton button = new JButton(new ImageIcon(image.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
-            button.setText(user.getPseudo());
-            GraphicsUtils.buttonWithText(button);
-            button.addActionListener(this);
-
-            buttonList.add( button);
+    public void setFriendList(ArrayList<User> friends){
+        for (User user1 : friends) {
+            friendList.addItem(user1.getPseudo());
+            userList.add(user1);
         }
-
-        friendList=new JComboBox(buttonList);
     }
 
     public void addAFriend(User user){
-        Image image;
-        if(user.getProfilPic()!=null)
-            image=user.getProfilPic();
-        else
-            image = FileUtils.getImage( "Icons/logo.png" );
-
-        JButton button = new JButton(new ImageIcon(image.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
-        button.setText(user.getPseudo());
-        GraphicsUtils.buttonWithText(button);
-        button.addActionListener(this);
-
-        buttonList.add( button);
-        friendList=new JComboBox(buttonList);
+        userList.add( user);
+        friendList.addItem(user.getPseudo());
+        addMyButton();
     }
 
     public void removeAFriend(int i){
-        buttonList.remove(i);
-        friendList=new JComboBox(buttonList);
+        userList.remove(i);
+        friendList.removeItemAt(i);
+        addMyButton();
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -181,6 +151,11 @@ public class ToolBar extends JPanel implements ActionListener {
         if(source == profil){
             ControllerClient.profil();
             ControllerClient.resetCurrentChannel();
+        }
+
+        if(source == search){
+            User selectedUser = userList.get(this.friendList.getSelectedIndex());
+            Window.getFenetre().setContenu(new UIUser(selectedUser));
         }
 
 
