@@ -20,6 +20,7 @@ import io.slack.utils.Utils;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.security.cert.CertificateRevokedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,12 @@ public class ControllerClient {
                 LeftSidePanel.getPanel().addMyButton();
                 getAllChannelUser(currentUser);
                 getAllFriendUser(currentUser);
-            }//todo affiche popup according to error code
+            }
+            int errorcode = received.getCode();
+            if (errorcode == 404 || errorcode == 403)
+                Window.getFenetre().affichePopup(new String[] {"Le login ou le mot de passe est incorrect."});
+            else if (errorcode == 500)
+                Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
@@ -80,12 +86,19 @@ public class ControllerClient {
             Message message = new MessageAttachment<UserCredentials>(ClientMessageType.SIGNUP.getValue(), new UserCredentialsOptions(email, password, pseudo));
             Message received = client.sendMessage(message);
 
-            if( received.hasAttachment() ){
-                currentUser = (User)( ( (MessageAttachment)received).getAttachment() ) ;
-                connect=true;
+            if( received.hasAttachment() ) {
+                currentUser = (User) (((MessageAttachment) received).getAttachment());
+                connect = true;
                 ToolBar.getToolBar().addMyButton();
                 LeftSidePanel.getPanel().addMyButton();
-            }//todo affiche popup according to error code
+            }
+            int errorcode = received.getCode();
+            if (errorcode == 404)
+                Window.getFenetre().affichePopup(new String[] {"Cet email est déjà utilisé pour un autre compte."});
+            else if (errorcode == 403)
+                Window.getFenetre().affichePopup(new String[] {"Email ou mot de passe invalide."});
+            else if (errorcode == 500)
+                Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
@@ -154,7 +167,15 @@ public class ControllerClient {
     public static void deleteAccount() {
         Message message=new MessageAttachment<UserCredentials>(ClientMessageType.DELETEUSER.getValue(), new UserCredentials(currentUser.getEmail(), currentUser.getPassword()));
         try {
-            client.sendMessage(message);
+            Message received = client.sendMessage(message);
+
+            int errorcode = received.getCode();
+            if (errorcode == 404)
+                Window.getFenetre().affichePopup(new String[] {"Cet utilisateur n'existe pas."});
+            else if (errorcode == 403)
+                Window.getFenetre().affichePopup(new String[] {"Email ou mot de passe invalide."});
+            else if (errorcode == 500)
+                Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
 
             disconnect(false);
         } catch (InterruptedException e) {
@@ -170,7 +191,14 @@ public class ControllerClient {
         Message message = new MessageAttachment<UserCredentialsOptions>(ClientMessageType.UPDATEUSER.getValue(), new UserCredentialsOptions(email, user.getPassword(), pseudo ));
 
         try {
-            client.sendMessage(message);
+            Message received = client.sendMessage(message);
+            int errorcode = received.getCode();
+            if (errorcode == 404)
+                Window.getFenetre().affichePopup(new String[] {"Cet utilisateur n'existe pas."});
+            else if (errorcode == 403)
+                Window.getFenetre().affichePopup(new String[] {"Email ou mot de passe invalide."});
+            else if (errorcode == 500)
+                Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -241,6 +269,11 @@ public class ControllerClient {
                     sendPost(channel.getAdmin(), channel,"Welcome to the '"+channel.getTitle()+"' channel");
                     return channel;
                 }
+                int errorcode = received.getCode();
+                if (errorcode == 403)
+                    Window.getFenetre().affichePopup(new String[] {"Ce channel existe déjà."});
+                else if (errorcode == 500)
+                    Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -344,6 +377,11 @@ public class ControllerClient {
                     Window.getFenetre().backToHome();
                     resetCurrentChannel();
                 }*/
+                int errorcode = received.getCode();
+                if (errorcode == 404)
+                    Window.getFenetre().affichePopup(new String[] {"Ce channel n'existe pas."});
+                else if (errorcode == 500)
+                    Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -383,6 +421,11 @@ public class ControllerClient {
 
                 ToolBar.getToolBar().addAFriend(friend.getSecUser());
             }
+            int errorcode = received.getCode();
+            if (errorcode == 403)
+                Window.getFenetre().affichePopup(new String[] {"Cet ami existe déjà."});
+            else if (errorcode == 500)
+                Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -399,6 +442,11 @@ public class ControllerClient {
 
                 ToolBar.getToolBar().removeAFriend(i);
             }
+            int errorcode = received.getCode();
+            if (errorcode == 404)
+                Window.getFenetre().affichePopup(new String[] {"Cet ami n'existe pas."});
+            else if (errorcode == 500)
+                Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -434,6 +482,11 @@ public class ControllerClient {
             if(received.hasAttachment()){
                 friend.getChannelDirect().setPosts((ArrayList<Post>)((MessageAttachment)received ).getAttachment() );
             }
+            int errorcode = received.getCode();
+            if (errorcode == 404)
+                Window.getFenetre().affichePopup(new String[] {"Pas d'amis :(."});
+            else if (errorcode == 500)
+                Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -492,6 +545,9 @@ public class ControllerClient {
             }
             Message message = new MessageAttachment<PostAndChannelCredentials>(ClientMessageType.ADDPOSTCHANNEL.getValue(), attachment);
             Message received = client.sendMessage(message);
+            int errorcode = received.getCode();
+            if (errorcode == 500)
+                Window.getFenetre().affichePopup(new String[] {"Une erreur inattendue est survenue."});
             //channel.addPost(post);
         } catch (InterruptedException e) {
             e.printStackTrace();

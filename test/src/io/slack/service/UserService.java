@@ -23,7 +23,7 @@ public class UserService {
 		try {
 			User user = userDAO.find(email);
 			if (user != null) {			// User already exists
-				return new Message(403);
+				return new Message(404);
 			}
 			if (!EmailUtils.isEmail(email) || !EmailUtils.isPassword(password)) {	// Invalid email or password
 				return new Message(403);

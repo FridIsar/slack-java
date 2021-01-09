@@ -6,8 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/test/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.idea/artifacts" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="15" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="mysql:mysql-connector-java:5.1.45" level="project" />
+    <orderEntry type="library" exported="" name="mysql:mysql-connector-java:5.1.45" level="project" />
   </component>
 </module>
